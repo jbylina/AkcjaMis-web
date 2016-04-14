@@ -1,0 +1,21 @@
+version: '2'
+services:
+    akcjamis-app:
+        image: akcjamis
+        external_links:
+            - akcjamis-postgresql:postgresql
+            - akcjamis-elasticsearch:elasticsearch
+        environment:
+            - SPRING_PROFILES_ACTIVE=prod
+            - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/akcjamis
+            - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=elasticsearch:9300
+        ports:
+            - 8080:8080
+    akcjamis-postgresql:
+        extends:
+            file: postgresql.yml
+            service: akcjamis-postgresql
+    akcjamis-elasticsearch:
+        extends:
+            file: elasticsearch.yml
+            service: akcjamis-elasticsearch

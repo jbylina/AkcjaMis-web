@@ -1,0 +1,10 @@
+version: '2'
+services:
+    akcjamis-elasticsearch:
+        container_name: akcjamis-elasticsearch
+        image: elasticsearch:1.7.5
+        # volumes:
+        #     - ~/volumes/jhipster/akcjamis/elasticsearch/:/usr/share/elasticsearch/data/
+        ports:
+            - 9200:9200
+            - 9300:9300
