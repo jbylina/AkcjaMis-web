@@ -1,0 +1,44 @@
+{
+  "relationships": [],
+  "fields": [
+    {
+      "fieldId": 1,
+      "fieldName": "street",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 2,
+      "fieldName": "houseNo",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 3,
+      "fieldName": "postcode",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 4,
+      "fieldName": "district",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 5,
+      "fieldName": "city",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 6,
+      "fieldName": "region",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 7,
+      "fieldName": "source",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20160415003530",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no"
+}

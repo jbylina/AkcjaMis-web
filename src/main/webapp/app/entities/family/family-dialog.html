@@ -1,0 +1,68 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myFamilyLabel">Create or edit a Family</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.family.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_street">Street</label>
+            <input type="text" class="form-control" name="street" id="field_street"
+                    ng-model="vm.family.street"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_houseNo">HouseNo</label>
+            <input type="text" class="form-control" name="houseNo" id="field_houseNo"
+                    ng-model="vm.family.houseNo"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_postcode">Postcode</label>
+            <input type="text" class="form-control" name="postcode" id="field_postcode"
+                    ng-model="vm.family.postcode"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_district">District</label>
+            <input type="text" class="form-control" name="district" id="field_district"
+                    ng-model="vm.family.district"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_city">City</label>
+            <input type="text" class="form-control" name="city" id="field_city"
+                    ng-model="vm.family.city"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_region">Region</label>
+            <input type="text" class="form-control" name="region" id="field_region"
+                    ng-model="vm.family.region"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_source">Source</label>
+            <input type="text" class="form-control" name="source" id="field_source"
+                    ng-model="vm.family.source"
+                     />
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

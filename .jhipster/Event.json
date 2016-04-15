@@ -1,0 +1,19 @@
+{
+  "relationships": [],
+  "fields": [
+    {
+      "fieldId": 1,
+      "fieldName": "year",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldId": 2,
+      "fieldName": "coordinator",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20160415003534",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no"
+}

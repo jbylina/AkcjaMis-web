@@ -1,0 +1,33 @@
+
+<div>
+    <h2><span>PackageChangelog</span> {{vm.packageChangelog.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span>TypeCode</dt></dt>
+        <dd>
+            <span>{{vm.packageChangelog.typeCode}}<span>
+        </dd>
+        <hr>
+        <dt><span>Time</dt></dt>
+        <dd>
+            <span>{{vm.packageChangelog.time | date:'mediumDate'}}</span>
+        </dd>
+        <hr>
+        <dt><span>Text</dt></dt>
+        <dd>
+            <span>{{vm.packageChangelog.text}}<span>
+        </dd>
+        <hr>
+        <dt><span>pack</span></dt>
+        <dd>
+            <a ui-sref="package-gift-detail({id:vm.packageChangelog.pack.id})">{{vm.packageChangelog.pack.id}}</a>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

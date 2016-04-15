@@ -1,0 +1,23 @@
+
+<div>
+    <h2><span>Team</span> {{vm.team.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span>TemNo</dt></dt>
+        <dd>
+            <span>{{vm.team.temNo}}<span>
+        </dd>
+        <hr>
+        <dt><span>event</span></dt>
+        <dd>
+            <a ui-sref="event-detail({id:vm.team.event.id})">{{vm.team.event.id}}</a>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

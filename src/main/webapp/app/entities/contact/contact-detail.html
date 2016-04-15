@@ -1,0 +1,28 @@
+
+<div>
+    <h2><span>Contact</span> {{vm.contact.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span>Type</dt></dt>
+        <dd>
+            <span>{{vm.contact.type}}<span>
+        </dd>
+        <hr>
+        <dt><span>Value</dt></dt>
+        <dd>
+            <span>{{vm.contact.value}}<span>
+        </dd>
+        <hr>
+        <dt><span>family</span></dt>
+        <dd>
+            <a ui-sref="family-detail({id:vm.contact.family.id})">{{vm.contact.family.id}}</a>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

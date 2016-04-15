@@ -1,0 +1,40 @@
+
+<div>
+    <h2><span>FamilyNote</span> {{vm.familyNote.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <dt><span>Time</dt></dt>
+        <dd>
+            <span>{{vm.familyNote.time | date:'mediumDate'}}</span>
+        </dd>
+        <hr>
+        <dt><span>Text</dt></dt>
+        <dd>
+            <span>{{vm.familyNote.text}}<span>
+        </dd>
+        <hr>
+        <dt><span>Archived</dt></dt>
+        <dd>
+            <span>{{vm.familyNote.archived}}<span>
+        </dd>
+        <hr>
+        <dt><span>family</span></dt>
+        <dd>
+            <a ui-sref="family-detail({id:vm.familyNote.family.id})">{{vm.familyNote.family.id}}</a>
+        </dd>
+        <hr>
+        <dt><span>tag</span></dt>
+        <dd>
+            <span ng-repeat="tag in vm.familyNote.tags">
+                <a ui-sref="tag-detail({id: {{tag.id}}})">{{tag.tgsID}}</a>{{$last ? '' : ', '}}
+            </span>
+        </dd>
+        <hr>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

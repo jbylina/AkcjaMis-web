@@ -1,0 +1,22 @@
+{
+  "relationships": [
+    {
+      "relationshipId": 1,
+      "relationshipName": "event",
+      "otherEntityName": "event",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "id"
+    }
+  ],
+  "fields": [
+    {
+      "fieldId": 1,
+      "fieldName": "temNo",
+      "fieldType": "Integer"
+    }
+  ],
+  "changelogDate": "20160415003535",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no"
+}

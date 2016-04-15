@@ -1,0 +1,33 @@
+{
+  "relationships": [
+    {
+      "relationshipId": 1,
+      "relationshipName": "familyNote",
+      "otherEntityName": "familyNote",
+      "relationshipType": "many-to-many",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "tag"
+    }
+  ],
+  "fields": [
+    {
+      "fieldId": 1,
+      "fieldName": "tgsID",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldId": 2,
+      "fieldName": "code",
+      "fieldType": "String"
+    },
+    {
+      "fieldId": 3,
+      "fieldName": "color",
+      "fieldType": "String"
+    }
+  ],
+  "changelogDate": "20160415003533",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no"
+}
