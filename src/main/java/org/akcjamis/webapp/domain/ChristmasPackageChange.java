@@ -27,7 +27,7 @@ public class ChristmasPackageChange implements Serializable {
 
     @Size(min = 3, max = 20)
     @Column(name = "type_code", length = 20)
-    private String type_code;
+    private String typeCode;
 
     @NotNull
     @Column(name = "time", nullable = false)
@@ -49,12 +49,12 @@ public class ChristmasPackageChange implements Serializable {
         this.id = id;
     }
 
-    public String getType_code() {
-        return type_code;
+    public String getTypeCode() {
+        return typeCode;
     }
 
-    public void setType_code(String type_code) {
-        this.type_code = type_code;
+    public void setTypeCode(String typeCode) {
+        this.typeCode = typeCode;
     }
 
     public LocalDate getTime() {
@@ -105,7 +105,7 @@ public class ChristmasPackageChange implements Serializable {
     public String toString() {
         return "ChristmasPackageChange{" +
             "id=" + id +
-            ", type_code='" + type_code + "'" +
+            ", typeCode='" + typeCode + "'" +
             ", time='" + time + "'" +
             ", content='" + content + "'" +
             '}';

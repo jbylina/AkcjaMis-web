@@ -83,7 +83,7 @@ public class ChristmasPackageChangeResourceIntTest {
     public void initTest() {
         christmasPackageChangeSearchRepository.deleteAll();
         christmasPackageChange = new ChristmasPackageChange();
-        christmasPackageChange.setType_code(DEFAULT_TYPE_CODE);
+        christmasPackageChange.setTypeCode(DEFAULT_TYPE_CODE);
         christmasPackageChange.setTime(DEFAULT_TIME);
         christmasPackageChange.setContent(DEFAULT_CONTENT);
     }
@@ -104,7 +104,7 @@ public class ChristmasPackageChangeResourceIntTest {
         List<ChristmasPackageChange> christmasPackageChanges = christmasPackageChangeRepository.findAll();
         assertThat(christmasPackageChanges).hasSize(databaseSizeBeforeCreate + 1);
         ChristmasPackageChange testChristmasPackageChange = christmasPackageChanges.get(christmasPackageChanges.size() - 1);
-        assertThat(testChristmasPackageChange.getType_code()).isEqualTo(DEFAULT_TYPE_CODE);
+        assertThat(testChristmasPackageChange.getTypeCode()).isEqualTo(DEFAULT_TYPE_CODE);
         assertThat(testChristmasPackageChange.getTime()).isEqualTo(DEFAULT_TIME);
         assertThat(testChristmasPackageChange.getContent()).isEqualTo(DEFAULT_CONTENT);
 
@@ -200,7 +200,7 @@ public class ChristmasPackageChangeResourceIntTest {
         // Update the christmasPackageChange
         ChristmasPackageChange updatedChristmasPackageChange = new ChristmasPackageChange();
         updatedChristmasPackageChange.setId(christmasPackageChange.getId());
-        updatedChristmasPackageChange.setType_code(UPDATED_TYPE_CODE);
+        updatedChristmasPackageChange.setTypeCode(UPDATED_TYPE_CODE);
         updatedChristmasPackageChange.setTime(UPDATED_TIME);
         updatedChristmasPackageChange.setContent(UPDATED_CONTENT);
 
@@ -213,7 +213,7 @@ public class ChristmasPackageChangeResourceIntTest {
         List<ChristmasPackageChange> christmasPackageChanges = christmasPackageChangeRepository.findAll();
         assertThat(christmasPackageChanges).hasSize(databaseSizeBeforeUpdate);
         ChristmasPackageChange testChristmasPackageChange = christmasPackageChanges.get(christmasPackageChanges.size() - 1);
-        assertThat(testChristmasPackageChange.getType_code()).isEqualTo(UPDATED_TYPE_CODE);
+        assertThat(testChristmasPackageChange.getTypeCode()).isEqualTo(UPDATED_TYPE_CODE);
         assertThat(testChristmasPackageChange.getTime()).isEqualTo(UPDATED_TIME);
         assertThat(testChristmasPackageChange.getContent()).isEqualTo(UPDATED_CONTENT);
 

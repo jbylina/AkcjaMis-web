@@ -14,17 +14,17 @@
                     ng-model="vm.christmasPackageChange.id" readonly />
         </div>
         <div class="form-group">
-            <label class="control-label" translate="akcjamisApp.christmasPackageChange.type_code" for="field_type_code">Type_code</label>
-            <input type="text" class="form-control" name="type_code" id="field_type_code"
-                    ng-model="vm.christmasPackageChange.type_code"
+            <label class="control-label" translate="akcjamisApp.christmasPackageChange.typeCode" for="field_type_code">Type_code</label>
+            <input type="text" class="form-control" name="typeCode" id="field_type_code"
+                    ng-model="vm.christmasPackageChange.typeCode"
                     ng-minlength="3" ng-maxlength="20" />
-            <div ng-show="editForm.type_code.$invalid">
+            <div ng-show="editForm.typeCode.$invalid">
                 <p class="help-block"
-                    ng-show="editForm.type_code.$error.minlength" translate-value-min="3">
+                    ng-show="editForm.typeCode.$error.minlength" translate-value-min="3">
                     This field is required to be at least 3 characters.
                 </p>
                 <p class="help-block"
-                    ng-show="editForm.type_code.$error.maxlength">
+                    ng-show="editForm.typeCode.$error.maxlength">
                     This field cannot be longer than 20 characters.
                 </p>
             </div>

@@ -36,7 +36,7 @@
             <thead>
                 <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.reset()">
                     <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="type_code"><span translate="akcjamisApp.christmasPackageChange.type_code">Type_code</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="typeCode"><span translate="akcjamisApp.christmasPackageChange.typeCode">Type_code</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="time"><span>Time</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="content"><span>Content</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="christmasPackage.id"><span>christmasPackage</span> <span class="glyphicon glyphicon-sort"></span></th>
@@ -46,7 +46,7 @@
             <tbody infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.page >= vm.links['last']">
                 <tr ng-repeat="christmasPackageChange in vm.christmasPackageChanges track by christmasPackageChange.id">
                     <td><a ui-sref="christmas-package-change-detail({id:christmasPackageChange.id})">{{christmasPackageChange.id}}</a></td>
-                    <td>{{christmasPackageChange.type_code}}</td>
+                    <td>{{christmasPackageChange.typeCode}}</td>
                         <td>{{christmasPackageChange.time | date:'mediumDate'}}</td>
                     <td>{{christmasPackageChange.content}}</td>
                     <td>
