@@ -17,7 +17,7 @@ import java.util.Objects;
 @Table(name = "christmas_package_changelogs")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "christmaspackagechange")
-public class ChristmasPackageChange implements Serializable {
+public class ChristmasPackageChange extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,6 +29,7 @@ public class ChristmasPackageChange implements Serializable {
     @Column(name = "type_code", length = 20)
     private String typeCode;
 
+    //TODO wywalić tą kolumnę. Została zastąpiona przez audytową
     @NotNull
     @Column(name = "time", nullable = false)
     private LocalDate time;

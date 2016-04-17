@@ -20,7 +20,7 @@ import java.util.Objects;
 @Table(name = "family_notes")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "familynote")
-public class FamilyNote implements Serializable {
+public class FamilyNote extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,6 +33,7 @@ public class FamilyNote implements Serializable {
     @Column(name = "content", length = 65535, nullable = false)
     private String content;
 
+    //TODO wywalić tą kolumnę. Została zastąpiona przez audytową
     @Column(name = "time")
     private LocalDate time;
 

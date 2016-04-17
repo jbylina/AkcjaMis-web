@@ -18,5 +18,8 @@
     "applicationType": "monolith",
     "testFrameworks": [],
     "enableTranslation": false
+  },
+  "generator-jhipster-entity-audit": {
+    "auditFramework": "custom"
   }
 }

@@ -16,7 +16,7 @@ import java.util.Objects;
 @Table(name = "subpackage_notes")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "subpackagenote")
-public class SubpackageNote implements Serializable {
+public class SubpackageNote extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

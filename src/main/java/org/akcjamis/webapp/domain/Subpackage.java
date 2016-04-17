@@ -19,7 +19,7 @@ import java.util.Objects;
 @Table(name = "subpackages")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "subpackage")
-public class Subpackage implements Serializable {
+public class Subpackage extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

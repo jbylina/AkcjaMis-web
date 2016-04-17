@@ -19,7 +19,7 @@ import org.akcjamis.webapp.domain.enumeration.Sex;
 @Table(name = "children")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "child")
-public class Child implements Serializable {
+public class Child extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

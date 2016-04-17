@@ -11,6 +11,7 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/angular-object-diff/dist/angular-object-diff.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css content/css/main.css -->
@@ -60,16 +61,17 @@
     <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/sockjs-client/dist/sockjs.js"></script>
     <script src="bower_components/stomp-websocket/lib/stomp.min.js"></script>
+    <script src="bower_components/angular-object-diff/dist/angular-object-diff.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js app/app.js  -->
     <!-- inject:js -->
     <script src="app/app.module.js"></script>
-    <script src="app/account/reset/finish/reset.finish.state.js"></script>
-    <script src="app/account/reset/finish/reset.finish.controller.js"></script>
     <script src="app/account/reset/request/reset.request.state.js"></script>
     <script src="app/account/reset/request/reset.request.controller.js"></script>
+    <script src="app/account/reset/finish/reset.finish.state.js"></script>
+    <script src="app/account/reset/finish/reset.finish.controller.js"></script>
     <script src="app/services/user/user.service.js"></script>
     <script src="app/services/auth/register.service.js"></script>
     <script src="app/services/auth/principal.service.js"></script>
@@ -219,6 +221,10 @@
     <script src="app/admin/health/health.service.js"></script>
     <script src="app/admin/health/health.modal.controller.js"></script>
     <script src="app/admin/health/health.controller.js"></script>
+    <script src="app/admin/entity-audit/entity-audit.state.js"></script>
+    <script src="app/admin/entity-audit/entity-audit.service.js"></script>
+    <script src="app/admin/entity-audit/entity-audit.detail.controller.js"></script>
+    <script src="app/admin/entity-audit/entity-audit.controller.js"></script>
     <script src="app/admin/docs/docs.state.js"></script>
     <script src="app/admin/configuration/configuration.state.js"></script>
     <script src="app/admin/configuration/configuration.service.js"></script>
