@@ -1,10 +1,12 @@
 package org.akcjamis.webapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,7 +14,7 @@ import java.util.Objects;
  * A Contact.
  */
 @Entity
-@Table(name = "contact")
+@Table(name = "contacts")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "contact")
 public class Contact implements Serializable {
@@ -23,13 +25,20 @@ public class Contact implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "type")
+    @NotNull
+    @Size(max = 20)
+    @Column(name = "type", length = 20, nullable = false)
     private String type;
 
-    @Column(name = "value")
+    @NotNull
+    @Column(name = "value", nullable = false)
     private String value;
 
+    @Column(name = "comment")
+    private String comment;
+
     @ManyToOne
+    @JsonIgnore
     private Family family;
 
     public Long getId() {
@@ -54,6 +63,14 @@ public class Contact implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Family getFamily() {
@@ -90,6 +107,7 @@ public class Contact implements Serializable {
             "id=" + id +
             ", type='" + type + "'" +
             ", value='" + value + "'" +
+            ", comment='" + comment + "'" +
             '}';
     }
 }

@@ -4,19 +4,21 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
+
     <include file="classpath:config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003529_added_entity_Contact.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003530_added_entity_Family.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003531_added_entity_FamilyNote.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003532_added_entity_Child.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003533_added_entity_Tag.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003534_added_entity_Event.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003535_added_entity_Team.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003536_added_entity_TeamMember.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003537_added_entity_PackageGift.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003538_added_entity_Sybpackage.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003539_added_entity_SubpackageNote.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003540_added_entity_PackageNote.xml" relativeToChangelogFile="false"/>
-    <include file="classpath:config/liquibase/changelog/20160415003541_added_entity_PackageChangelog.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160415114117_added_entity_Family.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160415103637_added_entity_Contact.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160415103839_added_entity_Tag.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160415105238_added_entity_FamilyNote.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160415105553_added_entity_Child.xml" relativeToChangelogFile="false"/>
+
+    <include file="classpath:config/liquibase/changelog/20160417195658_added_entity_Event.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160417194720_added_entity_Team.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160417200639_added_entity_ChristmasPackage.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160417194447_added_entity_Subpackage.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160417191446_added_entity_SubpackageNote.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160417192113_added_entity_ChristmasPackageChange.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160417192228_added_entity_ChristmasPackageNote.xml" relativeToChangelogFile="false"/>
+
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 </databaseChangeLog>

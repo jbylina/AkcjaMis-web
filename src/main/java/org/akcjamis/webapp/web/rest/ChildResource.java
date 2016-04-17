@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -49,7 +50,7 @@ public class ChildResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Child> createChild(@RequestBody Child child) throws URISyntaxException {
+    public ResponseEntity<Child> createChild(@Valid @RequestBody Child child) throws URISyntaxException {
         log.debug("REST request to save Child : {}", child);
         if (child.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("child", "idexists", "A new child cannot already have an ID")).body(null);
@@ -74,7 +75,7 @@ public class ChildResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Child> updateChild(@RequestBody Child child) throws URISyntaxException {
+    public ResponseEntity<Child> updateChild(@Valid @RequestBody Child child) throws URISyntaxException {
         log.debug("REST request to update Child : {}", child);
         if (child.getId() == null) {
             return createChild(child);

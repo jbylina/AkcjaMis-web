@@ -62,7 +62,6 @@
                     resolve: {
                         entity: function () {
                             return {
-                                tgsID: null,
                                 code: null,
                                 color: null,
                                 id: null

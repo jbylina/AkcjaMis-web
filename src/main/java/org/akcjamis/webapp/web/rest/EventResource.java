@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -49,7 +50,7 @@ public class EventResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) throws URISyntaxException {
+    public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) throws URISyntaxException {
         log.debug("REST request to save Event : {}", event);
         if (event.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("event", "idexists", "A new event cannot already have an ID")).body(null);
@@ -74,7 +75,7 @@ public class EventResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Event> updateEvent(@RequestBody Event event) throws URISyntaxException {
+    public ResponseEntity<Event> updateEvent(@Valid @RequestBody Event event) throws URISyntaxException {
         log.debug("REST request to update Event : {}", event);
         if (event.getId() == null) {
             return createEvent(event);

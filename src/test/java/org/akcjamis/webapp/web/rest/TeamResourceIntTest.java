@@ -43,8 +43,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TeamResourceIntTest {
 
 
-    private static final Integer DEFAULT_TEM_NO = 1;
-    private static final Integer UPDATED_TEM_NO = 2;
+    private static final Integer DEFAULT_TEAM_NUMBER = 1;
+    private static final Integer UPDATED_TEAM_NUMBER = 2;
+    private static final String DEFAULT_NOTE = "AAAAA";
+    private static final String UPDATED_NOTE = "BBBBB";
 
     @Inject
     private TeamRepository teamRepository;
@@ -77,7 +79,8 @@ public class TeamResourceIntTest {
     public void initTest() {
         teamSearchRepository.deleteAll();
         team = new Team();
-        team.setTemNo(DEFAULT_TEM_NO);
+        team.setTeamNumber(DEFAULT_TEAM_NUMBER);
+        team.setNote(DEFAULT_NOTE);
     }
 
     @Test
@@ -96,11 +99,30 @@ public class TeamResourceIntTest {
         List<Team> teams = teamRepository.findAll();
         assertThat(teams).hasSize(databaseSizeBeforeCreate + 1);
         Team testTeam = teams.get(teams.size() - 1);
-        assertThat(testTeam.getTemNo()).isEqualTo(DEFAULT_TEM_NO);
+        assertThat(testTeam.getTeamNumber()).isEqualTo(DEFAULT_TEAM_NUMBER);
+        assertThat(testTeam.getNote()).isEqualTo(DEFAULT_NOTE);
 
         // Validate the Team in ElasticSearch
         Team teamEs = teamSearchRepository.findOne(testTeam.getId());
         assertThat(teamEs).isEqualToComparingFieldByField(testTeam);
+    }
+
+    @Test
+    @Transactional
+    public void checkTeamNumberIsRequired() throws Exception {
+        int databaseSizeBeforeTest = teamRepository.findAll().size();
+        // set the field null
+        team.setTeamNumber(null);
+
+        // Create the Team, which fails.
+
+        restTeamMockMvc.perform(post("/api/teams")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(team)))
+                .andExpect(status().isBadRequest());
+
+        List<Team> teams = teamRepository.findAll();
+        assertThat(teams).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -114,7 +136,8 @@ public class TeamResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(team.getId().intValue())))
-                .andExpect(jsonPath("$.[*].temNo").value(hasItem(DEFAULT_TEM_NO)));
+                .andExpect(jsonPath("$.[*].teamNumber").value(hasItem(DEFAULT_TEAM_NUMBER)))
+                .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE.toString())));
     }
 
     @Test
@@ -128,7 +151,8 @@ public class TeamResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(team.getId().intValue()))
-            .andExpect(jsonPath("$.temNo").value(DEFAULT_TEM_NO));
+            .andExpect(jsonPath("$.teamNumber").value(DEFAULT_TEAM_NUMBER))
+            .andExpect(jsonPath("$.note").value(DEFAULT_NOTE.toString()));
     }
 
     @Test
@@ -150,7 +174,8 @@ public class TeamResourceIntTest {
         // Update the team
         Team updatedTeam = new Team();
         updatedTeam.setId(team.getId());
-        updatedTeam.setTemNo(UPDATED_TEM_NO);
+        updatedTeam.setTeamNumber(UPDATED_TEAM_NUMBER);
+        updatedTeam.setNote(UPDATED_NOTE);
 
         restTeamMockMvc.perform(put("/api/teams")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -161,7 +186,8 @@ public class TeamResourceIntTest {
         List<Team> teams = teamRepository.findAll();
         assertThat(teams).hasSize(databaseSizeBeforeUpdate);
         Team testTeam = teams.get(teams.size() - 1);
-        assertThat(testTeam.getTemNo()).isEqualTo(UPDATED_TEM_NO);
+        assertThat(testTeam.getTeamNumber()).isEqualTo(UPDATED_TEAM_NUMBER);
+        assertThat(testTeam.getNote()).isEqualTo(UPDATED_NOTE);
 
         // Validate the Team in ElasticSearch
         Team teamEs = teamSearchRepository.findOne(testTeam.getId());
@@ -202,6 +228,7 @@ public class TeamResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(team.getId().intValue())))
-            .andExpect(jsonPath("$.[*].temNo").value(hasItem(DEFAULT_TEM_NO)));
+            .andExpect(jsonPath("$.[*].teamNumber").value(hasItem(DEFAULT_TEAM_NUMBER)))
+            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE.toString())));
     }
 }

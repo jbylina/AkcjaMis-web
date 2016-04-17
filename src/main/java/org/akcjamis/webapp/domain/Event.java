@@ -1,19 +1,23 @@
 package org.akcjamis.webapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
  * A Event.
  */
 @Entity
-@Table(name = "event")
+@Table(name = "events")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "event")
 public class Event implements Serializable {
@@ -24,11 +28,19 @@ public class Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "year")
+    @NotNull
+    @Column(name = "year", nullable = false)
     private LocalDate year;
 
-    @Column(name = "coordinator")
-    private String coordinator;
+    @OneToMany(mappedBy = "event")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Team> teams = new HashSet<>();
+
+    @OneToMany(mappedBy = "event")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ChristmasPackage> christmasPackages = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -46,12 +58,20 @@ public class Event implements Serializable {
         this.year = year;
     }
 
-    public String getCoordinator() {
-        return coordinator;
+    public Set<Team> getTeams() {
+        return teams;
     }
 
-    public void setCoordinator(String coordinator) {
-        this.coordinator = coordinator;
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
+    }
+
+    public Set<ChristmasPackage> getChristmasPackages() {
+        return christmasPackages;
+    }
+
+    public void setChristmasPackages(Set<ChristmasPackage> christmasPackages) {
+        this.christmasPackages = christmasPackages;
     }
 
     @Override
@@ -79,7 +99,6 @@ public class Event implements Serializable {
         return "Event{" +
             "id=" + id +
             ", year='" + year + "'" +
-            ", coordinator='" + coordinator + "'" +
             '}';
     }
 }

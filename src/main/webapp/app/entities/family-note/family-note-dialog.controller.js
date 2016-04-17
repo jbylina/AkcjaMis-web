@@ -5,13 +5,13 @@
         .module('akcjamisApp')
         .controller('FamilyNoteDialogController', FamilyNoteDialogController);
 
-    FamilyNoteDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'FamilyNote', 'Family', 'Tag'];
+    FamilyNoteDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'FamilyNote', 'Tag', 'Family'];
 
-    function FamilyNoteDialogController ($scope, $stateParams, $uibModalInstance, entity, FamilyNote, Family, Tag) {
+    function FamilyNoteDialogController ($scope, $stateParams, $uibModalInstance, entity, FamilyNote, Tag, Family) {
         var vm = this;
         vm.familyNote = entity;
-        vm.familys = Family.query();
         vm.tags = Tag.query();
+        vm.familys = Family.query();
         vm.load = function(id) {
             FamilyNote.get({id : id}, function(result) {
                 vm.familyNote = result;

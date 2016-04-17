@@ -47,8 +47,6 @@ public class EventResourceIntTest {
 
     private static final LocalDate DEFAULT_YEAR = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_YEAR = LocalDate.now(ZoneId.systemDefault());
-    private static final String DEFAULT_COORDINATOR = "AAAAA";
-    private static final String UPDATED_COORDINATOR = "BBBBB";
 
     @Inject
     private EventRepository eventRepository;
@@ -82,7 +80,6 @@ public class EventResourceIntTest {
         eventSearchRepository.deleteAll();
         event = new Event();
         event.setYear(DEFAULT_YEAR);
-        event.setCoordinator(DEFAULT_COORDINATOR);
     }
 
     @Test
@@ -102,11 +99,28 @@ public class EventResourceIntTest {
         assertThat(events).hasSize(databaseSizeBeforeCreate + 1);
         Event testEvent = events.get(events.size() - 1);
         assertThat(testEvent.getYear()).isEqualTo(DEFAULT_YEAR);
-        assertThat(testEvent.getCoordinator()).isEqualTo(DEFAULT_COORDINATOR);
 
         // Validate the Event in ElasticSearch
         Event eventEs = eventSearchRepository.findOne(testEvent.getId());
         assertThat(eventEs).isEqualToComparingFieldByField(testEvent);
+    }
+
+    @Test
+    @Transactional
+    public void checkYearIsRequired() throws Exception {
+        int databaseSizeBeforeTest = eventRepository.findAll().size();
+        // set the field null
+        event.setYear(null);
+
+        // Create the Event, which fails.
+
+        restEventMockMvc.perform(post("/api/events")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(event)))
+                .andExpect(status().isBadRequest());
+
+        List<Event> events = eventRepository.findAll();
+        assertThat(events).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -120,8 +134,7 @@ public class EventResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
-                .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR.toString())))
-                .andExpect(jsonPath("$.[*].coordinator").value(hasItem(DEFAULT_COORDINATOR.toString())));
+                .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR.toString())));
     }
 
     @Test
@@ -135,8 +148,7 @@ public class EventResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(event.getId().intValue()))
-            .andExpect(jsonPath("$.year").value(DEFAULT_YEAR.toString()))
-            .andExpect(jsonPath("$.coordinator").value(DEFAULT_COORDINATOR.toString()));
+            .andExpect(jsonPath("$.year").value(DEFAULT_YEAR.toString()));
     }
 
     @Test
@@ -159,7 +171,6 @@ public class EventResourceIntTest {
         Event updatedEvent = new Event();
         updatedEvent.setId(event.getId());
         updatedEvent.setYear(UPDATED_YEAR);
-        updatedEvent.setCoordinator(UPDATED_COORDINATOR);
 
         restEventMockMvc.perform(put("/api/events")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -171,7 +182,6 @@ public class EventResourceIntTest {
         assertThat(events).hasSize(databaseSizeBeforeUpdate);
         Event testEvent = events.get(events.size() - 1);
         assertThat(testEvent.getYear()).isEqualTo(UPDATED_YEAR);
-        assertThat(testEvent.getCoordinator()).isEqualTo(UPDATED_COORDINATOR);
 
         // Validate the Event in ElasticSearch
         Event eventEs = eventSearchRepository.findOne(testEvent.getId());
@@ -212,7 +222,6 @@ public class EventResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(event.getId().intValue())))
-            .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR.toString())))
-            .andExpect(jsonPath("$.[*].coordinator").value(hasItem(DEFAULT_COORDINATOR.toString())));
+            .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR.toString())));
     }
 }

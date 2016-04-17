@@ -1,40 +1,44 @@
 {
-  "relationships": [
-    {
-      "relationshipId": 1,
-      "relationshipName": "family",
-      "otherEntityName": "family",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipId": 2,
-      "relationshipName": "tag",
-      "otherEntityName": "tag",
-      "relationshipType": "many-to-many",
-      "otherEntityField": "tgsID",
-      "ownerSide": true
-    }
-  ],
-  "fields": [
-    {
-      "fieldId": 1,
-      "fieldName": "time",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldId": 2,
-      "fieldName": "text",
-      "fieldType": "String"
-    },
-    {
-      "fieldId": 3,
-      "fieldName": "archived",
-      "fieldType": "Boolean"
-    }
-  ],
-  "changelogDate": "20160415003531",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no"
+    "relationships": [
+        {
+            "relationshipName": "tag",
+            "otherEntityName": "tag",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "code",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "family",
+            "otherEntityName": "family",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "content",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "65535"
+        },
+        {
+            "fieldName": "time",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "archived",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160415105238",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "family_notes",
+    "pagination": "infinite-scroll"
 }

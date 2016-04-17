@@ -1,5 +1,5 @@
 
-<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -14,6 +14,22 @@
                     ng-model="vm.familyNote.id" readonly />
         </div>
         <div class="form-group">
+            <label class="control-label" for="field_content">Content</label>
+            <input type="text" class="form-control" name="content" id="field_content"
+                    ng-model="vm.familyNote.content"
+                    required ng-maxlength="65535" />
+            <div ng-show="editForm.content.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.content.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.content.$error.maxlength">
+                    This field cannot be longer than 65535 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label" for="field_time">Time</label>
                 <div class="input-group">
                     <input id="field_time" type="text" class="form-control" name="time" uib-datepicker-popup="{{dateformat}}" ng-model="vm.familyNote.time" is-open="vm.datePickerOpenStatus.time"
@@ -24,27 +40,27 @@
                 </div>
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_text">Text</label>
-            <input type="text" class="form-control" name="text" id="field_text"
-                    ng-model="vm.familyNote.text"
-                     />
-        </div>
-        <div class="form-group">
             <label class="control-label" for="field_archived">Archived</label>
             <input type="checkbox" class="form-control" name="archived" id="field_archived"
                     ng-model="vm.familyNote.archived"
                      />
+            <div ng-show="editForm.archived.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.archived.$error.required">
+                    This field is required.
+                </p>
+            </div>
         </div>
 
+        <div class="form-group">
+            <label for="field_tag">tag</label>
+            <select class="form-control" id="field_tag" multiple name="tag" ng-model="vm.familyNote.tags" ng-options="tag as tag.code for tag in vm.tags track by tag.id"></select>
+        </div>
         <div class="form-group">
             <label for="field_family">family</label>
             <select class="form-control" id="field_family" name="family" ng-model="vm.familyNote.family" ng-options="family as family.id for family in vm.familys track by family.id">
                 <option value=""></option>
             </select>
-        </div>
-        <div class="form-group">
-            <label for="field_tag">tag</label>
-            <select class="form-control" id="field_tag" multiple name="tag" ng-model="vm.familyNote.tags" ng-options="tag as tag.tgsID for tag in vm.tags track by tag.id"></select>
         </div>
     </div>
     <div class="modal-footer">

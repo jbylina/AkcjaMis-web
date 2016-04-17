@@ -3,6 +3,7 @@ package org.akcjamis.webapp.web.rest;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.FamilyNote;
 import org.akcjamis.webapp.repository.FamilyNoteRepository;
+import org.akcjamis.webapp.service.FamilyNoteService;
 import org.akcjamis.webapp.repository.search.FamilyNoteSearchRepository;
 
 import org.junit.Before;
@@ -44,17 +45,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class FamilyNoteResourceIntTest {
 
+    private static final String DEFAULT_CONTENT = "AAAAAAAAAAAAAAA";
+    private static final String UPDATED_CONTENT = "BBBBBBBBBBBBBBB";
 
     private static final LocalDate DEFAULT_TIME = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_TIME = LocalDate.now(ZoneId.systemDefault());
-    private static final String DEFAULT_TEXT = "AAAAA";
-    private static final String UPDATED_TEXT = "BBBBB";
 
     private static final Boolean DEFAULT_ARCHIVED = false;
     private static final Boolean UPDATED_ARCHIVED = true;
 
     @Inject
     private FamilyNoteRepository familyNoteRepository;
+
+    @Inject
+    private FamilyNoteService familyNoteService;
 
     @Inject
     private FamilyNoteSearchRepository familyNoteSearchRepository;
@@ -72,9 +76,7 @@ public class FamilyNoteResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        FamilyNoteResource familyNoteResource = new FamilyNoteResource();
-        ReflectionTestUtils.setField(familyNoteResource, "familyNoteSearchRepository", familyNoteSearchRepository);
-        ReflectionTestUtils.setField(familyNoteResource, "familyNoteRepository", familyNoteRepository);
+        FamilyNoteResource familyNoteResource = new FamilyNoteResource(familyNoteService);
         this.restFamilyNoteMockMvc = MockMvcBuilders.standaloneSetup(familyNoteResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -84,8 +86,8 @@ public class FamilyNoteResourceIntTest {
     public void initTest() {
         familyNoteSearchRepository.deleteAll();
         familyNote = new FamilyNote();
+        familyNote.setContent(DEFAULT_CONTENT);
         familyNote.setTime(DEFAULT_TIME);
-        familyNote.setText(DEFAULT_TEXT);
         familyNote.setArchived(DEFAULT_ARCHIVED);
     }
 
@@ -105,13 +107,49 @@ public class FamilyNoteResourceIntTest {
         List<FamilyNote> familyNotes = familyNoteRepository.findAll();
         assertThat(familyNotes).hasSize(databaseSizeBeforeCreate + 1);
         FamilyNote testFamilyNote = familyNotes.get(familyNotes.size() - 1);
+        assertThat(testFamilyNote.getContent()).isEqualTo(DEFAULT_CONTENT);
         assertThat(testFamilyNote.getTime()).isEqualTo(DEFAULT_TIME);
-        assertThat(testFamilyNote.getText()).isEqualTo(DEFAULT_TEXT);
         assertThat(testFamilyNote.isArchived()).isEqualTo(DEFAULT_ARCHIVED);
 
         // Validate the FamilyNote in ElasticSearch
         FamilyNote familyNoteEs = familyNoteSearchRepository.findOne(testFamilyNote.getId());
         assertThat(familyNoteEs).isEqualToComparingFieldByField(testFamilyNote);
+    }
+
+    @Test
+    @Transactional
+    public void checkContentIsRequired() throws Exception {
+        int databaseSizeBeforeTest = familyNoteRepository.findAll().size();
+        // set the field null
+        familyNote.setContent(null);
+
+        // Create the FamilyNote, which fails.
+
+        restFamilyNoteMockMvc.perform(post("/api/family-notes")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(familyNote)))
+                .andExpect(status().isBadRequest());
+
+        List<FamilyNote> familyNotes = familyNoteRepository.findAll();
+        assertThat(familyNotes).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkArchivedIsRequired() throws Exception {
+        int databaseSizeBeforeTest = familyNoteRepository.findAll().size();
+        // set the field null
+        familyNote.setArchived(null);
+
+        // Create the FamilyNote, which fails.
+
+        restFamilyNoteMockMvc.perform(post("/api/family-notes")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(familyNote)))
+                .andExpect(status().isBadRequest());
+
+        List<FamilyNote> familyNotes = familyNoteRepository.findAll();
+        assertThat(familyNotes).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -125,8 +163,8 @@ public class FamilyNoteResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(familyNote.getId().intValue())))
+                .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
                 .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-                .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())))
                 .andExpect(jsonPath("$.[*].archived").value(hasItem(DEFAULT_ARCHIVED.booleanValue())));
     }
 
@@ -141,8 +179,8 @@ public class FamilyNoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(familyNote.getId().intValue()))
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()))
             .andExpect(jsonPath("$.time").value(DEFAULT_TIME.toString()))
-            .andExpect(jsonPath("$.text").value(DEFAULT_TEXT.toString()))
             .andExpect(jsonPath("$.archived").value(DEFAULT_ARCHIVED.booleanValue()));
     }
 
@@ -158,15 +196,15 @@ public class FamilyNoteResourceIntTest {
     @Transactional
     public void updateFamilyNote() throws Exception {
         // Initialize the database
-        familyNoteRepository.saveAndFlush(familyNote);
-        familyNoteSearchRepository.save(familyNote);
+        familyNoteService.save((long) 1, familyNote);
+
         int databaseSizeBeforeUpdate = familyNoteRepository.findAll().size();
 
         // Update the familyNote
         FamilyNote updatedFamilyNote = new FamilyNote();
         updatedFamilyNote.setId(familyNote.getId());
+        updatedFamilyNote.setContent(UPDATED_CONTENT);
         updatedFamilyNote.setTime(UPDATED_TIME);
-        updatedFamilyNote.setText(UPDATED_TEXT);
         updatedFamilyNote.setArchived(UPDATED_ARCHIVED);
 
         restFamilyNoteMockMvc.perform(put("/api/family-notes")
@@ -178,8 +216,8 @@ public class FamilyNoteResourceIntTest {
         List<FamilyNote> familyNotes = familyNoteRepository.findAll();
         assertThat(familyNotes).hasSize(databaseSizeBeforeUpdate);
         FamilyNote testFamilyNote = familyNotes.get(familyNotes.size() - 1);
+        assertThat(testFamilyNote.getContent()).isEqualTo(UPDATED_CONTENT);
         assertThat(testFamilyNote.getTime()).isEqualTo(UPDATED_TIME);
-        assertThat(testFamilyNote.getText()).isEqualTo(UPDATED_TEXT);
         assertThat(testFamilyNote.isArchived()).isEqualTo(UPDATED_ARCHIVED);
 
         // Validate the FamilyNote in ElasticSearch
@@ -191,8 +229,8 @@ public class FamilyNoteResourceIntTest {
     @Transactional
     public void deleteFamilyNote() throws Exception {
         // Initialize the database
-        familyNoteRepository.saveAndFlush(familyNote);
-        familyNoteSearchRepository.save(familyNote);
+        familyNoteService.save((long) 1, familyNote);
+
         int databaseSizeBeforeDelete = familyNoteRepository.findAll().size();
 
         // Get the familyNote
@@ -213,16 +251,15 @@ public class FamilyNoteResourceIntTest {
     @Transactional
     public void searchFamilyNote() throws Exception {
         // Initialize the database
-        familyNoteRepository.saveAndFlush(familyNote);
-        familyNoteSearchRepository.save(familyNote);
+        familyNoteService.save((long) 1, familyNote);
 
         // Search the familyNote
         restFamilyNoteMockMvc.perform(get("/api/_search/family-notes?query=id:" + familyNote.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(familyNote.getId().intValue())))
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
             .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())))
             .andExpect(jsonPath("$.[*].archived").value(hasItem(DEFAULT_ARCHIVED.booleanValue())));
     }
 }

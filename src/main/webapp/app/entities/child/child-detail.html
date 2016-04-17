@@ -3,9 +3,9 @@
     <h2><span>Child</span> {{vm.child.id}}</h2>
     <hr>
     <dl class="dl-horizontal">
-        <dt><span>ChldNo</dt></dt>
+        <dt><span>Number</dt></dt>
         <dd>
-            <span>{{vm.child.chldNo}}<span>
+            <span>{{vm.child.number}}<span>
         </dd>
         <hr>
         <dt><span>FirstName</dt></dt>
@@ -20,7 +20,7 @@
         <hr>
         <dt><span>Sex</dt></dt>
         <dd>
-            <span>{{vm.child.sex}}<span>
+            <span translate="{{'akcjamisApp.Sex.' + vm.child.sex}}">{{vm.child.sex}}</span>
         </dd>
         <hr>
         <dt><span>BirthYear</dt></dt>

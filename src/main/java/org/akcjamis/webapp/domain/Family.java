@@ -1,18 +1,22 @@
 package org.akcjamis.webapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 /**
  * A Family.
  */
 @Entity
-@Table(name = "family")
+@Table(name = "families")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "family")
 public class Family implements Serializable {
@@ -23,19 +27,28 @@ public class Family implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "street")
+    @NotNull
+    @Column(name = "street", nullable = false)
     private String street;
 
-    @Column(name = "house_no")
+    @NotNull
+    @Size(max = 10)
+    @Column(name = "house_no", length = 10, nullable = false)
     private String houseNo;
 
-    @Column(name = "postcode")
-    private String postcode;
+    @Size(max = 10)
+    @Column(name = "flat_no", length = 10)
+    private String flatNo;
+
+    @Size(max = 6)
+    @Column(name = "postalcode", length = 6)
+    private String postalcode;
 
     @Column(name = "district")
     private String district;
 
-    @Column(name = "city")
+    @NotNull
+    @Column(name = "city", nullable = false)
     private String city;
 
     @Column(name = "region")
@@ -43,6 +56,26 @@ public class Family implements Serializable {
 
     @Column(name = "source")
     private String source;
+
+    @OneToMany(mappedBy = "family")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Contact> contacts = new HashSet<>();
+
+    @OneToMany(mappedBy = "family")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Child> childs = new HashSet<>();
+
+    @OneToMany(mappedBy = "family")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<FamilyNote> familyNotes = new HashSet<>();
+
+    @OneToMany(mappedBy = "family")
+    @JsonIgnore
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ChristmasPackage> christmasPackages = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -68,12 +101,20 @@ public class Family implements Serializable {
         this.houseNo = houseNo;
     }
 
-    public String getPostcode() {
-        return postcode;
+    public String getFlatNo() {
+        return flatNo;
     }
 
-    public void setPostcode(String postcode) {
-        this.postcode = postcode;
+    public void setFlatNo(String flatNo) {
+        this.flatNo = flatNo;
+    }
+
+    public String getPostalcode() {
+        return postalcode;
+    }
+
+    public void setPostalcode(String postalcode) {
+        this.postalcode = postalcode;
     }
 
     public String getDistrict() {
@@ -108,6 +149,38 @@ public class Family implements Serializable {
         this.source = source;
     }
 
+    public Set<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(Set<Contact> contacts) {
+        this.contacts = contacts;
+    }
+
+    public Set<Child> getChilds() {
+        return childs;
+    }
+
+    public void setChilds(Set<Child> childs) {
+        this.childs = childs;
+    }
+
+    public Set<FamilyNote> getFamilyNotes() {
+        return familyNotes;
+    }
+
+    public void setFamilyNotes(Set<FamilyNote> familyNotes) {
+        this.familyNotes = familyNotes;
+    }
+
+    public Set<ChristmasPackage> getChristmasPackages() {
+        return christmasPackages;
+    }
+
+    public void setChristmasPackages(Set<ChristmasPackage> christmasPackages) {
+        this.christmasPackages = christmasPackages;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -134,7 +207,8 @@ public class Family implements Serializable {
             "id=" + id +
             ", street='" + street + "'" +
             ", houseNo='" + houseNo + "'" +
-            ", postcode='" + postcode + "'" +
+            ", flatNo='" + flatNo + "'" +
+            ", postalcode='" + postalcode + "'" +
             ", district='" + district + "'" +
             ", city='" + city + "'" +
             ", region='" + region + "'" +

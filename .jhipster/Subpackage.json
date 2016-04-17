@@ -1,0 +1,38 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "subpackageNote",
+            "otherEntityName": "subpackageNote",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "subpackage"
+        },
+        {
+            "relationshipName": "child",
+            "otherEntityName": "child",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "firstName"
+        },
+        {
+            "relationshipName": "christmasPackage",
+            "otherEntityName": "christmasPackage",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "subpackageNumber",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "1"
+        }
+    ],
+    "changelogDate": "20160417194447",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "subpackages",
+    "pagination": "no"
+}

@@ -1,27 +1,37 @@
 {
-  "relationships": [
-    {
-      "relationshipId": 1,
-      "relationshipName": "family",
-      "otherEntityName": "family",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
-    }
-  ],
-  "fields": [
-    {
-      "fieldId": 1,
-      "fieldName": "type",
-      "fieldType": "String"
-    },
-    {
-      "fieldId": 2,
-      "fieldName": "value",
-      "fieldType": "String"
-    }
-  ],
-  "changelogDate": "20160415003529",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no"
+    "relationships": [
+        {
+            "relationshipName": "family",
+            "otherEntityName": "family",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "type",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "value",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "comment",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160415103637",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "contacts",
+    "pagination": "no"
 }

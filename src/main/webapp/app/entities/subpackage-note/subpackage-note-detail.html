@@ -3,14 +3,14 @@
     <h2><span>SubpackageNote</span> {{vm.subpackageNote.id}}</h2>
     <hr>
     <dl class="dl-horizontal">
-        <dt><span>Text</dt></dt>
+        <dt><span>Content</dt></dt>
         <dd>
-            <span>{{vm.subpackageNote.text}}<span>
+            <span>{{vm.subpackageNote.content}}<span>
         </dd>
         <hr>
         <dt><span>subpackage</span></dt>
         <dd>
-            <a ui-sref="sybpackage-detail({id:vm.subpackageNote.subpackage.id})">{{vm.subpackageNote.subpackage.id}}</a>
+            <a ui-sref="subpackage-detail({id:vm.subpackageNote.subpackage.id})">{{vm.subpackageNote.subpackage.id}}</a>
         </dd>
         <hr>
     </dl>

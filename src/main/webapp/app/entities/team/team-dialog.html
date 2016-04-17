@@ -1,5 +1,5 @@
 
-<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -14,15 +14,43 @@
                     ng-model="vm.team.id" readonly />
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_temNo">TemNo</label>
-            <input type="number" class="form-control" name="temNo" id="field_temNo"
-                    ng-model="vm.team.temNo"
+            <label class="control-label" for="field_teamNumber">TeamNumber</label>
+            <input type="number" class="form-control" name="teamNumber" id="field_teamNumber"
+                    ng-model="vm.team.teamNumber"
+                    required min="1" max="100" />
+            <div ng-show="editForm.teamNumber.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.teamNumber.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.teamNumber.$error.min" translate-value-min="1">
+                    This field should be more than 1.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.teamNumber.$error.max">
+                    This field cannot be more than 100.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.teamNumber.$error.number">
+                    This field should be a number.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_note">Note</label>
+            <input type="text" class="form-control" name="note" id="field_note"
+                    ng-model="vm.team.note"
                      />
         </div>
 
         <div class="form-group">
+            <label for="field_user">user</label>
+            <select class="form-control" id="field_user" multiple name="user" ng-model="vm.team.users" ng-options="user as user.login for user in vm.users track by user.id"></select>
+        </div>
+        <div class="form-group">
             <label for="field_event">event</label>
-            <select class="form-control" id="field_event" name="event" ng-model="vm.team.event" ng-options="event as event.id for event in vm.events track by event.id">
+            <select class="form-control" id="field_event" name="event" ng-model="vm.team.event" ng-options="event as event.year for event in vm.events track by event.id">
                 <option value=""></option>
             </select>
         </div>

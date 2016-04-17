@@ -1,33 +1,30 @@
 {
-  "relationships": [
-    {
-      "relationshipId": 1,
-      "relationshipName": "familyNote",
-      "otherEntityName": "familyNote",
-      "relationshipType": "many-to-many",
-      "ownerSide": false,
-      "otherEntityRelationshipName": "tag"
-    }
-  ],
-  "fields": [
-    {
-      "fieldId": 1,
-      "fieldName": "tgsID",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldId": 2,
-      "fieldName": "code",
-      "fieldType": "String"
-    },
-    {
-      "fieldId": 3,
-      "fieldName": "color",
-      "fieldType": "String"
-    }
-  ],
-  "changelogDate": "20160415003533",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no"
+    "relationships": [],
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "3",
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "color",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "12"
+        }
+    ],
+    "changelogDate": "20160415103839",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "tags",
+    "pagination": "no"
 }

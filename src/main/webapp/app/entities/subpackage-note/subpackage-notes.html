@@ -36,7 +36,7 @@
             <thead>
                 <tr>
                     <th><span>ID</span></th>
-                    <th><span>Text</span></th>
+                    <th><span>Content</span></th>
                     <th><span>subpackage</span></th>
                     <th></th>
                 </tr>
@@ -44,9 +44,9 @@
             <tbody>
                 <tr ng-repeat="subpackageNote in vm.subpackageNotes track by subpackageNote.id">
                     <td><a ui-sref="subpackage-note-detail({id:subpackageNote.id})">{{subpackageNote.id}}</a></td>
-                    <td>{{subpackageNote.text}}</td>
+                    <td>{{subpackageNote.content}}</td>
                     <td>
-                        <a ui-sref="sybpackage-detail({id:subpackageNote.subpackage.id})">{{subpackageNote.subpackage.id}}</a>
+                        <a ui-sref="subpackage-detail({id:subpackageNote.subpackage.id})">{{subpackageNote.subpackage.id}}</a>
                     </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">

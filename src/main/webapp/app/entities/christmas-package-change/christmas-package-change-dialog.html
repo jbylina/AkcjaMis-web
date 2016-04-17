@@ -1,0 +1,80 @@
+
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="vm.clear()">&times;</button>
+        <h4 class="modal-title" id="myChristmasPackageChangeLabel">Create or edit a ChristmasPackageChange</h4>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="vm.christmasPackageChange.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="akcjamisApp.christmasPackageChange.type_code" for="field_type_code">Type_code</label>
+            <input type="text" class="form-control" name="type_code" id="field_type_code"
+                    ng-model="vm.christmasPackageChange.type_code"
+                    ng-minlength="3" ng-maxlength="20" />
+            <div ng-show="editForm.type_code.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.type_code.$error.minlength" translate-value-min="3">
+                    This field is required to be at least 3 characters.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.type_code.$error.maxlength">
+                    This field cannot be longer than 20 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_time">Time</label>
+                <div class="input-group">
+                    <input id="field_time" type="text" class="form-control" name="time" uib-datepicker-popup="{{dateformat}}" ng-model="vm.christmasPackageChange.time" is-open="vm.datePickerOpenStatus.time"
+                    required/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.openCalendar('time')"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            <div ng-show="editForm.time.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.time.$error.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_content">Content</label>
+            <input type="text" class="form-control" name="content" id="field_content"
+                    ng-model="vm.christmasPackageChange.content"
+                    required ng-maxlength="500" />
+            <div ng-show="editForm.content.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.content.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.content.$error.maxlength">
+                    This field cannot be longer than 500 characters.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="field_christmasPackage">christmasPackage</label>
+            <select class="form-control" id="field_christmasPackage" name="christmasPackage" ng-model="vm.christmasPackageChange.christmasPackage" ng-options="christmasPackage as christmasPackage.id for christmasPackage in vm.christmaspackages track by christmasPackage.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+        </button>
+    </div>
+</form>

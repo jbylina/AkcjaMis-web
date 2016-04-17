@@ -5,9 +5,9 @@
         .module('akcjamisApp')
         .controller('TeamDetailController', TeamDetailController);
 
-    TeamDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Team', 'Event'];
+    TeamDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Team', 'User', 'Event', 'ChristmasPackage'];
 
-    function TeamDetailController($scope, $rootScope, $stateParams, entity, Team, Event) {
+    function TeamDetailController($scope, $rootScope, $stateParams, entity, Team, User, Event, ChristmasPackage) {
         var vm = this;
         vm.team = entity;
         vm.load = function (id) {

@@ -1,0 +1,73 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "event",
+            "otherEntityName": "event",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "year"
+        },
+        {
+            "relationshipName": "team",
+            "otherEntityName": "team",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "teamNumber"
+        },
+        {
+            "relationshipName": "christmasPackageNote",
+            "otherEntityName": "christmasPackageNote",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "christmasPackage"
+        },
+        {
+            "relationshipName": "christmasPackageChange",
+            "otherEntityName": "christmasPackageChange",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "christmasPackage"
+        },
+        {
+            "relationshipName": "subpackage",
+            "otherEntityName": "subpackage",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "christmasPackage"
+        },
+        {
+            "relationshipName": "family",
+            "otherEntityName": "family",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "mark",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "1",
+            "fieldValidateRulesMax": "6"
+        },
+        {
+            "fieldName": "delivered",
+            "fieldType": "Boolean",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "packageNumber",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "1"
+        }
+    ],
+    "changelogDate": "20160417200639",
+    "dto": "no",
+    "service": "serviceClass",
+    "entityTableName": "christmas_packages",
+    "pagination": "pager"
+}

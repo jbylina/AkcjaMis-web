@@ -5,12 +5,12 @@
         .module('akcjamisApp')
         .controller('SubpackageNoteDialogController', SubpackageNoteDialogController);
 
-    SubpackageNoteDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'SubpackageNote', 'Sybpackage'];
+    SubpackageNoteDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'SubpackageNote', 'Subpackage'];
 
-    function SubpackageNoteDialogController ($scope, $stateParams, $uibModalInstance, entity, SubpackageNote, Sybpackage) {
+    function SubpackageNoteDialogController ($scope, $stateParams, $uibModalInstance, entity, SubpackageNote, Subpackage) {
         var vm = this;
         vm.subpackageNote = entity;
-        vm.sybpackages = Sybpackage.query();
+        vm.subpackages = Subpackage.query();
         vm.load = function(id) {
             SubpackageNote.get({id : id}, function(result) {
                 vm.subpackageNote = result;

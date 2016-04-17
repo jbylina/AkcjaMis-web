@@ -5,15 +5,18 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
+
+import org.akcjamis.webapp.domain.enumeration.Sex;
 
 /**
  * A Child.
  */
 @Entity
-@Table(name = "child")
+@Table(name = "children")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "child")
 public class Child implements Serializable {
@@ -24,19 +27,27 @@ public class Child implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "chld_no")
-    private Integer chldNo;
+    @NotNull
+    @Column(name = "number", nullable = false)
+    private Integer number;
 
-    @Column(name = "first_name")
+    @NotNull
+    @Size(max = 255)
+    @Column(name = "first_name", length = 255, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @NotNull
+    @Size(max = 255)
+    @Column(name = "last_name", length = 255, nullable = false)
     private String lastName;
 
-    @Column(name = "sex")
-    private Integer sex;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sex", nullable = false)
+    private Sex sex;
 
-    @Column(name = "birth_year")
+    @NotNull
+    @Column(name = "birth_year", nullable = false)
     private LocalDate birthYear;
 
     @ManyToOne
@@ -50,12 +61,12 @@ public class Child implements Serializable {
         this.id = id;
     }
 
-    public Integer getChldNo() {
-        return chldNo;
+    public Integer getNumber() {
+        return number;
     }
 
-    public void setChldNo(Integer chldNo) {
-        this.chldNo = chldNo;
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public String getFirstName() {
@@ -74,11 +85,11 @@ public class Child implements Serializable {
         this.lastName = lastName;
     }
 
-    public Integer getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(Integer sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
@@ -122,7 +133,7 @@ public class Child implements Serializable {
     public String toString() {
         return "Child{" +
             "id=" + id +
-            ", chldNo='" + chldNo + "'" +
+            ", number='" + number + "'" +
             ", firstName='" + firstName + "'" +
             ", lastName='" + lastName + "'" +
             ", sex='" + sex + "'" +

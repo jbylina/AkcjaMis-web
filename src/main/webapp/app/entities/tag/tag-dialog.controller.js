@@ -5,12 +5,11 @@
         .module('akcjamisApp')
         .controller('TagDialogController', TagDialogController);
 
-    TagDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Tag', 'FamilyNote'];
+    TagDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Tag'];
 
-    function TagDialogController ($scope, $stateParams, $uibModalInstance, entity, Tag, FamilyNote) {
+    function TagDialogController ($scope, $stateParams, $uibModalInstance, entity, Tag) {
         var vm = this;
         vm.tag = entity;
-        vm.familynotes = FamilyNote.query();
         vm.load = function(id) {
             Tag.get({id : id}, function(result) {
                 vm.tag = result;

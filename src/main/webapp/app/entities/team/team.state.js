@@ -62,7 +62,8 @@
                     resolve: {
                         entity: function () {
                             return {
-                                temNo: null,
+                                teamNumber: null,
+                                note: null,
                                 id: null
                             };
                         }

@@ -62,7 +62,7 @@
                     resolve: {
                         entity: function () {
                             return {
-                                text: null,
+                                content: null,
                                 id: null
                             };
                         }

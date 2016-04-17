@@ -32,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.akcjamis.webapp.domain.enumeration.Sex;
 
 /**
  * Test class for the ChildResource REST controller.
@@ -45,15 +46,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ChildResourceIntTest {
 
 
-    private static final Integer DEFAULT_CHLD_NO = 1;
-    private static final Integer UPDATED_CHLD_NO = 2;
-    private static final String DEFAULT_FIRST_NAME = "AAAAA";
-    private static final String UPDATED_FIRST_NAME = "BBBBB";
-    private static final String DEFAULT_LAST_NAME = "AAAAA";
-    private static final String UPDATED_LAST_NAME = "BBBBB";
+    private static final Integer DEFAULT_NUMBER = 1;
+    private static final Integer UPDATED_NUMBER = 2;
+    private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    private static final String UPDATED_FIRST_NAME = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB";
+    private static final String DEFAULT_LAST_NAME = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    private static final String UPDATED_LAST_NAME = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB";
 
-    private static final Integer DEFAULT_SEX = 1;
-    private static final Integer UPDATED_SEX = 2;
+    private static final Sex DEFAULT_SEX = Sex.MALE;
+    private static final Sex UPDATED_SEX = Sex.FEMALE;
 
     private static final LocalDate DEFAULT_BIRTH_YEAR = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_BIRTH_YEAR = LocalDate.now(ZoneId.systemDefault());
@@ -89,7 +90,7 @@ public class ChildResourceIntTest {
     public void initTest() {
         childSearchRepository.deleteAll();
         child = new Child();
-        child.setChldNo(DEFAULT_CHLD_NO);
+        child.setNumber(DEFAULT_NUMBER);
         child.setFirstName(DEFAULT_FIRST_NAME);
         child.setLastName(DEFAULT_LAST_NAME);
         child.setSex(DEFAULT_SEX);
@@ -112,7 +113,7 @@ public class ChildResourceIntTest {
         List<Child> children = childRepository.findAll();
         assertThat(children).hasSize(databaseSizeBeforeCreate + 1);
         Child testChild = children.get(children.size() - 1);
-        assertThat(testChild.getChldNo()).isEqualTo(DEFAULT_CHLD_NO);
+        assertThat(testChild.getNumber()).isEqualTo(DEFAULT_NUMBER);
         assertThat(testChild.getFirstName()).isEqualTo(DEFAULT_FIRST_NAME);
         assertThat(testChild.getLastName()).isEqualTo(DEFAULT_LAST_NAME);
         assertThat(testChild.getSex()).isEqualTo(DEFAULT_SEX);
@@ -121,6 +122,96 @@ public class ChildResourceIntTest {
         // Validate the Child in ElasticSearch
         Child childEs = childSearchRepository.findOne(testChild.getId());
         assertThat(childEs).isEqualToComparingFieldByField(testChild);
+    }
+
+    @Test
+    @Transactional
+    public void checkNumberIsRequired() throws Exception {
+        int databaseSizeBeforeTest = childRepository.findAll().size();
+        // set the field null
+        child.setNumber(null);
+
+        // Create the Child, which fails.
+
+        restChildMockMvc.perform(post("/api/children")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(child)))
+                .andExpect(status().isBadRequest());
+
+        List<Child> children = childRepository.findAll();
+        assertThat(children).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkFirstNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = childRepository.findAll().size();
+        // set the field null
+        child.setFirstName(null);
+
+        // Create the Child, which fails.
+
+        restChildMockMvc.perform(post("/api/children")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(child)))
+                .andExpect(status().isBadRequest());
+
+        List<Child> children = childRepository.findAll();
+        assertThat(children).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkLastNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = childRepository.findAll().size();
+        // set the field null
+        child.setLastName(null);
+
+        // Create the Child, which fails.
+
+        restChildMockMvc.perform(post("/api/children")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(child)))
+                .andExpect(status().isBadRequest());
+
+        List<Child> children = childRepository.findAll();
+        assertThat(children).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkSexIsRequired() throws Exception {
+        int databaseSizeBeforeTest = childRepository.findAll().size();
+        // set the field null
+        child.setSex(null);
+
+        // Create the Child, which fails.
+
+        restChildMockMvc.perform(post("/api/children")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(child)))
+                .andExpect(status().isBadRequest());
+
+        List<Child> children = childRepository.findAll();
+        assertThat(children).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkBirthYearIsRequired() throws Exception {
+        int databaseSizeBeforeTest = childRepository.findAll().size();
+        // set the field null
+        child.setBirthYear(null);
+
+        // Create the Child, which fails.
+
+        restChildMockMvc.perform(post("/api/children")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(child)))
+                .andExpect(status().isBadRequest());
+
+        List<Child> children = childRepository.findAll();
+        assertThat(children).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -134,10 +225,10 @@ public class ChildResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(child.getId().intValue())))
-                .andExpect(jsonPath("$.[*].chldNo").value(hasItem(DEFAULT_CHLD_NO)))
+                .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
                 .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME.toString())))
                 .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
-                .andExpect(jsonPath("$.[*].sex").value(hasItem(DEFAULT_SEX)))
+                .andExpect(jsonPath("$.[*].sex").value(hasItem(DEFAULT_SEX.toString())))
                 .andExpect(jsonPath("$.[*].birthYear").value(hasItem(DEFAULT_BIRTH_YEAR.toString())));
     }
 
@@ -152,10 +243,10 @@ public class ChildResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(child.getId().intValue()))
-            .andExpect(jsonPath("$.chldNo").value(DEFAULT_CHLD_NO))
+            .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME.toString()))
             .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME.toString()))
-            .andExpect(jsonPath("$.sex").value(DEFAULT_SEX))
+            .andExpect(jsonPath("$.sex").value(DEFAULT_SEX.toString()))
             .andExpect(jsonPath("$.birthYear").value(DEFAULT_BIRTH_YEAR.toString()));
     }
 
@@ -178,7 +269,7 @@ public class ChildResourceIntTest {
         // Update the child
         Child updatedChild = new Child();
         updatedChild.setId(child.getId());
-        updatedChild.setChldNo(UPDATED_CHLD_NO);
+        updatedChild.setNumber(UPDATED_NUMBER);
         updatedChild.setFirstName(UPDATED_FIRST_NAME);
         updatedChild.setLastName(UPDATED_LAST_NAME);
         updatedChild.setSex(UPDATED_SEX);
@@ -193,7 +284,7 @@ public class ChildResourceIntTest {
         List<Child> children = childRepository.findAll();
         assertThat(children).hasSize(databaseSizeBeforeUpdate);
         Child testChild = children.get(children.size() - 1);
-        assertThat(testChild.getChldNo()).isEqualTo(UPDATED_CHLD_NO);
+        assertThat(testChild.getNumber()).isEqualTo(UPDATED_NUMBER);
         assertThat(testChild.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(testChild.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(testChild.getSex()).isEqualTo(UPDATED_SEX);
@@ -238,10 +329,10 @@ public class ChildResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(child.getId().intValue())))
-            .andExpect(jsonPath("$.[*].chldNo").value(hasItem(DEFAULT_CHLD_NO)))
+            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
             .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME.toString())))
             .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
-            .andExpect(jsonPath("$.[*].sex").value(hasItem(DEFAULT_SEX)))
+            .andExpect(jsonPath("$.[*].sex").value(hasItem(DEFAULT_SEX.toString())))
             .andExpect(jsonPath("$.[*].birthYear").value(hasItem(DEFAULT_BIRTH_YEAR.toString())));
     }
 }

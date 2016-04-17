@@ -1,19 +1,30 @@
 {
-  "relationships": [],
-  "fields": [
-    {
-      "fieldId": 1,
-      "fieldName": "year",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldId": 2,
-      "fieldName": "coordinator",
-      "fieldType": "String"
-    }
-  ],
-  "changelogDate": "20160415003534",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no"
+    "relationships": [
+        {
+            "relationshipName": "team",
+            "otherEntityName": "team",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "event"
+        },
+        {
+            "relationshipName": "christmasPackage",
+            "otherEntityName": "christmasPackage",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "event"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "year",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160417195658",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "events",
+    "pagination": "no"
 }

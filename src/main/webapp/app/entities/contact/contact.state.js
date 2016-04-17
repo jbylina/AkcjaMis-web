@@ -64,6 +64,7 @@
                             return {
                                 type: null,
                                 value: null,
+                                comment: null,
                                 id: null
                             };
                         }

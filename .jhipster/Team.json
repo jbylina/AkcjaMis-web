@@ -1,22 +1,46 @@
 {
-  "relationships": [
-    {
-      "relationshipId": 1,
-      "relationshipName": "event",
-      "otherEntityName": "event",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
-    }
-  ],
-  "fields": [
-    {
-      "fieldId": 1,
-      "fieldName": "temNo",
-      "fieldType": "Integer"
-    }
-  ],
-  "changelogDate": "20160415003535",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no"
+    "relationships": [
+        {
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "event",
+            "otherEntityName": "event",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "year"
+        },
+        {
+            "relationshipName": "christmasPackage",
+            "otherEntityName": "christmasPackage",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "team"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "teamNumber",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "1",
+            "fieldValidateRulesMax": "100"
+        },
+        {
+            "fieldName": "note",
+            "fieldType": "String",
+            "fieldValidateRules": []
+        }
+    ],
+    "changelogDate": "20160417194720",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "teams",
+    "pagination": "no"
 }

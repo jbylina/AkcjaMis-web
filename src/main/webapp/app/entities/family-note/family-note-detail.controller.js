@@ -5,9 +5,9 @@
         .module('akcjamisApp')
         .controller('FamilyNoteDetailController', FamilyNoteDetailController);
 
-    FamilyNoteDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'FamilyNote', 'Family', 'Tag'];
+    FamilyNoteDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'FamilyNote', 'Tag', 'Family'];
 
-    function FamilyNoteDetailController($scope, $rootScope, $stateParams, entity, FamilyNote, Family, Tag) {
+    function FamilyNoteDetailController($scope, $rootScope, $stateParams, entity, FamilyNote, Tag, Family) {
         var vm = this;
         vm.familyNote = entity;
         vm.load = function (id) {

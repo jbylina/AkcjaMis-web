@@ -5,11 +5,15 @@
         .module('akcjamisApp')
         .controller('FamilyDialogController', FamilyDialogController);
 
-    FamilyDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Family'];
+    FamilyDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Family', 'Contact', 'Child', 'FamilyNote', 'ChristmasPackage'];
 
-    function FamilyDialogController ($scope, $stateParams, $uibModalInstance, entity, Family) {
+    function FamilyDialogController ($scope, $stateParams, $uibModalInstance, entity, Family, Contact, Child, FamilyNote, ChristmasPackage) {
         var vm = this;
         vm.family = entity;
+        vm.contacts = Contact.query();
+        vm.childs = Child.query();
+        vm.familynotes = FamilyNote.query();
+        vm.christmaspackages = ChristmasPackage.query();
         vm.load = function(id) {
             Family.get({id : id}, function(result) {
                 vm.family = result;

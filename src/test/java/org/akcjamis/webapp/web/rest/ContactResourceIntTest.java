@@ -5,6 +5,7 @@ import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 
+import org.akcjamis.webapp.service.FamilyService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,16 +43,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class ContactResourceIntTest {
 
-    private static final String DEFAULT_TYPE = "AAAAA";
-    private static final String UPDATED_TYPE = "BBBBB";
+    private static final String DEFAULT_TYPE = "AAAAAAAAAAAAAAAAAAAA";
+    private static final String UPDATED_TYPE = "BBBBBBBBBBBBBBBBBBBB";
     private static final String DEFAULT_VALUE = "AAAAA";
     private static final String UPDATED_VALUE = "BBBBB";
+    private static final String DEFAULT_COMMENT = "AAAAA";
+    private static final String UPDATED_COMMENT = "BBBBB";
 
     @Inject
     private ContactRepository contactRepository;
 
     @Inject
     private ContactSearchRepository contactSearchRepository;
+
+    @Inject
+    private FamilyService familyService;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -66,9 +72,7 @@ public class ContactResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ContactResource contactResource = new ContactResource();
-        ReflectionTestUtils.setField(contactResource, "contactSearchRepository", contactSearchRepository);
-        ReflectionTestUtils.setField(contactResource, "contactRepository", contactRepository);
+        ContactResource contactResource = new ContactResource(contactRepository, contactSearchRepository, familyService);
         this.restContactMockMvc = MockMvcBuilders.standaloneSetup(contactResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -80,6 +84,7 @@ public class ContactResourceIntTest {
         contact = new Contact();
         contact.setType(DEFAULT_TYPE);
         contact.setValue(DEFAULT_VALUE);
+        contact.setComment(DEFAULT_COMMENT);
     }
 
     @Test
@@ -100,10 +105,47 @@ public class ContactResourceIntTest {
         Contact testContact = contacts.get(contacts.size() - 1);
         assertThat(testContact.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testContact.getValue()).isEqualTo(DEFAULT_VALUE);
+        assertThat(testContact.getComment()).isEqualTo(DEFAULT_COMMENT);
 
         // Validate the Contact in ElasticSearch
         Contact contactEs = contactSearchRepository.findOne(testContact.getId());
         assertThat(contactEs).isEqualToComparingFieldByField(testContact);
+    }
+
+    @Test
+    @Transactional
+    public void checkTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = contactRepository.findAll().size();
+        // set the field null
+        contact.setType(null);
+
+        // Create the Contact, which fails.
+
+        restContactMockMvc.perform(post("/api/contacts")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(contact)))
+                .andExpect(status().isBadRequest());
+
+        List<Contact> contacts = contactRepository.findAll();
+        assertThat(contacts).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkValueIsRequired() throws Exception {
+        int databaseSizeBeforeTest = contactRepository.findAll().size();
+        // set the field null
+        contact.setValue(null);
+
+        // Create the Contact, which fails.
+
+        restContactMockMvc.perform(post("/api/contacts")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(contact)))
+                .andExpect(status().isBadRequest());
+
+        List<Contact> contacts = contactRepository.findAll();
+        assertThat(contacts).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -118,7 +160,8 @@ public class ContactResourceIntTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(contact.getId().intValue())))
                 .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-                .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())));
+                .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())))
+                .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())));
     }
 
     @Test
@@ -133,7 +176,8 @@ public class ContactResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(contact.getId().intValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()));
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()))
+            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT.toString()));
     }
 
     @Test
@@ -157,6 +201,7 @@ public class ContactResourceIntTest {
         updatedContact.setId(contact.getId());
         updatedContact.setType(UPDATED_TYPE);
         updatedContact.setValue(UPDATED_VALUE);
+        updatedContact.setComment(UPDATED_COMMENT);
 
         restContactMockMvc.perform(put("/api/contacts")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -169,6 +214,7 @@ public class ContactResourceIntTest {
         Contact testContact = contacts.get(contacts.size() - 1);
         assertThat(testContact.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testContact.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testContact.getComment()).isEqualTo(UPDATED_COMMENT);
 
         // Validate the Contact in ElasticSearch
         Contact contactEs = contactSearchRepository.findOne(testContact.getId());
@@ -210,6 +256,7 @@ public class ContactResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(contact.getId().intValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())));
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())))
+            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())));
     }
 }

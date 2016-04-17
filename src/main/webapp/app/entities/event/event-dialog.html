@@ -1,5 +1,5 @@
 
-<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -17,17 +17,17 @@
             <label class="control-label" for="field_year">Year</label>
                 <div class="input-group">
                     <input id="field_year" type="text" class="form-control" name="year" uib-datepicker-popup="{{dateformat}}" ng-model="vm.event.year" is-open="vm.datePickerOpenStatus.year"
-                    />
+                    required/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="vm.openCalendar('year')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label" for="field_coordinator">Coordinator</label>
-            <input type="text" class="form-control" name="coordinator" id="field_coordinator"
-                    ng-model="vm.event.coordinator"
-                     />
+            <div ng-show="editForm.year.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.year.$error.required">
+                    This field is required.
+                </p>
+            </div>
         </div>
 
     </div>

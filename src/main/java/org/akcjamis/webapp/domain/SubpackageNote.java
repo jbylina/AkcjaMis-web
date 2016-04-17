@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ import java.util.Objects;
  * A SubpackageNote.
  */
 @Entity
-@Table(name = "subpackage_note")
+@Table(name = "subpackage_notes")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "subpackagenote")
 public class SubpackageNote implements Serializable {
@@ -23,11 +24,13 @@ public class SubpackageNote implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "text")
-    private String text;
+    @NotNull
+    @Size(max = 65535)
+    @Column(name = "content", length = 65535, nullable = false)
+    private String content;
 
     @ManyToOne
-    private Sybpackage subpackage;
+    private Subpackage subpackage;
 
     public Long getId() {
         return id;
@@ -37,20 +40,20 @@ public class SubpackageNote implements Serializable {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Sybpackage getSubpackage() {
+    public Subpackage getSubpackage() {
         return subpackage;
     }
 
-    public void setSubpackage(Sybpackage sybpackage) {
-        this.subpackage = sybpackage;
+    public void setSubpackage(Subpackage subpackage) {
+        this.subpackage = subpackage;
     }
 
     @Override
@@ -77,7 +80,7 @@ public class SubpackageNote implements Serializable {
     public String toString() {
         return "SubpackageNote{" +
             "id=" + id +
-            ", text='" + text + "'" +
+            ", content='" + content + "'" +
             '}';
     }
 }

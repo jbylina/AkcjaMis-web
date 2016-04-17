@@ -5,9 +5,9 @@
         .module('akcjamisApp')
         .controller('EventDetailController', EventDetailController);
 
-    EventDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Event'];
+    EventDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'Event', 'Team', 'ChristmasPackage'];
 
-    function EventDetailController($scope, $rootScope, $stateParams, entity, Event) {
+    function EventDetailController($scope, $rootScope, $stateParams, entity, Event, Team, ChristmasPackage) {
         var vm = this;
         vm.event = entity;
         vm.load = function (id) {

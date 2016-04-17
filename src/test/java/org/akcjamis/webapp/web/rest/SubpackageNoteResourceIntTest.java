@@ -42,8 +42,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class SubpackageNoteResourceIntTest {
 
-    private static final String DEFAULT_TEXT = "AAAAA";
-    private static final String UPDATED_TEXT = "BBBBB";
+    private static final String DEFAULT_CONTENT = "AAAAAAAAA";
+    private static final String UPDATED_CONTENT = "BBBBBBBBB";
 
     @Inject
     private SubpackageNoteRepository subpackageNoteRepository;
@@ -76,7 +76,7 @@ public class SubpackageNoteResourceIntTest {
     public void initTest() {
         subpackageNoteSearchRepository.deleteAll();
         subpackageNote = new SubpackageNote();
-        subpackageNote.setText(DEFAULT_TEXT);
+        subpackageNote.setContent(DEFAULT_CONTENT);
     }
 
     @Test
@@ -95,11 +95,29 @@ public class SubpackageNoteResourceIntTest {
         List<SubpackageNote> subpackageNotes = subpackageNoteRepository.findAll();
         assertThat(subpackageNotes).hasSize(databaseSizeBeforeCreate + 1);
         SubpackageNote testSubpackageNote = subpackageNotes.get(subpackageNotes.size() - 1);
-        assertThat(testSubpackageNote.getText()).isEqualTo(DEFAULT_TEXT);
+        assertThat(testSubpackageNote.getContent()).isEqualTo(DEFAULT_CONTENT);
 
         // Validate the SubpackageNote in ElasticSearch
         SubpackageNote subpackageNoteEs = subpackageNoteSearchRepository.findOne(testSubpackageNote.getId());
         assertThat(subpackageNoteEs).isEqualToComparingFieldByField(testSubpackageNote);
+    }
+
+    @Test
+    @Transactional
+    public void checkContentIsRequired() throws Exception {
+        int databaseSizeBeforeTest = subpackageNoteRepository.findAll().size();
+        // set the field null
+        subpackageNote.setContent(null);
+
+        // Create the SubpackageNote, which fails.
+
+        restSubpackageNoteMockMvc.perform(post("/api/subpackage-notes")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(subpackageNote)))
+                .andExpect(status().isBadRequest());
+
+        List<SubpackageNote> subpackageNotes = subpackageNoteRepository.findAll();
+        assertThat(subpackageNotes).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -113,7 +131,7 @@ public class SubpackageNoteResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(subpackageNote.getId().intValue())))
-                .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())));
+                .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
     }
 
     @Test
@@ -127,7 +145,7 @@ public class SubpackageNoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(subpackageNote.getId().intValue()))
-            .andExpect(jsonPath("$.text").value(DEFAULT_TEXT.toString()));
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()));
     }
 
     @Test
@@ -149,7 +167,7 @@ public class SubpackageNoteResourceIntTest {
         // Update the subpackageNote
         SubpackageNote updatedSubpackageNote = new SubpackageNote();
         updatedSubpackageNote.setId(subpackageNote.getId());
-        updatedSubpackageNote.setText(UPDATED_TEXT);
+        updatedSubpackageNote.setContent(UPDATED_CONTENT);
 
         restSubpackageNoteMockMvc.perform(put("/api/subpackage-notes")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -160,7 +178,7 @@ public class SubpackageNoteResourceIntTest {
         List<SubpackageNote> subpackageNotes = subpackageNoteRepository.findAll();
         assertThat(subpackageNotes).hasSize(databaseSizeBeforeUpdate);
         SubpackageNote testSubpackageNote = subpackageNotes.get(subpackageNotes.size() - 1);
-        assertThat(testSubpackageNote.getText()).isEqualTo(UPDATED_TEXT);
+        assertThat(testSubpackageNote.getContent()).isEqualTo(UPDATED_CONTENT);
 
         // Validate the SubpackageNote in ElasticSearch
         SubpackageNote subpackageNoteEs = subpackageNoteSearchRepository.findOne(testSubpackageNote.getId());
@@ -201,6 +219,6 @@ public class SubpackageNoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(subpackageNote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].text").value(hasItem(DEFAULT_TEXT.toString())));
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
     }
 }

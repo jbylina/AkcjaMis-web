@@ -1,4 +1,4 @@
-// Generated on 2016-04-14 using generator-jhipster 3.0.0
+// Generated on 2016-04-15 using generator-jhipster 3.0.0
 'use strict';
 
 var gulp = require('gulp'),
@@ -8,9 +8,6 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant-fork'),
     eslint = require('gulp-eslint'),
-    argv = require('yargs').argv,
-    gutil = require('gulp-util'),
-    protractor = require('gulp-protractor').protractor,
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
     del = require('del'),
@@ -218,28 +215,10 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
     }, done).start();
 });
 
-/* to run individual suites pass `gulp itest --suite suiteName` */
-gulp.task('protractor', function () {
-    var configObj = {
-        configFile: config.test + 'protractor.conf.js'
-    };
-    if (argv.suite) {
-        configObj['args'] = ['--suite', argv.suite];
-    }
-    return gulp.src([])
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(protractor(configObj))
-        .on('error', function () {
-            gutil.log('E2E Tests failed');
-            process.exit(1);
-        });
-});
-
-gulp.task('itest', ['protractor']);
 
 gulp.task('watch', function () {
     gulp.watch('bower.json', ['install']);
-    gulp.watch(['gulpfile.js', 'build.gradle'], ['ngconstant:dev']);
+    gulp.watch(['gulpfile.js', 'pom.xml'], ['ngconstant:dev']);
     gulp.watch(config.app + 'content/css/**/*.css', ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
     gulp.watch(config.app + 'app/**/*.js', ['inject']);

@@ -5,12 +5,14 @@
         .module('akcjamisApp')
         .controller('TeamDialogController', TeamDialogController);
 
-    TeamDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Team', 'Event'];
+    TeamDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Team', 'User', 'Event', 'ChristmasPackage'];
 
-    function TeamDialogController ($scope, $stateParams, $uibModalInstance, entity, Team, Event) {
+    function TeamDialogController ($scope, $stateParams, $uibModalInstance, entity, Team, User, Event, ChristmasPackage) {
         var vm = this;
         vm.team = entity;
+        vm.users = User.query();
         vm.events = Event.query();
+        vm.christmaspackages = ChristmasPackage.query();
         vm.load = function(id) {
             Team.get({id : id}, function(result) {
                 vm.team = result;

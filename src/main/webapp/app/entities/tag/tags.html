@@ -36,7 +36,6 @@
             <thead>
                 <tr>
                     <th><span>ID</span></th>
-                    <th><span>TgsID</span></th>
                     <th><span>Code</span></th>
                     <th><span>Color</span></th>
                     <th></th>
@@ -45,7 +44,6 @@
             <tbody>
                 <tr ng-repeat="tag in vm.tags track by tag.id">
                     <td><a ui-sref="tag-detail({id:tag.id})">{{tag.id}}</a></td>
-                    <td>{{tag.tgsID}}</td>
                     <td>{{tag.code}}</td>
                     <td>{{tag.color}}</td>
                     <td class="text-right">

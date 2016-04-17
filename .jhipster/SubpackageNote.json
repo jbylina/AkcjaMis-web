@@ -1,22 +1,26 @@
 {
-  "relationships": [
-    {
-      "relationshipId": 1,
-      "relationshipName": "subpackage",
-      "otherEntityName": "sybpackage",
-      "relationshipType": "many-to-one",
-      "otherEntityField": "id"
-    }
-  ],
-  "fields": [
-    {
-      "fieldId": 1,
-      "fieldName": "text",
-      "fieldType": "String"
-    }
-  ],
-  "changelogDate": "20160415003539",
-  "dto": "no",
-  "pagination": "no",
-  "service": "no"
+    "relationships": [
+        {
+            "relationshipName": "subpackage",
+            "otherEntityName": "subpackage",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "content",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "65535"
+        }
+    ],
+    "changelogDate": "20160417191446",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "subpackage_notes",
+    "pagination": "no"
 }

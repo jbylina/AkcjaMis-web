@@ -1,0 +1,93 @@
+<div>
+    <h2>ChristmasPackages</h2>
+    <jhi-alert></jhi-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="christmas-package.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span class="hidden-xs" >
+                        Create new ChristmasPackage
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery" placeholder="Query">
+                        <span  class="input-group-btn width-min" >
+                            <button class="btn btn-info" ng-click="vm.search(vm.searchQuery)">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn width-min" ng-if="vm.currentSearch">
+                            <button class="btn btn-info" ng-click="vm.clear()">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="mark"><span>Mark</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="delivered"><span>Delivered</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="packageNumber"><span>PackageNumber</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="event.year"><span>event</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="team.teamNumber"><span>team</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="family.id"><span>family</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="christmasPackage in vm.christmasPackages track by christmasPackage.id">
+                    <td><a ui-sref="christmas-package-detail({id:christmasPackage.id})">{{christmasPackage.id}}</a></td>
+                    <td>{{christmasPackage.mark}}</td>
+                    <td>{{christmasPackage.delivered}}</td>
+                    <td>{{christmasPackage.packageNumber}}</td>
+                    <td>
+                        <a ui-sref="event-detail({id:christmasPackage.event.id})">{{christmasPackage.event.year}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="team-detail({id:christmasPackage.team.id})">{{christmasPackage.team.teamNumber}}</a>
+                    </td>
+                    <td>
+                        <a ui-sref="family-detail({id:christmasPackage.family.id})">{{christmasPackage.family.id}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="christmas-package-detail({id:christmasPackage.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="christmas-package.edit({id:christmasPackage.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="christmas-package.delete({id:christmasPackage.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <jhi-item-count page="vm.page" total="vm.queryCount"></jhi-item-count>
+    </div>
+    <uib-pager total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
+</div>

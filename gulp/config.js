@@ -1,10 +1,10 @@
 module.exports = {
     app: 'src/main/webapp/',
-    dist: 'build/www/',
+    dist: 'target/www/',
     test: 'src/test/javascript/',
     bower: 'src/main/webapp/bower_components/',
-    tmp: 'build/tmp',
-    revManifest: 'build/tmp/rev-manifest.json',
+    tmp: 'target/tmp',
+    revManifest: 'target/tmp/rev-manifest.json',
     port: 9000,
     apiPort: 8080,
     liveReloadPort: 35729,

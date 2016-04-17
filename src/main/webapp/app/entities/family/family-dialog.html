@@ -1,5 +1,5 @@
 
-<form name="editForm" role="form" novalidate ng-submit="vm.save()">
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -17,19 +17,53 @@
             <label class="control-label" for="field_street">Street</label>
             <input type="text" class="form-control" name="street" id="field_street"
                     ng-model="vm.family.street"
-                     />
+                    required />
+            <div ng-show="editForm.street.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.street.$error.required">
+                    This field is required.
+                </p>
+            </div>
         </div>
         <div class="form-group">
             <label class="control-label" for="field_houseNo">HouseNo</label>
             <input type="text" class="form-control" name="houseNo" id="field_houseNo"
                     ng-model="vm.family.houseNo"
-                     />
+                    required ng-maxlength="10" />
+            <div ng-show="editForm.houseNo.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.houseNo.$error.required">
+                    This field is required.
+                </p>
+                <p class="help-block"
+                    ng-show="editForm.houseNo.$error.maxlength">
+                    This field cannot be longer than 10 characters.
+                </p>
+            </div>
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_postcode">Postcode</label>
-            <input type="text" class="form-control" name="postcode" id="field_postcode"
-                    ng-model="vm.family.postcode"
-                     />
+            <label class="control-label" for="field_flatNo">FlatNo</label>
+            <input type="text" class="form-control" name="flatNo" id="field_flatNo"
+                    ng-model="vm.family.flatNo"
+                    ng-maxlength="10" />
+            <div ng-show="editForm.flatNo.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.flatNo.$error.maxlength">
+                    This field cannot be longer than 10 characters.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="field_postalcode">Postalcode</label>
+            <input type="text" class="form-control" name="postalcode" id="field_postalcode"
+                    ng-model="vm.family.postalcode"
+                    ng-maxlength="6" />
+            <div ng-show="editForm.postalcode.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.postalcode.$error.maxlength">
+                    This field cannot be longer than 6 characters.
+                </p>
+            </div>
         </div>
         <div class="form-group">
             <label class="control-label" for="field_district">District</label>
@@ -41,7 +75,13 @@
             <label class="control-label" for="field_city">City</label>
             <input type="text" class="form-control" name="city" id="field_city"
                     ng-model="vm.family.city"
-                     />
+                    required />
+            <div ng-show="editForm.city.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.city.$error.required">
+                    This field is required.
+                </p>
+            </div>
         </div>
         <div class="form-group">
             <label class="control-label" for="field_region">Region</label>

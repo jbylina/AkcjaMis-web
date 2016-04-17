@@ -2,11 +2,13 @@ package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Family;
-import org.akcjamis.webapp.repository.FamilyRepository;
-import org.akcjamis.webapp.repository.search.FamilySearchRepository;
+import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
+import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -33,10 +36,7 @@ public class FamilyResource {
     private final Logger log = LoggerFactory.getLogger(FamilyResource.class);
         
     @Inject
-    private FamilyRepository familyRepository;
-    
-    @Inject
-    private FamilySearchRepository familySearchRepository;
+    private FamilyService familyService;
     
     /**
      * POST  /families : Create a new family.
@@ -49,13 +49,12 @@ public class FamilyResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Family> createFamily(@RequestBody Family family) throws URISyntaxException {
+    public ResponseEntity<Family> createFamily(@Valid @RequestBody Family family) throws URISyntaxException {
         log.debug("REST request to save Family : {}", family);
         if (family.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("family", "idexists", "A new family cannot already have an ID")).body(null);
         }
-        Family result = familyRepository.save(family);
-        familySearchRepository.save(result);
+        Family result = familyService.save(family);
         return ResponseEntity.created(new URI("/api/families/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("family", result.getId().toString()))
             .body(result);
@@ -74,13 +73,12 @@ public class FamilyResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Family> updateFamily(@RequestBody Family family) throws URISyntaxException {
+    public ResponseEntity<Family> updateFamily(@Valid @RequestBody Family family) throws URISyntaxException {
         log.debug("REST request to update Family : {}", family);
         if (family.getId() == null) {
             return createFamily(family);
         }
-        Family result = familyRepository.save(family);
-        familySearchRepository.save(result);
+        Family result = familyService.save(family);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("family", family.getId().toString()))
             .body(result);
@@ -89,16 +87,20 @@ public class FamilyResource {
     /**
      * GET  /families : get all the families.
      *
+     * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of families in body
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @RequestMapping(value = "/families",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Family> getAllFamilies() {
-        log.debug("REST request to get all Families");
-        List<Family> families = familyRepository.findAll();
-        return families;
+    public ResponseEntity<List<Family>> getAllFamilies(Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to get a page of Families");
+        Page<Family> page = familyService.findAll(pageable); 
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/families");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
@@ -113,7 +115,7 @@ public class FamilyResource {
     @Timed
     public ResponseEntity<Family> getFamily(@PathVariable Long id) {
         log.debug("REST request to get Family : {}", id);
-        Family family = familyRepository.findOne(id);
+        Family family = familyService.findOne(id);
         return Optional.ofNullable(family)
             .map(result -> new ResponseEntity<>(
                 result,
@@ -133,8 +135,7 @@ public class FamilyResource {
     @Timed
     public ResponseEntity<Void> deleteFamily(@PathVariable Long id) {
         log.debug("REST request to delete Family : {}", id);
-        familyRepository.delete(id);
-        familySearchRepository.delete(id);
+        familyService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("family", id.toString())).build();
     }
 
@@ -149,11 +150,12 @@ public class FamilyResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Family> searchFamilies(@RequestParam String query) {
-        log.debug("REST request to search Families for query {}", query);
-        return StreamSupport
-            .stream(familySearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
+    public ResponseEntity<List<Family>> searchFamilies(@RequestParam String query, Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to search for a page of Families for query {}", query);
+        Page<Family> page = familyService.search(query, pageable);
+        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/families");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
 }

@@ -66,10 +66,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         mappings.add("json", "text/html;charset=utf-8");
         container.setMimeMappings(mappings);
 
-        // When running in an IDE or with ./gradlew bootRun, set location of the static web assets.
+        // When running in an IDE or with ./mvnw spring-boot:run, set location of the static web assets.
         File root;
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            root = new File("build/www/");
+            root = new File("target/www/");
         } else {
             root = new File("src/main/webapp/");
         }

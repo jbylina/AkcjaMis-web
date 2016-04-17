@@ -3,14 +3,26 @@
     <h2><span>Team</span> {{vm.team.id}}</h2>
     <hr>
     <dl class="dl-horizontal">
-        <dt><span>TemNo</dt></dt>
+        <dt><span>TeamNumber</dt></dt>
         <dd>
-            <span>{{vm.team.temNo}}<span>
+            <span>{{vm.team.teamNumber}}<span>
+        </dd>
+        <hr>
+        <dt><span>Note</dt></dt>
+        <dd>
+            <span>{{vm.team.note}}<span>
+        </dd>
+        <hr>
+        <dt><span>user</span></dt>
+        <dd>
+            <span ng-repeat="user in vm.team.users">
+                {{user.login}}{{$last ? '' : ', '}}
+            </span>
         </dd>
         <hr>
         <dt><span>event</span></dt>
         <dd>
-            <a ui-sref="event-detail({id:vm.team.event.id})">{{vm.team.event.id}}</a>
+            <a ui-sref="event-detail({id:vm.team.event.id})">{{vm.team.event.year}}</a>
         </dd>
         <hr>
     </dl>

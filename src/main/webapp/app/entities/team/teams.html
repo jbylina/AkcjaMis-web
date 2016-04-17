@@ -36,7 +36,9 @@
             <thead>
                 <tr>
                     <th><span>ID</span></th>
-                    <th><span>TemNo</span></th>
+                    <th><span>TeamNumber</span></th>
+                    <th><span>Note</span></th>
+                    <th><span>user</span></th>
                     <th><span>event</span></th>
                     <th></th>
                 </tr>
@@ -44,9 +46,15 @@
             <tbody>
                 <tr ng-repeat="team in vm.teams track by team.id">
                     <td><a ui-sref="team-detail({id:team.id})">{{team.id}}</a></td>
-                    <td>{{team.temNo}}</td>
+                    <td>{{team.teamNumber}}</td>
+                    <td>{{team.note}}</td>
                     <td>
-                        <a ui-sref="event-detail({id:team.event.id})">{{team.event.id}}</a>
+                        <span ng-repeat="user in team.users">
+                            {{user.login}}{{$last ? '' : ', '}}
+                        <span>
+                    </td>
+                    <td>
+                        <a ui-sref="event-detail({id:team.event.id})">{{team.event.year}}</a>
                     </td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">

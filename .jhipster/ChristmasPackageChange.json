@@ -1,0 +1,43 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "christmasPackage",
+            "otherEntityName": "christmasPackage",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "type_code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "3",
+            "fieldValidateRulesMaxlength": 20
+        },
+        {
+            "fieldName": "time",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "content",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "500"
+        }
+    ],
+    "changelogDate": "20160417192113",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "christmas_package_changelogs",
+    "pagination": "infinite-scroll"
+}

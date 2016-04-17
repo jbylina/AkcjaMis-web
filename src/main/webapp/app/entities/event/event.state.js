@@ -63,7 +63,6 @@
                         entity: function () {
                             return {
                                 year: null,
-                                coordinator: null,
                                 id: null
                             };
                         }

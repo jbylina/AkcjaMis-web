@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -49,7 +50,7 @@ public class SubpackageNoteResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<SubpackageNote> createSubpackageNote(@RequestBody SubpackageNote subpackageNote) throws URISyntaxException {
+    public ResponseEntity<SubpackageNote> createSubpackageNote(@Valid @RequestBody SubpackageNote subpackageNote) throws URISyntaxException {
         log.debug("REST request to save SubpackageNote : {}", subpackageNote);
         if (subpackageNote.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("subpackageNote", "idexists", "A new subpackageNote cannot already have an ID")).body(null);
@@ -74,7 +75,7 @@ public class SubpackageNoteResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<SubpackageNote> updateSubpackageNote(@RequestBody SubpackageNote subpackageNote) throws URISyntaxException {
+    public ResponseEntity<SubpackageNote> updateSubpackageNote(@Valid @RequestBody SubpackageNote subpackageNote) throws URISyntaxException {
         log.debug("REST request to update SubpackageNote : {}", subpackageNote);
         if (subpackageNote.getId() == null) {
             return createSubpackageNote(subpackageNote);

@@ -1,10 +1,12 @@
 package org.akcjamis.webapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -15,7 +17,7 @@ import java.util.Objects;
  * A FamilyNote.
  */
 @Entity
-@Table(name = "family_note")
+@Table(name = "family_notes")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "familynote")
 public class FamilyNote implements Serializable {
@@ -26,24 +28,28 @@ public class FamilyNote implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
+    @Size(max = 65535)
+    @Column(name = "content", length = 65535, nullable = false)
+    private String content;
+
     @Column(name = "time")
     private LocalDate time;
 
-    @Column(name = "text")
-    private String text;
-
-    @Column(name = "archived")
+    @NotNull
+    @Column(name = "archived", nullable = false)
     private Boolean archived;
-
-    @ManyToOne
-    private Family family;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "family_note_tag",
+    @JoinTable(name = "family_notes_tag",
                joinColumns = @JoinColumn(name="family_notes_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="tags_id", referencedColumnName="ID"))
+               inverseJoinColumns = @JoinColumn(name="tag_id", referencedColumnName="ID"))
     private Set<Tag> tags = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnore
+    private Family family;
 
     public Long getId() {
         return id;
@@ -51,6 +57,14 @@ public class FamilyNote implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public LocalDate getTime() {
@@ -61,14 +75,6 @@ public class FamilyNote implements Serializable {
         this.time = time;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public Boolean isArchived() {
         return archived;
     }
@@ -77,20 +83,20 @@ public class FamilyNote implements Serializable {
         this.archived = archived;
     }
 
-    public Family getFamily() {
-        return family;
-    }
-
-    public void setFamily(Family family) {
-        this.family = family;
-    }
-
     public Set<Tag> getTags() {
         return tags;
     }
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Family getFamily() {
+        return family;
+    }
+
+    public void setFamily(Family family) {
+        this.family = family;
     }
 
     @Override
@@ -117,8 +123,8 @@ public class FamilyNote implements Serializable {
     public String toString() {
         return "FamilyNote{" +
             "id=" + id +
+            ", content='" + content + "'" +
             ", time='" + time + "'" +
-            ", text='" + text + "'" +
             ", archived='" + archived + "'" +
             '}';
     }

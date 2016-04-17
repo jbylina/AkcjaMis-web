@@ -3,6 +3,7 @@ package org.akcjamis.webapp.web.rest;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.FamilyRepository;
+import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.repository.search.FamilySearchRepository;
 
 import org.junit.Before;
@@ -44,10 +45,12 @@ public class FamilyResourceIntTest {
 
     private static final String DEFAULT_STREET = "AAAAA";
     private static final String UPDATED_STREET = "BBBBB";
-    private static final String DEFAULT_HOUSE_NO = "AAAAA";
-    private static final String UPDATED_HOUSE_NO = "BBBBB";
-    private static final String DEFAULT_POSTCODE = "AAAAA";
-    private static final String UPDATED_POSTCODE = "BBBBB";
+    private static final String DEFAULT_HOUSE_NO = "AAAAAAAAAA";
+    private static final String UPDATED_HOUSE_NO = "BBBBBBBBBB";
+    private static final String DEFAULT_FLAT_NO = "AAAAAAAAAA";
+    private static final String UPDATED_FLAT_NO = "BBBBBBBBBB";
+    private static final String DEFAULT_POSTALCODE = "AAAAAA";
+    private static final String UPDATED_POSTALCODE = "BBBBBB";
     private static final String DEFAULT_DISTRICT = "AAAAA";
     private static final String UPDATED_DISTRICT = "BBBBB";
     private static final String DEFAULT_CITY = "AAAAA";
@@ -59,6 +62,9 @@ public class FamilyResourceIntTest {
 
     @Inject
     private FamilyRepository familyRepository;
+
+    @Inject
+    private FamilyService familyService;
 
     @Inject
     private FamilySearchRepository familySearchRepository;
@@ -77,8 +83,7 @@ public class FamilyResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         FamilyResource familyResource = new FamilyResource();
-        ReflectionTestUtils.setField(familyResource, "familySearchRepository", familySearchRepository);
-        ReflectionTestUtils.setField(familyResource, "familyRepository", familyRepository);
+        ReflectionTestUtils.setField(familyResource, "familyService", familyService);
         this.restFamilyMockMvc = MockMvcBuilders.standaloneSetup(familyResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -90,7 +95,8 @@ public class FamilyResourceIntTest {
         family = new Family();
         family.setStreet(DEFAULT_STREET);
         family.setHouseNo(DEFAULT_HOUSE_NO);
-        family.setPostcode(DEFAULT_POSTCODE);
+        family.setFlatNo(DEFAULT_FLAT_NO);
+        family.setPostalcode(DEFAULT_POSTALCODE);
         family.setDistrict(DEFAULT_DISTRICT);
         family.setCity(DEFAULT_CITY);
         family.setRegion(DEFAULT_REGION);
@@ -115,7 +121,8 @@ public class FamilyResourceIntTest {
         Family testFamily = families.get(families.size() - 1);
         assertThat(testFamily.getStreet()).isEqualTo(DEFAULT_STREET);
         assertThat(testFamily.getHouseNo()).isEqualTo(DEFAULT_HOUSE_NO);
-        assertThat(testFamily.getPostcode()).isEqualTo(DEFAULT_POSTCODE);
+        assertThat(testFamily.getFlatNo()).isEqualTo(DEFAULT_FLAT_NO);
+        assertThat(testFamily.getPostalcode()).isEqualTo(DEFAULT_POSTALCODE);
         assertThat(testFamily.getDistrict()).isEqualTo(DEFAULT_DISTRICT);
         assertThat(testFamily.getCity()).isEqualTo(DEFAULT_CITY);
         assertThat(testFamily.getRegion()).isEqualTo(DEFAULT_REGION);
@@ -124,6 +131,60 @@ public class FamilyResourceIntTest {
         // Validate the Family in ElasticSearch
         Family familyEs = familySearchRepository.findOne(testFamily.getId());
         assertThat(familyEs).isEqualToComparingFieldByField(testFamily);
+    }
+
+    @Test
+    @Transactional
+    public void checkStreetIsRequired() throws Exception {
+        int databaseSizeBeforeTest = familyRepository.findAll().size();
+        // set the field null
+        family.setStreet(null);
+
+        // Create the Family, which fails.
+
+        restFamilyMockMvc.perform(post("/api/families")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(family)))
+                .andExpect(status().isBadRequest());
+
+        List<Family> families = familyRepository.findAll();
+        assertThat(families).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkHouseNoIsRequired() throws Exception {
+        int databaseSizeBeforeTest = familyRepository.findAll().size();
+        // set the field null
+        family.setHouseNo(null);
+
+        // Create the Family, which fails.
+
+        restFamilyMockMvc.perform(post("/api/families")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(family)))
+                .andExpect(status().isBadRequest());
+
+        List<Family> families = familyRepository.findAll();
+        assertThat(families).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkCityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = familyRepository.findAll().size();
+        // set the field null
+        family.setCity(null);
+
+        // Create the Family, which fails.
+
+        restFamilyMockMvc.perform(post("/api/families")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(family)))
+                .andExpect(status().isBadRequest());
+
+        List<Family> families = familyRepository.findAll();
+        assertThat(families).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -139,7 +200,8 @@ public class FamilyResourceIntTest {
                 .andExpect(jsonPath("$.[*].id").value(hasItem(family.getId().intValue())))
                 .andExpect(jsonPath("$.[*].street").value(hasItem(DEFAULT_STREET.toString())))
                 .andExpect(jsonPath("$.[*].houseNo").value(hasItem(DEFAULT_HOUSE_NO.toString())))
-                .andExpect(jsonPath("$.[*].postcode").value(hasItem(DEFAULT_POSTCODE.toString())))
+                .andExpect(jsonPath("$.[*].flatNo").value(hasItem(DEFAULT_FLAT_NO.toString())))
+                .andExpect(jsonPath("$.[*].postalcode").value(hasItem(DEFAULT_POSTALCODE.toString())))
                 .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT.toString())))
                 .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toString())))
                 .andExpect(jsonPath("$.[*].region").value(hasItem(DEFAULT_REGION.toString())))
@@ -159,7 +221,8 @@ public class FamilyResourceIntTest {
             .andExpect(jsonPath("$.id").value(family.getId().intValue()))
             .andExpect(jsonPath("$.street").value(DEFAULT_STREET.toString()))
             .andExpect(jsonPath("$.houseNo").value(DEFAULT_HOUSE_NO.toString()))
-            .andExpect(jsonPath("$.postcode").value(DEFAULT_POSTCODE.toString()))
+            .andExpect(jsonPath("$.flatNo").value(DEFAULT_FLAT_NO.toString()))
+            .andExpect(jsonPath("$.postalcode").value(DEFAULT_POSTALCODE.toString()))
             .andExpect(jsonPath("$.district").value(DEFAULT_DISTRICT.toString()))
             .andExpect(jsonPath("$.city").value(DEFAULT_CITY.toString()))
             .andExpect(jsonPath("$.region").value(DEFAULT_REGION.toString()))
@@ -178,8 +241,8 @@ public class FamilyResourceIntTest {
     @Transactional
     public void updateFamily() throws Exception {
         // Initialize the database
-        familyRepository.saveAndFlush(family);
-        familySearchRepository.save(family);
+        familyService.save(family);
+
         int databaseSizeBeforeUpdate = familyRepository.findAll().size();
 
         // Update the family
@@ -187,7 +250,8 @@ public class FamilyResourceIntTest {
         updatedFamily.setId(family.getId());
         updatedFamily.setStreet(UPDATED_STREET);
         updatedFamily.setHouseNo(UPDATED_HOUSE_NO);
-        updatedFamily.setPostcode(UPDATED_POSTCODE);
+        updatedFamily.setFlatNo(UPDATED_FLAT_NO);
+        updatedFamily.setPostalcode(UPDATED_POSTALCODE);
         updatedFamily.setDistrict(UPDATED_DISTRICT);
         updatedFamily.setCity(UPDATED_CITY);
         updatedFamily.setRegion(UPDATED_REGION);
@@ -204,7 +268,8 @@ public class FamilyResourceIntTest {
         Family testFamily = families.get(families.size() - 1);
         assertThat(testFamily.getStreet()).isEqualTo(UPDATED_STREET);
         assertThat(testFamily.getHouseNo()).isEqualTo(UPDATED_HOUSE_NO);
-        assertThat(testFamily.getPostcode()).isEqualTo(UPDATED_POSTCODE);
+        assertThat(testFamily.getFlatNo()).isEqualTo(UPDATED_FLAT_NO);
+        assertThat(testFamily.getPostalcode()).isEqualTo(UPDATED_POSTALCODE);
         assertThat(testFamily.getDistrict()).isEqualTo(UPDATED_DISTRICT);
         assertThat(testFamily.getCity()).isEqualTo(UPDATED_CITY);
         assertThat(testFamily.getRegion()).isEqualTo(UPDATED_REGION);
@@ -219,8 +284,8 @@ public class FamilyResourceIntTest {
     @Transactional
     public void deleteFamily() throws Exception {
         // Initialize the database
-        familyRepository.saveAndFlush(family);
-        familySearchRepository.save(family);
+        familyService.save(family);
+
         int databaseSizeBeforeDelete = familyRepository.findAll().size();
 
         // Get the family
@@ -241,8 +306,7 @@ public class FamilyResourceIntTest {
     @Transactional
     public void searchFamily() throws Exception {
         // Initialize the database
-        familyRepository.saveAndFlush(family);
-        familySearchRepository.save(family);
+        familyService.save(family);
 
         // Search the family
         restFamilyMockMvc.perform(get("/api/_search/families?query=id:" + family.getId()))
@@ -251,7 +315,8 @@ public class FamilyResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(family.getId().intValue())))
             .andExpect(jsonPath("$.[*].street").value(hasItem(DEFAULT_STREET.toString())))
             .andExpect(jsonPath("$.[*].houseNo").value(hasItem(DEFAULT_HOUSE_NO.toString())))
-            .andExpect(jsonPath("$.[*].postcode").value(hasItem(DEFAULT_POSTCODE.toString())))
+            .andExpect(jsonPath("$.[*].flatNo").value(hasItem(DEFAULT_FLAT_NO.toString())))
+            .andExpect(jsonPath("$.[*].postalcode").value(hasItem(DEFAULT_POSTALCODE.toString())))
             .andExpect(jsonPath("$.[*].district").value(hasItem(DEFAULT_DISTRICT.toString())))
             .andExpect(jsonPath("$.[*].city").value(hasItem(DEFAULT_CITY.toString())))
             .andExpect(jsonPath("$.[*].region").value(hasItem(DEFAULT_REGION.toString())))

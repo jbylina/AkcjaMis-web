@@ -13,12 +13,10 @@
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "postgresql",
     "searchEngine": "elasticsearch",
-    "buildTool": "gradle",
+    "buildTool": "maven",
     "useSass": false,
     "applicationType": "monolith",
-    "testFrameworks": [
-      "protractor"
-    ],
+    "testFrameworks": [],
     "enableTranslation": false
   }
 }

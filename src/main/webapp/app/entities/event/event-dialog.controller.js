@@ -5,11 +5,13 @@
         .module('akcjamisApp')
         .controller('EventDialogController', EventDialogController);
 
-    EventDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Event'];
+    EventDialogController.$inject = ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Event', 'Team', 'ChristmasPackage'];
 
-    function EventDialogController ($scope, $stateParams, $uibModalInstance, entity, Event) {
+    function EventDialogController ($scope, $stateParams, $uibModalInstance, entity, Event, Team, ChristmasPackage) {
         var vm = this;
         vm.event = entity;
+        vm.teams = Team.query();
+        vm.christmaspackages = ChristmasPackage.query();
         vm.load = function(id) {
             Event.get({id : id}, function(result) {
                 vm.event = result;

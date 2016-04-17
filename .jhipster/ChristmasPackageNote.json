@@ -1,0 +1,26 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "christmasPackage",
+            "otherEntityName": "christmasPackage",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "content",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "65535"
+        }
+    ],
+    "changelogDate": "20160417192228",
+    "dto": "no",
+    "service": "no",
+    "entityTableName": "christmas_package_notes",
+    "pagination": "no"
+}

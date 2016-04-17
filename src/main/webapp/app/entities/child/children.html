@@ -36,7 +36,7 @@
             <thead>
                 <tr>
                     <th><span>ID</span></th>
-                    <th><span>ChldNo</span></th>
+                    <th><span>Number</span></th>
                     <th><span>FirstName</span></th>
                     <th><span>LastName</span></th>
                     <th><span>Sex</span></th>
@@ -48,10 +48,10 @@
             <tbody>
                 <tr ng-repeat="child in vm.children track by child.id">
                     <td><a ui-sref="child-detail({id:child.id})">{{child.id}}</a></td>
-                    <td>{{child.chldNo}}</td>
+                    <td>{{child.number}}</td>
                     <td>{{child.firstName}}</td>
                     <td>{{child.lastName}}</td>
-                    <td>{{child.sex}}</td>
+                    <td translate="{{'akcjamisApp.Sex.' + child.sex}}">{{child.sex}}</td>
                         <td>{{child.birthYear | date:'mediumDate'}}</td>
                     <td>
                         <a ui-sref="family-detail({id:child.family.id})">{{child.family.id}}</a>

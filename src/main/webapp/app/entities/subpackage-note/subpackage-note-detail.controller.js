@@ -5,9 +5,9 @@
         .module('akcjamisApp')
         .controller('SubpackageNoteDetailController', SubpackageNoteDetailController);
 
-    SubpackageNoteDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'SubpackageNote', 'Sybpackage'];
+    SubpackageNoteDetailController.$inject = ['$scope', '$rootScope', '$stateParams', 'entity', 'SubpackageNote', 'Subpackage'];
 
-    function SubpackageNoteDetailController($scope, $rootScope, $stateParams, entity, SubpackageNote, Sybpackage) {
+    function SubpackageNoteDetailController($scope, $rootScope, $stateParams, entity, SubpackageNote, Subpackage) {
         var vm = this;
         vm.subpackageNote = entity;
         vm.load = function (id) {

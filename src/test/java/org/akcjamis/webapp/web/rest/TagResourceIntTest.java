@@ -42,13 +42,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class TagResourceIntTest {
 
-
-    private static final Integer DEFAULT_TGS_ID = 1;
-    private static final Integer UPDATED_TGS_ID = 2;
-    private static final String DEFAULT_CODE = "AAAAA";
-    private static final String UPDATED_CODE = "BBBBB";
-    private static final String DEFAULT_COLOR = "AAAAA";
-    private static final String UPDATED_COLOR = "BBBBB";
+    private static final String DEFAULT_CODE = "AAA";
+    private static final String UPDATED_CODE = "BBB";
+    private static final String DEFAULT_COLOR = "AAAAAAAAAAAA";
+    private static final String UPDATED_COLOR = "BBBBBBBBBBBB";
 
     @Inject
     private TagRepository tagRepository;
@@ -81,7 +78,6 @@ public class TagResourceIntTest {
     public void initTest() {
         tagSearchRepository.deleteAll();
         tag = new Tag();
-        tag.setTgsID(DEFAULT_TGS_ID);
         tag.setCode(DEFAULT_CODE);
         tag.setColor(DEFAULT_COLOR);
     }
@@ -102,13 +98,48 @@ public class TagResourceIntTest {
         List<Tag> tags = tagRepository.findAll();
         assertThat(tags).hasSize(databaseSizeBeforeCreate + 1);
         Tag testTag = tags.get(tags.size() - 1);
-        assertThat(testTag.getTgsID()).isEqualTo(DEFAULT_TGS_ID);
         assertThat(testTag.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testTag.getColor()).isEqualTo(DEFAULT_COLOR);
 
         // Validate the Tag in ElasticSearch
         Tag tagEs = tagSearchRepository.findOne(testTag.getId());
         assertThat(tagEs).isEqualToComparingFieldByField(testTag);
+    }
+
+    @Test
+    @Transactional
+    public void checkCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = tagRepository.findAll().size();
+        // set the field null
+        tag.setCode(null);
+
+        // Create the Tag, which fails.
+
+        restTagMockMvc.perform(post("/api/tags")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(tag)))
+                .andExpect(status().isBadRequest());
+
+        List<Tag> tags = tagRepository.findAll();
+        assertThat(tags).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkColorIsRequired() throws Exception {
+        int databaseSizeBeforeTest = tagRepository.findAll().size();
+        // set the field null
+        tag.setColor(null);
+
+        // Create the Tag, which fails.
+
+        restTagMockMvc.perform(post("/api/tags")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(tag)))
+                .andExpect(status().isBadRequest());
+
+        List<Tag> tags = tagRepository.findAll();
+        assertThat(tags).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -122,7 +153,6 @@ public class TagResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(tag.getId().intValue())))
-                .andExpect(jsonPath("$.[*].tgsID").value(hasItem(DEFAULT_TGS_ID)))
                 .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
                 .andExpect(jsonPath("$.[*].color").value(hasItem(DEFAULT_COLOR.toString())));
     }
@@ -138,7 +168,6 @@ public class TagResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(tag.getId().intValue()))
-            .andExpect(jsonPath("$.tgsID").value(DEFAULT_TGS_ID))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE.toString()))
             .andExpect(jsonPath("$.color").value(DEFAULT_COLOR.toString()));
     }
@@ -162,7 +191,6 @@ public class TagResourceIntTest {
         // Update the tag
         Tag updatedTag = new Tag();
         updatedTag.setId(tag.getId());
-        updatedTag.setTgsID(UPDATED_TGS_ID);
         updatedTag.setCode(UPDATED_CODE);
         updatedTag.setColor(UPDATED_COLOR);
 
@@ -175,7 +203,6 @@ public class TagResourceIntTest {
         List<Tag> tags = tagRepository.findAll();
         assertThat(tags).hasSize(databaseSizeBeforeUpdate);
         Tag testTag = tags.get(tags.size() - 1);
-        assertThat(testTag.getTgsID()).isEqualTo(UPDATED_TGS_ID);
         assertThat(testTag.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testTag.getColor()).isEqualTo(UPDATED_COLOR);
 
@@ -218,7 +245,6 @@ public class TagResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(tag.getId().intValue())))
-            .andExpect(jsonPath("$.[*].tgsID").value(hasItem(DEFAULT_TGS_ID)))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE.toString())))
             .andExpect(jsonPath("$.[*].color").value(hasItem(DEFAULT_COLOR.toString())));
     }

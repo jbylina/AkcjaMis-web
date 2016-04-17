@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -49,7 +50,7 @@ public class TeamResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Team> createTeam(@RequestBody Team team) throws URISyntaxException {
+    public ResponseEntity<Team> createTeam(@Valid @RequestBody Team team) throws URISyntaxException {
         log.debug("REST request to save Team : {}", team);
         if (team.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("team", "idexists", "A new team cannot already have an ID")).body(null);
@@ -74,7 +75,7 @@ public class TeamResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Team> updateTeam(@RequestBody Team team) throws URISyntaxException {
+    public ResponseEntity<Team> updateTeam(@Valid @RequestBody Team team) throws URISyntaxException {
         log.debug("REST request to update Team : {}", team);
         if (team.getId() == null) {
             return createTeam(team);
@@ -97,7 +98,7 @@ public class TeamResource {
     @Timed
     public List<Team> getAllTeams() {
         log.debug("REST request to get all Teams");
-        List<Team> teams = teamRepository.findAll();
+        List<Team> teams = teamRepository.findAllWithEagerRelationships();
         return teams;
     }
 
@@ -113,7 +114,7 @@ public class TeamResource {
     @Timed
     public ResponseEntity<Team> getTeam(@PathVariable Long id) {
         log.debug("REST request to get Team : {}", id);
-        Team team = teamRepository.findOne(id);
+        Team team = teamRepository.findOneWithEagerRelationships(id);
         return Optional.ofNullable(team)
             .map(result -> new ResponseEntity<>(
                 result,
