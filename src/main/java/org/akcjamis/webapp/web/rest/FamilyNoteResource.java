@@ -123,9 +123,8 @@ public class FamilyNoteResource {
     @Timed
     public ResponseEntity<FamilyNote> getFamilyNote(@PathVariable Long familyId, @PathVariable Long id) {
         log.debug("REST request to get FamilyNote : {}", id);
-        FamilyNote familyNote = familyNoteService.findOne(id);
+        FamilyNote familyNote = familyNoteService.findOne(familyId, id);
         return Optional.ofNullable(familyNote)
-            .filter(note -> Objects.equals(note.getFamily().getId(), familyId))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))

@@ -68,9 +68,9 @@ public class FamilyNoteService {
      *  @return the entity
      */
     @Transactional(readOnly = true)
-    public FamilyNote findOne(Long noteId) {
+    public FamilyNote findOne(Long familyId, Long noteId) {
         log.debug("Request to get FamilyNote : {}", noteId);
-        return familyNoteRepository.findOneWithEagerRelationships(noteId);
+        return familyNoteRepository.findOneWithEagerRelationships(familyId, noteId);
     }
 
     /**

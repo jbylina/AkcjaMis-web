@@ -1,9 +1,12 @@
 package org.akcjamis.webapp.service;
 
+import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.domain.Family;
+import org.akcjamis.webapp.repository.ChildRepository;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
+import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 import org.akcjamis.webapp.repository.search.FamilySearchRepository;
 import org.slf4j.Logger;
@@ -27,7 +30,6 @@ public class FamilyService {
 
     private final Logger log = LoggerFactory.getLogger(FamilyService.class);
 
-    @Inject
     private FamilyRepository familyRepository;
 
     private FamilySearchRepository familySearchRepository;
@@ -36,15 +38,23 @@ public class FamilyService {
 
     private ContactSearchRepository contactSearchRepository;
 
+    private ChildRepository childRepository;
+
+    private ChildSearchRepository childSearchRepository;
+
     @Inject
     public FamilyService(FamilyRepository familyRepository,
                          FamilySearchRepository familySearchRepository,
                          ContactRepository contactRepository,
-                         ContactSearchRepository contactSearchRepository) {
+                         ContactSearchRepository contactSearchRepository,
+                         ChildRepository childRepository,
+                         ChildSearchRepository childSearchRepository) {
         this.familyRepository = familyRepository;
         this.familySearchRepository = familySearchRepository;
         this.contactRepository = contactRepository;
         this.contactSearchRepository = contactSearchRepository;
+        this.childRepository = childRepository;
+        this.childSearchRepository = childSearchRepository;
     }
 
     /**
@@ -120,6 +130,21 @@ public class FamilyService {
     public List<Contact> getAllContacts(Long id) {
         log.debug("Request contacts for Family : {}", id);
         return contactRepository.findByFamily_id(id);
+    }
+
+    public Child saveChild(Long id, Child child) {
+        log.debug("Request to save Child : {}", child);
+        Family family = new Family();
+        family.setId(id);
+        child.setFamily(family);
+        Child result = childRepository.save(child);
+        childSearchRepository.save(result);
+        return result;
+    }
+
+    public List<Child> getAllChildren(Long id) {
+        log.debug("Request children for Family : {}", id);
+        return childRepository.findByFamily_id(id);
     }
 
     /**

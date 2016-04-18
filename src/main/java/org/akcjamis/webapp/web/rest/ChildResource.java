@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.repository.ChildRepository;
 import org.akcjamis.webapp.repository.search.ChildSearchRepository;
+import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,53 +33,63 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class ChildResource {
 
     private final Logger log = LoggerFactory.getLogger(ChildResource.class);
-        
-    @Inject
+
     private ChildRepository childRepository;
-    
-    @Inject
+
     private ChildSearchRepository childSearchRepository;
-    
+
+    private FamilyService familyService;
+
+    @Inject
+    public ChildResource(ChildRepository childRepository,
+                         ChildSearchRepository childSearchRepository,
+                         FamilyService familyService) {
+        this.childRepository = childRepository;
+        this.childSearchRepository = childSearchRepository;
+        this.familyService = familyService;
+    }
+
     /**
-     * POST  /children : Create a new child.
+     * POST  /families/:id/children : Create a new child.
      *
+     * @param id family ID
      * @param child the child to create
      * @return the ResponseEntity with status 201 (Created) and with body the new child, or with status 400 (Bad Request) if the child has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/children",
+    @RequestMapping(value = "/families/{id}/children",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Child> createChild(@Valid @RequestBody Child child) throws URISyntaxException {
+    public ResponseEntity<Child> createChild(@PathVariable Long id, @Valid @RequestBody Child child) throws URISyntaxException {
         log.debug("REST request to save Child : {}", child);
         if (child.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("child", "idexists", "A new child cannot already have an ID")).body(null);
         }
-        Child result = childRepository.save(child);
-        childSearchRepository.save(result);
-        return ResponseEntity.created(new URI("/api/children/" + result.getId()))
+        Child result = familyService.saveChild(id, child);
+        return ResponseEntity.created(new URI("/api/families/" + id + "/children/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("child", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /children : Updates an existing child.
+     * PUT  /families/:id/children : Updates an existing child.
      *
+     * @param id family ID
      * @param child the child to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated child,
      * or with status 400 (Bad Request) if the child is not valid,
      * or with status 500 (Internal Server Error) if the child couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/children",
+    @RequestMapping(value = "/families/{id}/children",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Child> updateChild(@Valid @RequestBody Child child) throws URISyntaxException {
+    public ResponseEntity<Child> updateChild(@PathVariable Long id, @Valid @RequestBody Child child) throws URISyntaxException {
         log.debug("REST request to update Child : {}", child);
         if (child.getId() == null) {
-            return createChild(child);
+            return createChild(id, child);
         }
         Child result = childRepository.save(child);
         childSearchRepository.save(result);
@@ -88,33 +99,34 @@ public class ChildResource {
     }
 
     /**
-     * GET  /children : get all the children.
+     * GET  /families/:id/children : get all the children for given family.
      *
+     * @param id family ID
      * @return the ResponseEntity with status 200 (OK) and the list of children in body
      */
-    @RequestMapping(value = "/children",
+    @RequestMapping(value = "/families/{id}/children",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Child> getAllChildren() {
+    public List<Child> getAllChildren(@PathVariable Long id) {
         log.debug("REST request to get all Children");
-        List<Child> children = childRepository.findAll();
-        return children;
+        return familyService.getAllChildren(id);
     }
 
     /**
-     * GET  /children/:id : get the "id" child.
+     * GET  /families/:familyId/children/:id : get the "id" child.
      *
+     * @param familyId the id of the family
      * @param id the id of the child to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the child, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/children/{id}",
+    @RequestMapping(value = "/families/{familyId}/children/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Child> getChild(@PathVariable Long id) {
+    public ResponseEntity<Child> getChild(@PathVariable Long familyId, @PathVariable Long id) {
         log.debug("REST request to get Child : {}", id);
-        Child child = childRepository.findOne(id);
+        Child child = childRepository.findByIdAndFamily_id(familyId, id);
         return Optional.ofNullable(child)
             .map(result -> new ResponseEntity<>(
                 result,
@@ -123,16 +135,17 @@ public class ChildResource {
     }
 
     /**
-     * DELETE  /children/:id : delete the "id" child.
+     * DELETE  /families/:familyId/children/:id : delete the "id" child.
      *
+     * @param familyId the id of the family
      * @param id the id of the child to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @RequestMapping(value = "/children/{id}",
+    @RequestMapping(value = "/families/{familyId}/children/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteChild(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteChild(@PathVariable Long familyId, @PathVariable Long id) {
         log.debug("REST request to delete Child : {}", id);
         childRepository.delete(id);
         childSearchRepository.delete(id);

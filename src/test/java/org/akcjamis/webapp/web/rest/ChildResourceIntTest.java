@@ -5,6 +5,7 @@ import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.repository.ChildRepository;
 import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 
+import org.akcjamis.webapp.service.FamilyService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,6 +67,9 @@ public class ChildResourceIntTest {
     private ChildSearchRepository childSearchRepository;
 
     @Inject
+    private FamilyService familyService;
+
+    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -78,7 +82,9 @@ public class ChildResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ChildResource childResource = new ChildResource();
+        ChildResource childResource = new ChildResource(childRepository,
+                                                        childSearchRepository,
+                                                        familyService);
         ReflectionTestUtils.setField(childResource, "childSearchRepository", childSearchRepository);
         ReflectionTestUtils.setField(childResource, "childRepository", childRepository);
         this.restChildMockMvc = MockMvcBuilders.standaloneSetup(childResource)

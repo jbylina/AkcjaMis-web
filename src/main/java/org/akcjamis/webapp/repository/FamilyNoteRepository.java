@@ -17,8 +17,8 @@ public interface FamilyNoteRepository extends JpaRepository<FamilyNote,Long> {
     @Query("select distinct familyNote from FamilyNote familyNote left join fetch familyNote.tags")
     List<FamilyNote> findAllWithEagerRelationships();
 
-    @Query("select familyNote from FamilyNote familyNote left join fetch familyNote.tags where familyNote.id =:id")
-    FamilyNote findOneWithEagerRelationships(@Param("id") Long id);
+    @Query("select familyNote from FamilyNote familyNote left join fetch familyNote.tags where familyNote.id =:noteId and familyNote.family.id = :familyId")
+    FamilyNote findOneWithEagerRelationships(@Param("familyId") Long familyId, @Param("noteId") Long noteId);
 
     Page<FamilyNote> findByFamily_id(Long id, Pageable var1);
 }

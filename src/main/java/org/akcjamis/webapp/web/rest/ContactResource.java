@@ -68,9 +68,7 @@ public class ContactResource {
         if (contact.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("contact", "idexists", "A new contact cannot already have an ID")).body(null);
         }
-
         Contact result = familyService.saveContact(id, contact);
-
         return ResponseEntity.created(new URI("/api/families/" + id + "/contacts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("contact", result.getId().toString()))
             .body(result);
@@ -95,10 +93,8 @@ public class ContactResource {
         if (contact.getId() == null) {
             return createContact(id, contact);
         }
-
         Contact result = contactRepository.save(contact);
         contactSearchRepository.save(result);
-
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("contact", contact.getId().toString()))
             .body(result);
@@ -132,10 +128,8 @@ public class ContactResource {
     @Timed
     public ResponseEntity<Contact> getContact(@PathVariable Long familyId, @PathVariable Long id) {
         log.debug("REST request to get Contact : {}", id);
-        Contact contact = contactRepository.findOne(id);
-
+        Contact contact = contactRepository.findByIdAndFamily_id(familyId, id);
         return Optional.ofNullable(contact)
-            .filter(con -> Objects.equals(con.getFamily().getId(), familyId))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))

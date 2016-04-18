@@ -1,5 +1,6 @@
 package org.akcjamis.webapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -51,6 +52,7 @@ public class Child extends AbstractAuditingEntity implements Serializable {
     private LocalDate birthYear;
 
     @ManyToOne
+    @JsonIgnore
     private Family family;
 
     public Long getId() {

@@ -12,4 +12,6 @@ import java.util.List;
 public interface ContactRepository extends JpaRepository<Contact,Long> {
 
     List<Contact>findByFamily_id(Long id);
+
+    Contact findByIdAndFamily_id(Long id, Long FamilyId);
 }
