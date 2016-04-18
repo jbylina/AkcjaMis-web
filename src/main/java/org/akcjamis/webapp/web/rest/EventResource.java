@@ -32,13 +32,17 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class EventResource {
 
     private final Logger log = LoggerFactory.getLogger(EventResource.class);
-        
-    @Inject
+
     private EventRepository eventRepository;
-    
-    @Inject
+
     private EventSearchRepository eventSearchRepository;
-    
+
+    @Inject
+    public EventResource(EventRepository eventRepository, EventSearchRepository eventSearchRepository) {
+        this.eventRepository = eventRepository;
+        this.eventSearchRepository = eventSearchRepository;
+    }
+
     /**
      * POST  /events : Create a new event.
      *
@@ -98,8 +102,7 @@ public class EventResource {
     @Timed
     public List<Event> getAllEvents() {
         log.debug("REST request to get all Events");
-        List<Event> events = eventRepository.findAll();
-        return events;
+        return eventRepository.findAll();
     }
 
     /**

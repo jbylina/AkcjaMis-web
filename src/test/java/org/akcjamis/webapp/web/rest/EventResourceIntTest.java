@@ -67,7 +67,7 @@ public class EventResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        EventResource eventResource = new EventResource();
+        EventResource eventResource = new EventResource(eventRepository, eventSearchRepository);
         ReflectionTestUtils.setField(eventResource, "eventSearchRepository", eventSearchRepository);
         ReflectionTestUtils.setField(eventResource, "eventRepository", eventRepository);
         this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)

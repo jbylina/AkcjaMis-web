@@ -75,7 +75,7 @@ public class ChristmasPackageResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ChristmasPackageResource christmasPackageResource = new ChristmasPackageResource();
+        ChristmasPackageResource christmasPackageResource = new ChristmasPackageResource(christmasPackageService);
         ReflectionTestUtils.setField(christmasPackageResource, "christmasPackageService", christmasPackageService);
         this.restChristmasPackageMockMvc = MockMvcBuilders.standaloneSetup(christmasPackageResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -196,7 +196,7 @@ public class ChristmasPackageResourceIntTest {
     @Transactional
     public void updateChristmasPackage() throws Exception {
         // Initialize the database
-        christmasPackageService.save(christmasPackage);
+        christmasPackageService.save((long) 1, christmasPackage);
 
         int databaseSizeBeforeUpdate = christmasPackageRepository.findAll().size();
 
@@ -229,7 +229,7 @@ public class ChristmasPackageResourceIntTest {
     @Transactional
     public void deleteChristmasPackage() throws Exception {
         // Initialize the database
-        christmasPackageService.save(christmasPackage);
+        christmasPackageService.save((long) 1, christmasPackage);
 
         int databaseSizeBeforeDelete = christmasPackageRepository.findAll().size();
 
@@ -251,7 +251,7 @@ public class ChristmasPackageResourceIntTest {
     @Transactional
     public void searchChristmasPackage() throws Exception {
         // Initialize the database
-        christmasPackageService.save(christmasPackage);
+        christmasPackageService.save((long) 1, christmasPackage);
 
         // Search the christmasPackage
         restChristmasPackageMockMvc.perform(get("/api/_search/christmas-packages?query=id:" + christmasPackage.getId()))

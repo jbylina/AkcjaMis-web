@@ -46,6 +46,7 @@ public class FamilyNoteResource {
     /**
      * POST  /families/:id/family-notes : Create a new familyNote.
      *
+     * @param id the family Id
      * @param familyNote the familyNote to create
      * @return the ResponseEntity with status 201 (Created) and with body the new familyNote, or with status 400 (Bad Request) if the familyNote has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
