@@ -11,6 +11,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import org.akcjamis.webapp.config.audit.EntityAuditEventListener;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -30,22 +32,22 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
-    
+
     private String createdBy;
 
     @CreatedDate
     @Column(name = "created_date", nullable = false)
-    
+
     private ZonedDateTime createdDate = ZonedDateTime.now();
 
     @LastModifiedBy
     @Column(name = "last_modified_by", length = 50)
-    
+
     private String lastModifiedBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date")
-    
+
     private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
 
     public String getCreatedBy() {
@@ -61,7 +63,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
     }
 
     public void setCreatedDate(ZonedDateTime createdDate) {
-        this.createdDate = createdDate;
+        this.createdDate = createdDate.withZoneSameInstant(ZoneId.systemDefault());
     }
 
     public String getLastModifiedBy() {
@@ -77,6 +79,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
     }
 
     public void setLastModifiedDate(ZonedDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+        this.lastModifiedDate = lastModifiedDate.withZoneSameInstant(ZoneId.systemDefault());
     }
 }
