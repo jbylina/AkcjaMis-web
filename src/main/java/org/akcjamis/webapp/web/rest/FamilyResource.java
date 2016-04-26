@@ -34,10 +34,14 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class FamilyResource {
 
     private final Logger log = LoggerFactory.getLogger(FamilyResource.class);
-        
-    @Inject
+
     private FamilyService familyService;
-    
+
+    @Inject
+    public FamilyResource(FamilyService familyService) {
+        this.familyService = familyService;
+    }
+
     /**
      * POST  /families : Create a new family.
      *
@@ -98,7 +102,7 @@ public class FamilyResource {
     public ResponseEntity<List<Family>> getAllFamilies(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Families");
-        Page<Family> page = familyService.findAll(pageable); 
+        Page<Family> page = familyService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/families");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

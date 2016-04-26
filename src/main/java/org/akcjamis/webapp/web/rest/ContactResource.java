@@ -38,16 +38,15 @@ public class ContactResource {
 
     private ContactRepository contactRepository;
 
+    @Inject
     private ContactSearchRepository contactSearchRepository;
 
     private FamilyService familyService;
 
     @Inject
     public ContactResource(ContactRepository contactRepository,
-                           ContactSearchRepository contactSearchRepository,
                            FamilyService familyService) {
         this.contactRepository = contactRepository;
-        this.contactSearchRepository = contactSearchRepository;
         this.familyService = familyService;
     }
 
@@ -93,8 +92,7 @@ public class ContactResource {
         if (contact.getId() == null) {
             return createContact(id, contact);
         }
-        Contact result = contactRepository.save(contact);
-        contactSearchRepository.save(result);
+        Contact result = familyService.saveContact(id, contact);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("contact", contact.getId().toString()))
             .body(result);
@@ -128,7 +126,7 @@ public class ContactResource {
     @Timed
     public ResponseEntity<Contact> getContact(@PathVariable Long familyId, @PathVariable Long id) {
         log.debug("REST request to get Contact : {}", id);
-        Contact contact = contactRepository.findByIdAndFamily_id(familyId, id);
+        Contact contact = contactRepository.findByIdAndFamily_id(id, familyId);
         return Optional.ofNullable(contact)
             .map(result -> new ResponseEntity<>(
                 result,
@@ -149,7 +147,7 @@ public class ContactResource {
     @Timed
     public ResponseEntity<Void> deleteContact(@PathVariable Long familyId, @PathVariable Long id) {
         log.debug("REST request to delete Contact : {}", id);
-        contactRepository.delete(id);
+        contactRepository.delete(id); // TODO move to FamilyService ?
         contactSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("contact", id.toString())).build();
     }

@@ -1,11 +1,15 @@
-package org.akcjamis.webapp.web.rest;
+package org.akcjamis.webapp.web.rest.family;
 
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Contact;
+import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ContactRepository;
+import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 
 import org.akcjamis.webapp.service.FamilyService;
+import org.akcjamis.webapp.web.rest.ContactResource;
+import org.akcjamis.webapp.web.rest.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,6 +54,15 @@ public class ContactResourceIntTest {
     private static final String DEFAULT_COMMENT = "AAAAA";
     private static final String UPDATED_COMMENT = "BBBBB";
 
+    private static final String DEFAULT_STREET = "AAAAA";
+    private static final String DEFAULT_HOUSE_NO = "AAAAAAAAAA";
+    private static final String DEFAULT_FLAT_NO = "AAAAAAAAAA";
+    private static final String DEFAULT_POSTALCODE = "AAAAAA";
+    private static final String DEFAULT_DISTRICT = "AAAAA";
+    private static final String DEFAULT_CITY = "AAAAA";
+    private static final String DEFAULT_REGION = "AAAAA";
+    private static final String DEFAULT_SOURCE = "AAAAA";
+
     @Inject
     private ContactRepository contactRepository;
 
@@ -65,14 +78,20 @@ public class ContactResourceIntTest {
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
+    @Inject
+    private FamilyRepository familyRepository;
+
     private MockMvc restContactMockMvc;
 
     private Contact contact;
 
+    private Family family;
+
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ContactResource contactResource = new ContactResource(contactRepository, contactSearchRepository, familyService);
+        ContactResource contactResource = new ContactResource(contactRepository, familyService);
+        ReflectionTestUtils.setField(contactResource, "contactSearchRepository", contactSearchRepository);
         this.restContactMockMvc = MockMvcBuilders.standaloneSetup(contactResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -80,7 +99,19 @@ public class ContactResourceIntTest {
 
     @Before
     public void initTest() {
-        contactSearchRepository.deleteAll();
+
+        familyRepository.deleteAll();
+        family = new Family();
+        family.setStreet(DEFAULT_STREET);
+        family.setHouseNo(DEFAULT_HOUSE_NO);
+        family.setFlatNo(DEFAULT_FLAT_NO);
+        family.setPostalcode(DEFAULT_POSTALCODE);
+        family.setDistrict(DEFAULT_DISTRICT);
+        family.setCity(DEFAULT_CITY);
+        family.setRegion(DEFAULT_REGION);
+        family.setSource(DEFAULT_SOURCE);
+        family = familyRepository.save(family);
+
         contact = new Contact();
         contact.setType(DEFAULT_TYPE);
         contact.setValue(DEFAULT_VALUE);
@@ -93,8 +124,7 @@ public class ContactResourceIntTest {
         int databaseSizeBeforeCreate = contactRepository.findAll().size();
 
         // Create the Contact
-
-        restContactMockMvc.perform(post("/api/contacts")
+        restContactMockMvc.perform(post("/api/families/{id}/contacts", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(contact)))
                 .andExpect(status().isCreated());
@@ -107,9 +137,6 @@ public class ContactResourceIntTest {
         assertThat(testContact.getValue()).isEqualTo(DEFAULT_VALUE);
         assertThat(testContact.getComment()).isEqualTo(DEFAULT_COMMENT);
 
-        // Validate the Contact in ElasticSearch
-        Contact contactEs = contactSearchRepository.findOne(testContact.getId());
-        assertThat(contactEs).isEqualToComparingFieldByField(testContact);
     }
 
     @Test
@@ -120,8 +147,7 @@ public class ContactResourceIntTest {
         contact.setType(null);
 
         // Create the Contact, which fails.
-
-        restContactMockMvc.perform(post("/api/contacts")
+        restContactMockMvc.perform(post("/api/families/{id}/contacts", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(contact)))
                 .andExpect(status().isBadRequest());
@@ -139,7 +165,7 @@ public class ContactResourceIntTest {
 
         // Create the Contact, which fails.
 
-        restContactMockMvc.perform(post("/api/contacts")
+        restContactMockMvc.perform(post("/api/families/{id}/contacts", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(contact)))
                 .andExpect(status().isBadRequest());
@@ -151,49 +177,51 @@ public class ContactResourceIntTest {
     @Test
     @Transactional
     public void getAllContacts() throws Exception {
+        contact.setFamily(family);
         // Initialize the database
         contactRepository.saveAndFlush(contact);
 
         // Get all the contacts
-        restContactMockMvc.perform(get("/api/contacts?sort=id,desc"))
+        restContactMockMvc.perform(get("/api/families/{id}/contacts?sort=id,desc", family.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(contact.getId().intValue())))
-                .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-                .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())))
-                .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())));
+                .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+                .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+                .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)));
     }
 
     @Test
     @Transactional
     public void getContact() throws Exception {
+        contact.setFamily(family);
         // Initialize the database
         contactRepository.saveAndFlush(contact);
 
         // Get the contact
-        restContactMockMvc.perform(get("/api/contacts/{id}", contact.getId()))
+        restContactMockMvc.perform(get("/api/families/{id}/contacts/{id}", family.getId(), contact.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(contact.getId().intValue()))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
-            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE.toString()))
-            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT.toString()));
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
+            .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT));
     }
 
     @Test
     @Transactional
     public void getNonExistingContact() throws Exception {
         // Get the contact
-        restContactMockMvc.perform(get("/api/contacts/{id}", Long.MAX_VALUE))
+        restContactMockMvc.perform(get("/api/families/{id}/contacts/{id}", family.getId(), Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
     public void updateContact() throws Exception {
+        contact.setFamily(family);
         // Initialize the database
         contactRepository.saveAndFlush(contact);
-        contactSearchRepository.save(contact);
         int databaseSizeBeforeUpdate = contactRepository.findAll().size();
 
         // Update the contact
@@ -203,7 +231,7 @@ public class ContactResourceIntTest {
         updatedContact.setValue(UPDATED_VALUE);
         updatedContact.setComment(UPDATED_COMMENT);
 
-        restContactMockMvc.perform(put("/api/contacts")
+        restContactMockMvc.perform(put("/api/families/{id}/contacts", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(updatedContact)))
                 .andExpect(status().isOk());
@@ -216,27 +244,20 @@ public class ContactResourceIntTest {
         assertThat(testContact.getValue()).isEqualTo(UPDATED_VALUE);
         assertThat(testContact.getComment()).isEqualTo(UPDATED_COMMENT);
 
-        // Validate the Contact in ElasticSearch
-        Contact contactEs = contactSearchRepository.findOne(testContact.getId());
-        assertThat(contactEs).isEqualToComparingFieldByField(testContact);
     }
 
     @Test
     @Transactional
     public void deleteContact() throws Exception {
+        contact.setFamily(family);
         // Initialize the database
         contactRepository.saveAndFlush(contact);
-        contactSearchRepository.save(contact);
         int databaseSizeBeforeDelete = contactRepository.findAll().size();
 
         // Get the contact
-        restContactMockMvc.perform(delete("/api/contacts/{id}", contact.getId())
+        restContactMockMvc.perform(delete("/api/families/{id}/contacts/{id}", family.getId(), contact.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-
-        // Validate ElasticSearch is empty
-        boolean contactExistsInEs = contactSearchRepository.exists(contact.getId());
-        assertThat(contactExistsInEs).isFalse();
 
         // Validate the database is empty
         List<Contact> contacts = contactRepository.findAll();
@@ -246,6 +267,7 @@ public class ContactResourceIntTest {
     @Test
     @Transactional
     public void searchContact() throws Exception {
+        contact.setFamily(family);
         // Initialize the database
         contactRepository.saveAndFlush(contact);
         contactSearchRepository.save(contact);
@@ -255,8 +277,8 @@ public class ContactResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(contact.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE.toString())))
-            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())));
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)));
     }
 }

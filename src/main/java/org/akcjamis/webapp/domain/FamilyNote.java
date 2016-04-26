@@ -33,10 +33,6 @@ public class FamilyNote extends AbstractAuditingEntity implements Serializable {
     @Column(name = "content", length = 65535, nullable = false)
     private String content;
 
-    //TODO wywalić tą kolumnę. Została zastąpiona przez audytową
-    @Column(name = "time")
-    private LocalDate time;
-
     @NotNull
     @Column(name = "archived", nullable = false)
     private Boolean archived;
@@ -66,14 +62,6 @@ public class FamilyNote extends AbstractAuditingEntity implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public LocalDate getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDate time) {
-        this.time = time;
     }
 
     public Boolean isArchived() {
@@ -125,7 +113,6 @@ public class FamilyNote extends AbstractAuditingEntity implements Serializable {
         return "FamilyNote{" +
             "id=" + id +
             ", content='" + content + "'" +
-            ", time='" + time + "'" +
             ", archived='" + archived + "'" +
             '}';
     }

@@ -55,8 +55,6 @@ public class ChristmasPackageChangeResourceIntTest {
     @Inject
     private ChristmasPackageChangeRepository christmasPackageChangeRepository;
 
-    @Inject
-    private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -71,9 +69,7 @@ public class ChristmasPackageChangeResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ChristmasPackageChangeResource christmasPackageChangeResource = new ChristmasPackageChangeResource();
-        ReflectionTestUtils.setField(christmasPackageChangeResource, "christmasPackageChangeSearchRepository", christmasPackageChangeSearchRepository);
-        ReflectionTestUtils.setField(christmasPackageChangeResource, "christmasPackageChangeRepository", christmasPackageChangeRepository);
+        ChristmasPackageChangeResource christmasPackageChangeResource = new ChristmasPackageChangeResource(christmasPackageChangeRepository);
         this.restChristmasPackageChangeMockMvc = MockMvcBuilders.standaloneSetup(christmasPackageChangeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -81,7 +77,6 @@ public class ChristmasPackageChangeResourceIntTest {
 
     @Before
     public void initTest() {
-        christmasPackageChangeSearchRepository.deleteAll();
         christmasPackageChange = new ChristmasPackageChange();
         christmasPackageChange.setTypeCode(DEFAULT_TYPE_CODE);
         christmasPackageChange.setTime(DEFAULT_TIME);
@@ -108,9 +103,6 @@ public class ChristmasPackageChangeResourceIntTest {
         assertThat(testChristmasPackageChange.getTime()).isEqualTo(DEFAULT_TIME);
         assertThat(testChristmasPackageChange.getContent()).isEqualTo(DEFAULT_CONTENT);
 
-        // Validate the ChristmasPackageChange in ElasticSearch
-        ChristmasPackageChange christmasPackageChangeEs = christmasPackageChangeSearchRepository.findOne(testChristmasPackageChange.getId());
-        assertThat(christmasPackageChangeEs).isEqualToComparingFieldByField(testChristmasPackageChange);
     }
 
     @Test
@@ -160,9 +152,9 @@ public class ChristmasPackageChangeResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageChange.getId().intValue())))
-                .andExpect(jsonPath("$.[*].type_code").value(hasItem(DEFAULT_TYPE_CODE.toString())))
+                .andExpect(jsonPath("$.[*].type_code").value(hasItem(DEFAULT_TYPE_CODE)))
                 .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-                .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
+                .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
     }
 
     @Test
@@ -176,9 +168,9 @@ public class ChristmasPackageChangeResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(christmasPackageChange.getId().intValue()))
-            .andExpect(jsonPath("$.type_code").value(DEFAULT_TYPE_CODE.toString()))
+            .andExpect(jsonPath("$.type_code").value(DEFAULT_TYPE_CODE))
             .andExpect(jsonPath("$.time").value(DEFAULT_TIME.toString()))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()));
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT));
     }
 
     @Test
@@ -194,7 +186,6 @@ public class ChristmasPackageChangeResourceIntTest {
     public void updateChristmasPackageChange() throws Exception {
         // Initialize the database
         christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
-        christmasPackageChangeSearchRepository.save(christmasPackageChange);
         int databaseSizeBeforeUpdate = christmasPackageChangeRepository.findAll().size();
 
         // Update the christmasPackageChange
@@ -217,9 +208,6 @@ public class ChristmasPackageChangeResourceIntTest {
         assertThat(testChristmasPackageChange.getTime()).isEqualTo(UPDATED_TIME);
         assertThat(testChristmasPackageChange.getContent()).isEqualTo(UPDATED_CONTENT);
 
-        // Validate the ChristmasPackageChange in ElasticSearch
-        ChristmasPackageChange christmasPackageChangeEs = christmasPackageChangeSearchRepository.findOne(testChristmasPackageChange.getId());
-        assertThat(christmasPackageChangeEs).isEqualToComparingFieldByField(testChristmasPackageChange);
     }
 
     @Test
@@ -227,17 +215,12 @@ public class ChristmasPackageChangeResourceIntTest {
     public void deleteChristmasPackageChange() throws Exception {
         // Initialize the database
         christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
-        christmasPackageChangeSearchRepository.save(christmasPackageChange);
         int databaseSizeBeforeDelete = christmasPackageChangeRepository.findAll().size();
 
         // Get the christmasPackageChange
         restChristmasPackageChangeMockMvc.perform(delete("/api/christmas-package-changes/{id}", christmasPackageChange.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-
-        // Validate ElasticSearch is empty
-        boolean christmasPackageChangeExistsInEs = christmasPackageChangeSearchRepository.exists(christmasPackageChange.getId());
-        assertThat(christmasPackageChangeExistsInEs).isFalse();
 
         // Validate the database is empty
         List<ChristmasPackageChange> christmasPackageChanges = christmasPackageChangeRepository.findAll();
@@ -249,15 +232,14 @@ public class ChristmasPackageChangeResourceIntTest {
     public void searchChristmasPackageChange() throws Exception {
         // Initialize the database
         christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
-        christmasPackageChangeSearchRepository.save(christmasPackageChange);
 
         // Search the christmasPackageChange
         restChristmasPackageChangeMockMvc.perform(get("/api/_search/christmas-package-changes?query=id:" + christmasPackageChange.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageChange.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type_code").value(hasItem(DEFAULT_TYPE_CODE.toString())))
+            .andExpect(jsonPath("$.[*].type_code").value(hasItem(DEFAULT_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
     }
 }

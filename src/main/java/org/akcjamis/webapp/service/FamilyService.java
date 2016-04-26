@@ -122,7 +122,7 @@ public class FamilyService {
     }
 
     /**
-     * Add contact to selected family.
+     * Get all contacts of selected family.
      *
      * @param id the id of family
      * @return the persisted entity
@@ -132,6 +132,12 @@ public class FamilyService {
         return contactRepository.findByFamily_id(id);
     }
 
+    /**
+     * Add child to selected family.
+     *
+     * @param id the id of family
+     * @return the persisted entity
+     */
     public Child saveChild(Long id, Child child) {
         log.debug("Request to save Child : {}", child);
         Family family = new Family();
@@ -142,6 +148,12 @@ public class FamilyService {
         return result;
     }
 
+    /**
+     * Get all children of selected family.
+     *
+     * @param id the id of family
+     * @return the persisted entity
+     */
     public List<Child> getAllChildren(Long id) {
         log.debug("Request children for Family : {}", id);
         return childRepository.findByFamily_id(id);

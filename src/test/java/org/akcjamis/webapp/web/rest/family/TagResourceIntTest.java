@@ -1,10 +1,12 @@
-package org.akcjamis.webapp.web.rest;
+package org.akcjamis.webapp.web.rest.family;
 
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Tag;
 import org.akcjamis.webapp.repository.TagRepository;
 import org.akcjamis.webapp.repository.search.TagSearchRepository;
 
+import org.akcjamis.webapp.web.rest.TagResource;
+import org.akcjamis.webapp.web.rest.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

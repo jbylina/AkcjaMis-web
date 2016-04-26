@@ -35,13 +35,18 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class ChristmasPackageChangeResource {
 
     private final Logger log = LoggerFactory.getLogger(ChristmasPackageChangeResource.class);
-        
-    @Inject
+
+
     private ChristmasPackageChangeRepository christmasPackageChangeRepository;
-    
+
     @Inject
     private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
-    
+
+    @Inject
+    public ChristmasPackageChangeResource(ChristmasPackageChangeRepository christmasPackageChangeRepository) {
+        this.christmasPackageChangeRepository = christmasPackageChangeRepository;
+    }
+
     /**
      * POST  /christmas-package-changes : Create a new christmasPackageChange.
      *
@@ -104,7 +109,7 @@ public class ChristmasPackageChangeResource {
     public ResponseEntity<List<ChristmasPackageChange>> getAllChristmasPackageChanges(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of ChristmasPackageChanges");
-        Page<ChristmasPackageChange> page = christmasPackageChangeRepository.findAll(pageable); 
+        Page<ChristmasPackageChange> page = christmasPackageChangeRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/christmas-package-changes");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

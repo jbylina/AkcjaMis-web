@@ -1,15 +1,21 @@
-package org.akcjamis.webapp.web.rest;
+package org.akcjamis.webapp.web.rest.family;
 
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Child;
+import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ChildRepository;
+import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 
 import org.akcjamis.webapp.service.FamilyService;
+import org.akcjamis.webapp.web.rest.ChildResource;
+import org.akcjamis.webapp.web.rest.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.hasItem;
+
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -60,6 +66,15 @@ public class ChildResourceIntTest {
     private static final LocalDate DEFAULT_BIRTH_YEAR = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_BIRTH_YEAR = LocalDate.now(ZoneId.systemDefault());
 
+    private static final String DEFAULT_STREET = "AAAAA";
+    private static final String DEFAULT_HOUSE_NO = "AAAAAAAAAA";
+    private static final String DEFAULT_FLAT_NO = "AAAAAAAAAA";
+    private static final String DEFAULT_POSTALCODE = "AAAAAA";
+    private static final String DEFAULT_DISTRICT = "AAAAA";
+    private static final String DEFAULT_CITY = "AAAAA";
+    private static final String DEFAULT_REGION = "AAAAA";
+    private static final String DEFAULT_SOURCE = "AAAAA";
+
     @Inject
     private ChildRepository childRepository;
 
@@ -75,18 +90,21 @@ public class ChildResourceIntTest {
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
+    @Inject
+    private FamilyRepository familyRepository;
+
     private MockMvc restChildMockMvc;
 
     private Child child;
+
+    private Family family;
 
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
         ChildResource childResource = new ChildResource(childRepository,
-                                                        childSearchRepository,
                                                         familyService);
         ReflectionTestUtils.setField(childResource, "childSearchRepository", childSearchRepository);
-        ReflectionTestUtils.setField(childResource, "childRepository", childRepository);
         this.restChildMockMvc = MockMvcBuilders.standaloneSetup(childResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -94,7 +112,18 @@ public class ChildResourceIntTest {
 
     @Before
     public void initTest() {
-        childSearchRepository.deleteAll();
+        familyRepository.deleteAll();
+        family = new Family();
+        family.setStreet(DEFAULT_STREET);
+        family.setHouseNo(DEFAULT_HOUSE_NO);
+        family.setFlatNo(DEFAULT_FLAT_NO);
+        family.setPostalcode(DEFAULT_POSTALCODE);
+        family.setDistrict(DEFAULT_DISTRICT);
+        family.setCity(DEFAULT_CITY);
+        family.setRegion(DEFAULT_REGION);
+        family.setSource(DEFAULT_SOURCE);
+        family = familyRepository.save(family);
+
         child = new Child();
         child.setNumber(DEFAULT_NUMBER);
         child.setFirstName(DEFAULT_FIRST_NAME);
@@ -109,8 +138,7 @@ public class ChildResourceIntTest {
         int databaseSizeBeforeCreate = childRepository.findAll().size();
 
         // Create the Child
-
-        restChildMockMvc.perform(post("/api/children")
+        restChildMockMvc.perform(post("/api/families/{id}/children", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(child)))
                 .andExpect(status().isCreated());
@@ -125,9 +153,6 @@ public class ChildResourceIntTest {
         assertThat(testChild.getSex()).isEqualTo(DEFAULT_SEX);
         assertThat(testChild.getBirthYear()).isEqualTo(DEFAULT_BIRTH_YEAR);
 
-        // Validate the Child in ElasticSearch
-        Child childEs = childSearchRepository.findOne(testChild.getId());
-        assertThat(childEs).isEqualToComparingFieldByField(testChild);
     }
 
     @Test
@@ -138,8 +163,7 @@ public class ChildResourceIntTest {
         child.setNumber(null);
 
         // Create the Child, which fails.
-
-        restChildMockMvc.perform(post("/api/children")
+        restChildMockMvc.perform(post("/api/families/{id}/children", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(child)))
                 .andExpect(status().isBadRequest());
@@ -156,8 +180,7 @@ public class ChildResourceIntTest {
         child.setFirstName(null);
 
         // Create the Child, which fails.
-
-        restChildMockMvc.perform(post("/api/children")
+        restChildMockMvc.perform(post("/api/families/{id}/children", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(child)))
                 .andExpect(status().isBadRequest());
@@ -174,8 +197,7 @@ public class ChildResourceIntTest {
         child.setLastName(null);
 
         // Create the Child, which fails.
-
-        restChildMockMvc.perform(post("/api/children")
+        restChildMockMvc.perform(post("/api/families/{id}/children", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(child)))
                 .andExpect(status().isBadRequest());
@@ -192,8 +214,7 @@ public class ChildResourceIntTest {
         child.setSex(null);
 
         // Create the Child, which fails.
-
-        restChildMockMvc.perform(post("/api/children")
+        restChildMockMvc.perform(post("/api/families/{id}/children", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(child)))
                 .andExpect(status().isBadRequest());
@@ -210,8 +231,7 @@ public class ChildResourceIntTest {
         child.setBirthYear(null);
 
         // Create the Child, which fails.
-
-        restChildMockMvc.perform(post("/api/children")
+        restChildMockMvc.perform(post("/api/families/{id}/children", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(child)))
                 .andExpect(status().isBadRequest());
@@ -223,17 +243,18 @@ public class ChildResourceIntTest {
     @Test
     @Transactional
     public void getAllChildren() throws Exception {
+        child.setFamily(family);
         // Initialize the database
         childRepository.saveAndFlush(child);
 
         // Get all the children
-        restChildMockMvc.perform(get("/api/children?sort=id,desc"))
+        restChildMockMvc.perform(get("/api/families/{id}/children?sort=id,desc", family.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(child.getId().intValue())))
                 .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
-                .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME.toString())))
-                .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
+                .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
+                .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
                 .andExpect(jsonPath("$.[*].sex").value(hasItem(DEFAULT_SEX.toString())))
                 .andExpect(jsonPath("$.[*].birthYear").value(hasItem(DEFAULT_BIRTH_YEAR.toString())));
     }
@@ -241,17 +262,18 @@ public class ChildResourceIntTest {
     @Test
     @Transactional
     public void getChild() throws Exception {
+        child.setFamily(family);
         // Initialize the database
         childRepository.saveAndFlush(child);
 
         // Get the child
-        restChildMockMvc.perform(get("/api/children/{id}", child.getId()))
+        restChildMockMvc.perform(get("/api/families/{id}/children/{id}", family.getId(), child.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(child.getId().intValue()))
             .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER))
-            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME.toString()))
-            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME.toString()))
+            .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))
+            .andExpect(jsonPath("$.lastName").value(DEFAULT_LAST_NAME))
             .andExpect(jsonPath("$.sex").value(DEFAULT_SEX.toString()))
             .andExpect(jsonPath("$.birthYear").value(DEFAULT_BIRTH_YEAR.toString()));
     }
@@ -260,16 +282,16 @@ public class ChildResourceIntTest {
     @Transactional
     public void getNonExistingChild() throws Exception {
         // Get the child
-        restChildMockMvc.perform(get("/api/children/{id}", Long.MAX_VALUE))
+        restChildMockMvc.perform(get("/api/families/{id}/children/{id}", family.getId(), Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
     public void updateChild() throws Exception {
+        child.setFamily(family);
         // Initialize the database
         childRepository.saveAndFlush(child);
-        childSearchRepository.save(child);
         int databaseSizeBeforeUpdate = childRepository.findAll().size();
 
         // Update the child
@@ -281,7 +303,7 @@ public class ChildResourceIntTest {
         updatedChild.setSex(UPDATED_SEX);
         updatedChild.setBirthYear(UPDATED_BIRTH_YEAR);
 
-        restChildMockMvc.perform(put("/api/children")
+        restChildMockMvc.perform(put("/api/families/{id}/children", family.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(updatedChild)))
                 .andExpect(status().isOk());
@@ -296,27 +318,20 @@ public class ChildResourceIntTest {
         assertThat(testChild.getSex()).isEqualTo(UPDATED_SEX);
         assertThat(testChild.getBirthYear()).isEqualTo(UPDATED_BIRTH_YEAR);
 
-        // Validate the Child in ElasticSearch
-        Child childEs = childSearchRepository.findOne(testChild.getId());
-        assertThat(childEs).isEqualToComparingFieldByField(testChild);
     }
 
     @Test
     @Transactional
     public void deleteChild() throws Exception {
+        child.setFamily(family);
         // Initialize the database
         childRepository.saveAndFlush(child);
-        childSearchRepository.save(child);
         int databaseSizeBeforeDelete = childRepository.findAll().size();
 
         // Get the child
-        restChildMockMvc.perform(delete("/api/children/{id}", child.getId())
+        restChildMockMvc.perform(delete("/api/families/{id}/children/{id}", family.getId(), child.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-
-        // Validate ElasticSearch is empty
-        boolean childExistsInEs = childSearchRepository.exists(child.getId());
-        assertThat(childExistsInEs).isFalse();
 
         // Validate the database is empty
         List<Child> children = childRepository.findAll();
@@ -326,6 +341,7 @@ public class ChildResourceIntTest {
     @Test
     @Transactional
     public void searchChild() throws Exception {
+        child.setFamily(family);
         // Initialize the database
         childRepository.saveAndFlush(child);
         childSearchRepository.save(child);
@@ -336,8 +352,8 @@ public class ChildResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(child.getId().intValue())))
             .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME.toString())))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME.toString())))
+            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
+            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
             .andExpect(jsonPath("$.[*].sex").value(hasItem(DEFAULT_SEX.toString())))
             .andExpect(jsonPath("$.[*].birthYear").value(hasItem(DEFAULT_BIRTH_YEAR.toString())));
     }

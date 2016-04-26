@@ -36,16 +36,15 @@ public class ChildResource {
 
     private ChildRepository childRepository;
 
+    @Inject
     private ChildSearchRepository childSearchRepository;
 
     private FamilyService familyService;
 
     @Inject
     public ChildResource(ChildRepository childRepository,
-                         ChildSearchRepository childSearchRepository,
                          FamilyService familyService) {
         this.childRepository = childRepository;
-        this.childSearchRepository = childSearchRepository;
         this.familyService = familyService;
     }
 
@@ -91,8 +90,7 @@ public class ChildResource {
         if (child.getId() == null) {
             return createChild(id, child);
         }
-        Child result = childRepository.save(child);
-        childSearchRepository.save(result);
+        Child result = familyService.saveChild(id, child);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("child", child.getId().toString()))
             .body(result);
@@ -126,7 +124,7 @@ public class ChildResource {
     @Timed
     public ResponseEntity<Child> getChild(@PathVariable Long familyId, @PathVariable Long id) {
         log.debug("REST request to get Child : {}", id);
-        Child child = childRepository.findByIdAndFamily_id(familyId, id);
+        Child child = childRepository.findByIdAndFamily_id(id, familyId);
         return Optional.ofNullable(child)
             .map(result -> new ResponseEntity<>(
                 result,

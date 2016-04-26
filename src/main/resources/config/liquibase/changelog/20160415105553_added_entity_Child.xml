@@ -21,33 +21,39 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+
             <column name="number" type="integer">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="first_name" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="last_name" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="sex" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="birth_year" type="date">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
-            <column name="family_id" type="bigint"/>
+            <column name="family_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+
             <column name="created_date" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
+
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->

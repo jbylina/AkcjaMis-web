@@ -1,4 +1,4 @@
-package org.akcjamis.webapp.web.rest;
+package org.akcjamis.webapp.web.rest.family;
 
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.FamilyNote;
@@ -6,6 +6,8 @@ import org.akcjamis.webapp.repository.FamilyNoteRepository;
 import org.akcjamis.webapp.service.FamilyNoteService;
 import org.akcjamis.webapp.repository.search.FamilyNoteSearchRepository;
 
+import org.akcjamis.webapp.web.rest.FamilyNoteResource;
+import org.akcjamis.webapp.web.rest.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,8 +50,6 @@ public class FamilyNoteResourceIntTest {
     private static final String DEFAULT_CONTENT = "AAAAAAAAAAAAAAA";
     private static final String UPDATED_CONTENT = "BBBBBBBBBBBBBBB";
 
-    private static final LocalDate DEFAULT_TIME = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_TIME = LocalDate.now(ZoneId.systemDefault());
 
     private static final Boolean DEFAULT_ARCHIVED = false;
     private static final Boolean UPDATED_ARCHIVED = true;
@@ -87,7 +87,6 @@ public class FamilyNoteResourceIntTest {
         familyNoteSearchRepository.deleteAll();
         familyNote = new FamilyNote();
         familyNote.setContent(DEFAULT_CONTENT);
-        familyNote.setTime(DEFAULT_TIME);
         familyNote.setArchived(DEFAULT_ARCHIVED);
     }
 
@@ -108,7 +107,6 @@ public class FamilyNoteResourceIntTest {
         assertThat(familyNotes).hasSize(databaseSizeBeforeCreate + 1);
         FamilyNote testFamilyNote = familyNotes.get(familyNotes.size() - 1);
         assertThat(testFamilyNote.getContent()).isEqualTo(DEFAULT_CONTENT);
-        assertThat(testFamilyNote.getTime()).isEqualTo(DEFAULT_TIME);
         assertThat(testFamilyNote.isArchived()).isEqualTo(DEFAULT_ARCHIVED);
 
         // Validate the FamilyNote in ElasticSearch
@@ -163,9 +161,8 @@ public class FamilyNoteResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(familyNote.getId().intValue())))
-                .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
-                .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-                .andExpect(jsonPath("$.[*].archived").value(hasItem(DEFAULT_ARCHIVED.booleanValue())));
+                .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)))
+                .andExpect(jsonPath("$.[*].archived").value(hasItem(DEFAULT_ARCHIVED)));
     }
 
     @Test
@@ -179,9 +176,8 @@ public class FamilyNoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(familyNote.getId().intValue()))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()))
-            .andExpect(jsonPath("$.time").value(DEFAULT_TIME.toString()))
-            .andExpect(jsonPath("$.archived").value(DEFAULT_ARCHIVED.booleanValue()));
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT))
+            .andExpect(jsonPath("$.archived").value(DEFAULT_ARCHIVED));
     }
 
     @Test
@@ -204,7 +200,6 @@ public class FamilyNoteResourceIntTest {
         FamilyNote updatedFamilyNote = new FamilyNote();
         updatedFamilyNote.setId(familyNote.getId());
         updatedFamilyNote.setContent(UPDATED_CONTENT);
-        updatedFamilyNote.setTime(UPDATED_TIME);
         updatedFamilyNote.setArchived(UPDATED_ARCHIVED);
 
         restFamilyNoteMockMvc.perform(put("/api/family-notes")
@@ -217,7 +212,6 @@ public class FamilyNoteResourceIntTest {
         assertThat(familyNotes).hasSize(databaseSizeBeforeUpdate);
         FamilyNote testFamilyNote = familyNotes.get(familyNotes.size() - 1);
         assertThat(testFamilyNote.getContent()).isEqualTo(UPDATED_CONTENT);
-        assertThat(testFamilyNote.getTime()).isEqualTo(UPDATED_TIME);
         assertThat(testFamilyNote.isArchived()).isEqualTo(UPDATED_ARCHIVED);
 
         // Validate the FamilyNote in ElasticSearch
@@ -258,8 +252,7 @@ public class FamilyNoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(familyNote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
-            .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-            .andExpect(jsonPath("$.[*].archived").value(hasItem(DEFAULT_ARCHIVED.booleanValue())));
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)))
+            .andExpect(jsonPath("$.[*].archived").value(hasItem(DEFAULT_ARCHIVED)));
     }
 }

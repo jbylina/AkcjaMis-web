@@ -51,7 +51,7 @@ public class Child extends AbstractAuditingEntity implements Serializable {
     @Column(name = "birth_year", nullable = false)
     private LocalDate birthYear;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Family family;
 

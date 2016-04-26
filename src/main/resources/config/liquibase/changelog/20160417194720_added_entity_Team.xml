@@ -21,26 +21,33 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+
             <column name="team_number" type="integer">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="note" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
 
-            <column name="event_id" type="bigint"/>
+            <column name="event_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
+
             <column name="created_date" type="timestamp" defaultValueDate="${now}">
                 <constraints nullable="false"/>
             </column>
+
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
-                <createTable tableName="teams_user">
+
+        <createTable tableName="teams_user">
             <column name="users_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
