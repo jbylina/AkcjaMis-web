@@ -3,7 +3,10 @@ package org.akcjamis.webapp.service;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.domain.FamilyNote;
 import org.akcjamis.webapp.repository.FamilyNoteRepository;
+import org.akcjamis.webapp.repository.TagRepository;
 import org.akcjamis.webapp.repository.search.FamilyNoteSearchRepository;
+import org.akcjamis.webapp.web.rest.dto.FamilyNoteDTO;
+import org.akcjamis.webapp.web.rest.mapper.FamilyNoteMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,27 +27,39 @@ public class FamilyNoteService {
 
     private final Logger log = LoggerFactory.getLogger(FamilyNoteService.class);
 
-    @Inject
     private FamilyNoteRepository familyNoteRepository;
+
+    private TagRepository tagRepository;
+
+    private FamilyNoteMapper familyNoteMapper;
 
     @Inject
     private FamilyNoteSearchRepository familyNoteSearchRepository;
+
+    @Inject
+    public FamilyNoteService(FamilyNoteRepository familyNoteRepository, TagRepository tagRepository, FamilyNoteMapper familyNoteMapper) {
+        this.familyNoteRepository = familyNoteRepository;
+        this.tagRepository = tagRepository;
+        this.familyNoteMapper = familyNoteMapper;
+    }
 
     /**
      * Save a familyNote for given family id.
      *
      * @param familyId family id
-     * @param familyNote the entity to save
+     * @param familyNoteDTO the DTO to save
      * @return the persisted entity
      */
-    public FamilyNote save(Long familyId, FamilyNote familyNote) {
-        log.debug("Request to save FamilyNote : {}", familyNote);
+    public FamilyNoteDTO save(Long familyId, FamilyNoteDTO familyNoteDTO) {
+        log.debug("Request to save FamilyNote : {}", familyNoteDTO);
+        FamilyNote familyNote = familyNoteMapper.toFamilyNote(familyNoteDTO);
         Family family = new Family();
         family.setId(familyId);
         familyNote.setFamily(family);
         FamilyNote result = familyNoteRepository.save(familyNote);
         familyNoteSearchRepository.save(result);
-        return result;
+
+        return familyNoteMapper.toFamilyNoteDTO(result);
     }
 
     /**

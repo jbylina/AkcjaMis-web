@@ -32,7 +32,6 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     @CreatedBy
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
-
     private String createdBy;
 
     @CreatedDate

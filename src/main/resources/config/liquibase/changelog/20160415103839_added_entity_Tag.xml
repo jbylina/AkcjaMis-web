@@ -23,11 +23,11 @@
             </column>
 
             <column name="code" type="varchar(20)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
 
             <column name="color" type="varchar(12)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
 
             <column name="created_by" type="varchar(50)">

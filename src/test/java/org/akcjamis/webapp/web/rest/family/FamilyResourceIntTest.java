@@ -67,7 +67,6 @@ public class FamilyResourceIntTest {
 
     @Inject
     private FamilyService familyService;
-
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 

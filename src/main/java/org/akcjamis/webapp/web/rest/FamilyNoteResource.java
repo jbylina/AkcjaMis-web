@@ -3,6 +3,7 @@ package org.akcjamis.webapp.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.FamilyNote;
 import org.akcjamis.webapp.service.FamilyNoteService;
+import org.akcjamis.webapp.web.rest.dto.FamilyNoteDTO;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -47,7 +48,7 @@ public class FamilyNoteResource {
      * POST  /families/:id/family-notes : Create a new familyNote.
      *
      * @param id the family Id
-     * @param familyNote the familyNote to create
+     * @param familyNoteDTO the familyNote to create
      * @return the ResponseEntity with status 201 (Created) and with body the new familyNote, or with status 400 (Bad Request) if the familyNote has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
@@ -55,12 +56,12 @@ public class FamilyNoteResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<FamilyNote> createFamilyNote(@PathVariable Long id, @Valid @RequestBody FamilyNote familyNote) throws URISyntaxException {
-        log.debug("REST request to save FamilyNote : {}", familyNote);
-        if (familyNote.getId() != null) {
+    public ResponseEntity<FamilyNoteDTO> createFamilyNote(@PathVariable Long id, @Valid @RequestBody FamilyNoteDTO familyNoteDTO) throws URISyntaxException {
+        log.debug("REST request to save FamilyNote : {}", familyNoteDTO);
+        if (familyNoteDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("familyNote", "idexists", "A new familyNote cannot already have an ID")).body(null);
         }
-        FamilyNote result = familyNoteService.save(id, familyNote);
+        FamilyNoteDTO result = familyNoteService.save(id, familyNoteDTO);
         return ResponseEntity.created(new URI("/api/families/" + id + "/family-notes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("familyNote", result.getId().toString()))
             .body(result);
@@ -70,7 +71,7 @@ public class FamilyNoteResource {
      * PUT  /families/:id/family-notes : Updates an existing familyNote.
      *
      * @param id family ID
-     * @param familyNote the familyNote to update
+     * @param familyNoteDTO the familyNote to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated familyNote,
      * or with status 400 (Bad Request) if the familyNote is not valid,
      * or with status 500 (Internal Server Error) if the familyNote couldnt be updated
@@ -80,14 +81,14 @@ public class FamilyNoteResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<FamilyNote> updateFamilyNote(@PathVariable Long id, @Valid @RequestBody FamilyNote familyNote) throws URISyntaxException {
-        log.debug("REST request to update FamilyNote : {}", familyNote);
-        if (familyNote.getId() == null) {
-            return createFamilyNote(id, familyNote);
+    public ResponseEntity<FamilyNoteDTO> updateFamilyNote(@PathVariable Long id, @Valid @RequestBody FamilyNoteDTO familyNoteDTO) throws URISyntaxException {
+        log.debug("REST request to update FamilyNote : {}", familyNoteDTO);
+        if (familyNoteDTO.getId() == null) {
+            return createFamilyNote(id, familyNoteDTO);
         }
-        FamilyNote result = familyNoteService.save(id, familyNote);
+        FamilyNoteDTO result = familyNoteService.save(id, familyNoteDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert("familyNote", familyNote.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert("familyNote", familyNoteDTO.getId().toString()))
             .body(result);
     }
 

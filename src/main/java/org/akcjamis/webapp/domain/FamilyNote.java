@@ -33,9 +33,8 @@ public class FamilyNote extends AbstractAuditingEntity implements Serializable {
     @Column(name = "content", length = 65535, nullable = false)
     private String content;
 
-    @NotNull
     @Column(name = "archived", nullable = false)
-    private Boolean archived;
+    private Boolean archived = false;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -44,7 +43,7 @@ public class FamilyNote extends AbstractAuditingEntity implements Serializable {
                inverseJoinColumns = @JoinColumn(name="tag_id", referencedColumnName="ID"))
     private Set<Tag> tags = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Family family;
 
