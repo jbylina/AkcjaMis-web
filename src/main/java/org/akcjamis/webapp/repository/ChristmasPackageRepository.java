@@ -16,4 +16,6 @@ public interface ChristmasPackageRepository extends JpaRepository<ChristmasPacka
     Page<ChristmasPackage> findByEvent_id(Long id, Pageable var1);
 
     ChristmasPackage findByIdAndEvent_id(Long eventId, Long id);
+
+    ChristmasPackage findById(Long id);
 }

@@ -1,8 +1,11 @@
 package org.akcjamis.webapp.service;
 
 import org.akcjamis.webapp.domain.ChristmasPackage;
+import org.akcjamis.webapp.domain.ChristmasPackageNote;
 import org.akcjamis.webapp.domain.Event;
+import org.akcjamis.webapp.repository.ChristmasPackageNoteRepository;
 import org.akcjamis.webapp.repository.ChristmasPackageRepository;
+import org.akcjamis.webapp.repository.search.ChristmasPackageNoteSearchRepository;
 import org.akcjamis.webapp.repository.search.ChristmasPackageSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
+import javax.inject.Inject;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -27,11 +29,24 @@ public class ChristmasPackageService {
 
     private final Logger log = LoggerFactory.getLogger(ChristmasPackageService.class);
 
-    @Inject
     private ChristmasPackageRepository christmasPackageRepository;
 
-    @Inject
     private ChristmasPackageSearchRepository christmasPackageSearchRepository;
+
+    private ChristmasPackageNoteRepository christmasPackageNoteRepository;
+
+    private ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository;
+
+    @Inject
+    public ChristmasPackageService(ChristmasPackageRepository christmasPackageRepository,
+                                   ChristmasPackageSearchRepository christmasPackageSearchRepository,
+                                   ChristmasPackageNoteRepository christmasPackageNoteRepository,
+                                   ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository) {
+        this.christmasPackageRepository = christmasPackageRepository;
+        this.christmasPackageSearchRepository = christmasPackageSearchRepository;
+        this.christmasPackageNoteRepository = christmasPackageNoteRepository;
+        this.christmasPackageNoteSearchRepository = christmasPackageNoteSearchRepository;
+    }
 
     /**
      * Save a christmasPackage for given event.
@@ -75,6 +90,17 @@ public class ChristmasPackageService {
     }
 
     /**
+     *  Get one christmasPackage by id.
+     *
+     *  @param id the id of the entity
+     *  @return the entity
+     */
+    @Transactional(readOnly = true)
+    public ChristmasPackage findOneById(Long id) {
+        log.debug("Request to get ChristmasPackage : {}", id);
+        return christmasPackageRepository.findById(id);
+    }
+    /**
      *  Delete the  christmasPackage by id.
      *
      *  @param id the id of the entity
@@ -96,4 +122,51 @@ public class ChristmasPackageService {
         log.debug("Request to search for a page of ChristmasPackages for query {}", query);
         return christmasPackageSearchRepository.search(queryStringQuery(query), pageable);
     }
+
+    /**
+     * Add contact to selected family.
+     *
+     * @param id the id of christmas package
+     * @param packageNote the entity to save
+     * @return the persisted entity
+     */
+    public ChristmasPackageNote saveNote(Long id, ChristmasPackageNote packageNote) {
+        log.debug("Request to save ChristmasPackageNote : {}", packageNote);
+
+        ChristmasPackage christmasPackage = new ChristmasPackage();
+
+        christmasPackage.setId(id);
+        packageNote.setChristmasPackage(christmasPackage);
+
+        ChristmasPackageNote result = christmasPackageNoteRepository.save(packageNote);
+        christmasPackageNoteSearchRepository.save(result);
+
+        return result;
+    }
+
+    /**
+     * Get all package notes of selected package.
+     *
+     * @param id the id of christmas package
+     * @return the persisted entity
+     */
+
+    public List<ChristmasPackageNote> getAllPackageNotes(Long id) {
+        log.debug("Request contacts for ChristamasPackageNote : {}", id);
+        return christmasPackageNoteRepository.findByChristmasPackage_id(id);
+
+    }
+
+    /**
+     * Delete package note.
+     *
+     * @param id the id of christmas package
+     */
+
+    public void deletePackageNote(Long id) {
+        log.debug("Request contacts for ChristamasPackageNote : {}", id);
+        christmasPackageNoteRepository.delete(id);
+        christmasPackageNoteSearchRepository.delete(id);
+    }
+    ;
 }

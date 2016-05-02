@@ -11,4 +11,8 @@ import java.util.List;
  */
 public interface ChristmasPackageNoteRepository extends JpaRepository<ChristmasPackageNote,Long> {
 
+    List<ChristmasPackageNote> findByChristmasPackage_id(Long id);
+
+    ChristmasPackageNote findByIdAndChristmasPackage_id(Long id, Long packageId);
+
 }
