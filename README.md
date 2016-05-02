@@ -65,3 +65,12 @@ To setup this project in Jenkins, use the following configuration:
     * Invoke Maven / Tasks: `-Pprod clean package`
 * Post-build Actions
     * Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml`
+
+[JHipster]: https://jhipster.github.io/
+[Node.js]: https://nodejs.org/
+[Bower]: http://bower.io/
+[Gulp]: http://gulpjs.com/
+[BrowserSync]: http://www.browsersync.io/
+[Karma]: http://karma-runner.github.io/
+[Jasmine]: http://jasmine.github.io/2.0/introduction.html
+[Protractor]: https://angular.github.io/protractor/
