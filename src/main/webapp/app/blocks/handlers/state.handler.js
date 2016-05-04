@@ -5,11 +5,9 @@
         .module('akcjamisApp')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$state',  '$window', 
-        'Auth', 'Principal', 'ENV', 'VERSION'];
+    stateHandler.$inject = ['$rootScope', '$state',  '$window', 'Auth', 'Principal', 'ENV', 'VERSION'];
 
-    function stateHandler($rootScope, $state,  $window, 
-        Auth, Principal, ENV, VERSION) {
+    function stateHandler($rootScope, $state,  $window, Auth, Principal, ENV, VERSION) {
         return {
             initialize: initialize
         };
@@ -26,8 +24,6 @@
                 if (Principal.isIdentityResolved()) {
                     Auth.authorize();
                 }
-
-                
             });
 
             var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
