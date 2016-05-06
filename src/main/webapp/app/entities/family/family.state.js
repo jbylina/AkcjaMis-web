@@ -66,6 +66,21 @@
                 }]
             }
         })
+            .state('family.create',{
+                parent:'entity',
+                url: '/family/create',
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: 'Nowa rodzina'
+                },
+                views:{
+                    'content@': {
+                        templateUrl: 'app/entities/family/new-family.html',
+                        controller: 'FamilyDialogController',
+                        controllerAs: 'vm'
+                    }
+                }
+            })
         .state('family.new', {
             parent: 'family',
             url: '/new',

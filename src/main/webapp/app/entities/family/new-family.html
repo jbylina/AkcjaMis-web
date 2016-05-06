@@ -1,0 +1,43 @@
+<div class="col-lg-12">
+<h2>Dodaj nową rodzinę</h2>
+    </div>
+<div class="col-lg-12">
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+<div class="col-lg-6">
+    <div class="col-lg-10">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <label>Dodaj rodzinę</label>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+
+                    <p class="help-block">Ulica</p>
+                    <input class="form-control" placeholder="Przykładowa" name="street" ng-model="vm.family.street" required>
+                    <div ng-show="editForm.street.$invalid"></div>
+
+                    <p class="help-block">Numer domu</p>
+                    <input class="form-control" placeholder="0" name="houseNo" ng-model="vm.family.houseNo">
+                    <p class="help-block">Numer mieszkania</p>
+                    <input class="form-control" placeholder="0" name="flatNo" ng-model="vm.family.flatNo">
+                    <p class="help-block">Kod pocztowy</p>
+                    <input class="form-control" placeholder="00-000" name="postalcode" ng-model="vm.family.postalcode">
+                    <p class="help-block">Miasto</p>
+                    <input class="form-control" placeholder="Warszawa" name="city" ng-model="vm.family.city">
+                    <p class="help-block">Dzielnica</p>
+                    <input class="form-control" placeholder="Mokotów" name="region" ng-model="vm.family.region">
+                </div>
+            </div>
+            <div class="panel-footer">
+                    <button type="button" class="btn btn-default center-block" data-dismiss="modal" ng-click="vm.clear()">
+                        <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+                    </button>
+                    <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+                    </button>
+                </div>
+        </div>
+    </div>
+</div>
+</form>
+</div>
