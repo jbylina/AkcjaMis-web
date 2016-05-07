@@ -1,10 +1,11 @@
 package org.akcjamis.webapp.web.rest;
 
 import org.akcjamis.webapp.AkcjamisApp;
-import org.akcjamis.webapp.domain.ChristmasPackageChange;
-import org.akcjamis.webapp.repository.ChristmasPackageChangeRepository;
+import org.akcjamis.webapp.domain.*;
+import org.akcjamis.webapp.repository.*;
 import org.akcjamis.webapp.repository.search.ChristmasPackageChangeSearchRepository;
 
+import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,10 +52,41 @@ public class ChristmasPackageChangeResourceIntTest {
     private static final LocalDate UPDATED_TIME = LocalDate.now(ZoneId.systemDefault());
     private static final String DEFAULT_CONTENT = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     private static final String UPDATED_CONTENT = "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB";
-/*
+
+    private static final Integer DEFAULT_MARK = 1;
+
+    private static final Boolean DEFAULT_DELIVERED = false;
+
+    private static final Integer DEFAULT_PACKAGE_NUMBER = 1;
+
+    private static final LocalDate DEFAULT_YEAR = LocalDate.ofEpochDay(0L);
+
+    private static final String DEFAULT_STREET = "AAAAA";
+    private static final String DEFAULT_HOUSE_NO = "AAAAAAAAAA";
+    private static final String DEFAULT_FLAT_NO = "AAAAAAAAAA";
+    private static final String DEFAULT_POSTALCODE = "AAAAAA";
+    private static final String DEFAULT_DISTRICT = "AAAAA";
+    private static final String DEFAULT_CITY = "AAAAA";
+    private static final String DEFAULT_REGION = "AAAAA";
+    private static final String DEFAULT_SOURCE = "AAAAA";
+
     @Inject
     private ChristmasPackageChangeRepository christmasPackageChangeRepository;
 
+    @Inject
+    private ChristmasPackageRepository christmasPackageRepository;
+
+    @Inject
+    private ChristmasPackageService christmasPackageService;
+
+    @Inject
+    private FamilyRepository familyRepository;
+
+    @Inject
+    private EventRepository eventRepository;
+
+    @Inject
+    private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -66,10 +98,16 @@ public class ChristmasPackageChangeResourceIntTest {
 
     private ChristmasPackageChange christmasPackageChange;
 
+    private ChristmasPackage christmasPackage;
+
+    private Family family;
+
+    private Event event;
+
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ChristmasPackageChangeResource christmasPackageChangeResource = new ChristmasPackageChangeResource(christmasPackageChangeRepository);
+        ChristmasPackageChangeResource christmasPackageChangeResource = new ChristmasPackageChangeResource(christmasPackageChangeRepository, christmasPackageService);
         this.restChristmasPackageChangeMockMvc = MockMvcBuilders.standaloneSetup(christmasPackageChangeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -77,10 +115,37 @@ public class ChristmasPackageChangeResourceIntTest {
 
     @Before
     public void initTest() {
+        christmasPackageChangeRepository.deleteAll();
         christmasPackageChange = new ChristmasPackageChange();
         christmasPackageChange.setTypeCode(DEFAULT_TYPE_CODE);
         christmasPackageChange.setTime(DEFAULT_TIME);
         christmasPackageChange.setContent(DEFAULT_CONTENT);
+
+        eventRepository.deleteAll();
+        event = new Event();
+        event.setYear(DEFAULT_YEAR);
+        event = eventRepository.save(event);
+
+        familyRepository.deleteAll();
+        family = new Family();
+        family.setStreet(DEFAULT_STREET);
+        family.setHouseNo(DEFAULT_HOUSE_NO);
+        family.setFlatNo(DEFAULT_FLAT_NO);
+        family.setPostalcode(DEFAULT_POSTALCODE);
+        family.setDistrict(DEFAULT_DISTRICT);
+        family.setCity(DEFAULT_CITY);
+        family.setRegion(DEFAULT_REGION);
+        family.setSource(DEFAULT_SOURCE);
+        family = familyRepository.save(family);
+
+        christmasPackageRepository.deleteAll();
+        christmasPackage = new ChristmasPackage();
+        christmasPackage.setMark(DEFAULT_MARK);
+        christmasPackage.setDelivered(DEFAULT_DELIVERED);
+        christmasPackage.setPackageNumber(DEFAULT_PACKAGE_NUMBER);
+        christmasPackage.setEvent(event);
+        christmasPackage.setFamily(family);
+        christmasPackage = christmasPackageRepository.save(christmasPackage);
     }
 
     @Test
@@ -90,7 +155,7 @@ public class ChristmasPackageChangeResourceIntTest {
 
         // Create the ChristmasPackageChange
 
-        restChristmasPackageChangeMockMvc.perform(post("/api/christmas-package-changes")
+        restChristmasPackageChangeMockMvc.perform(post("/api/christmas-package/{id}/changes", christmasPackage.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(christmasPackageChange)))
                 .andExpect(status().isCreated());
@@ -114,7 +179,7 @@ public class ChristmasPackageChangeResourceIntTest {
 
         // Create the ChristmasPackageChange, which fails.
 
-        restChristmasPackageChangeMockMvc.perform(post("/api/christmas-package-changes")
+        restChristmasPackageChangeMockMvc.perform(post("/api/christmas-package/{id}/changes", christmasPackage.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(christmasPackageChange)))
                 .andExpect(status().isBadRequest());
@@ -132,7 +197,7 @@ public class ChristmasPackageChangeResourceIntTest {
 
         // Create the ChristmasPackageChange, which fails.
 
-        restChristmasPackageChangeMockMvc.perform(post("/api/christmas-package-changes")
+        restChristmasPackageChangeMockMvc.perform(post("/api/christmas-package/{id}/changes", christmasPackage.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(christmasPackageChange)))
                 .andExpect(status().isBadRequest());
@@ -145,10 +210,11 @@ public class ChristmasPackageChangeResourceIntTest {
     @Transactional
     public void getAllChristmasPackageChanges() throws Exception {
         // Initialize the database
+        christmasPackageChange.setChristmasPackage(christmasPackage);
         christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
 
         // Get all the christmasPackageChanges
-        restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package-changes?sort=id,desc"))
+        restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package/{id}/changes?sort=id,desc", christmasPackage.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageChange.getId().intValue())))
@@ -161,10 +227,11 @@ public class ChristmasPackageChangeResourceIntTest {
     @Transactional
     public void getChristmasPackageChange() throws Exception {
         // Initialize the database
+        christmasPackageChange.setChristmasPackage(christmasPackage);
         christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
 
         // Get the christmasPackageChange
-        restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package-changes/{id}", christmasPackageChange.getId()))
+        restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package/{packageId}/changes/{id}", christmasPackage.getId(), christmasPackageChange.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(christmasPackageChange.getId().intValue()))
@@ -177,7 +244,7 @@ public class ChristmasPackageChangeResourceIntTest {
     @Transactional
     public void getNonExistingChristmasPackageChange() throws Exception {
         // Get the christmasPackageChange
-        restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package-changes/{id}", Long.MAX_VALUE))
+        restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package/{packageId}/changes/{id}", christmasPackage.getId(), Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
@@ -185,6 +252,7 @@ public class ChristmasPackageChangeResourceIntTest {
     @Transactional
     public void updateChristmasPackageChange() throws Exception {
         // Initialize the database
+        christmasPackageChange.setChristmasPackage(christmasPackage);
         christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
         int databaseSizeBeforeUpdate = christmasPackageChangeRepository.findAll().size();
 
@@ -195,7 +263,7 @@ public class ChristmasPackageChangeResourceIntTest {
         updatedChristmasPackageChange.setTime(UPDATED_TIME);
         updatedChristmasPackageChange.setContent(UPDATED_CONTENT);
 
-        restChristmasPackageChangeMockMvc.perform(put("/api/christmas-package-changes")
+        restChristmasPackageChangeMockMvc.perform(put("/api/christmas-package/{id}/changes", christmasPackage.getId())
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(updatedChristmasPackageChange)))
                 .andExpect(status().isOk());
@@ -214,11 +282,12 @@ public class ChristmasPackageChangeResourceIntTest {
     @Transactional
     public void deleteChristmasPackageChange() throws Exception {
         // Initialize the database
+        christmasPackageChange.setChristmasPackage(christmasPackage);
         christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
         int databaseSizeBeforeDelete = christmasPackageChangeRepository.findAll().size();
 
         // Get the christmasPackageChange
-        restChristmasPackageChangeMockMvc.perform(delete("/api/christmas-package-changes/{id}", christmasPackageChange.getId())
+        restChristmasPackageChangeMockMvc.perform(delete("/api/christmas-package/{packageId}/changes/{id}", christmasPackage.getId(), christmasPackageChange.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
@@ -241,5 +310,5 @@ public class ChristmasPackageChangeResourceIntTest {
             .andExpect(jsonPath("$.[*].type_code").value(hasItem(DEFAULT_TYPE_CODE)))
             .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
             .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
-    }*/
+    }
 }

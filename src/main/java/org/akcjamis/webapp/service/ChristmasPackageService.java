@@ -45,12 +45,12 @@ public class ChristmasPackageService {
     private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
 
     @Inject
-    public ChristmasPackageService(ChristmasPackageRepository christmasPackageRepository,
-                                   ChristmasPackageSearchRepository christmasPackageSearchRepository,
-                                   ChristmasPackageNoteRepository christmasPackageNoteRepository,
-                                   ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository,
-                                   ChristmasPackageChangeRepository christmasPackageChangeRepository,
-                                   ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository) {
+    private ChristmasPackageService(ChristmasPackageRepository christmasPackageRepository,
+                                    ChristmasPackageSearchRepository christmasPackageSearchRepository,
+                                    ChristmasPackageNoteRepository christmasPackageNoteRepository,
+                                    ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository,
+                                    ChristmasPackageChangeRepository christmasPackageChangeRepository,
+                                    ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository) {
         this.christmasPackageRepository = christmasPackageRepository;
         this.christmasPackageSearchRepository = christmasPackageSearchRepository;
         this.christmasPackageNoteRepository = christmasPackageNoteRepository;
@@ -136,7 +136,7 @@ public class ChristmasPackageService {
     }
 
     /**
-     * Add contact to selected family.
+     * Add note to selected family.
      *
      * @param id the id of christmas package
      * @param packageNote the entity to save
