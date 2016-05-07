@@ -1,12 +1,15 @@
 package org.akcjamis.webapp.service;
 
 import org.akcjamis.webapp.domain.ChristmasPackage;
+import org.akcjamis.webapp.domain.ChristmasPackageChange;
 import org.akcjamis.webapp.domain.ChristmasPackageNote;
 import org.akcjamis.webapp.domain.Event;
 import org.akcjamis.webapp.repository.ChristmasPackageNoteRepository;
 import org.akcjamis.webapp.repository.ChristmasPackageRepository;
 import org.akcjamis.webapp.repository.search.ChristmasPackageNoteSearchRepository;
+import org.akcjamis.webapp.repository.ChristmasPackageChangeRepository;
 import org.akcjamis.webapp.repository.search.ChristmasPackageSearchRepository;
+import org.akcjamis.webapp.repository.search.ChristmasPackageChangeSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -37,15 +40,23 @@ public class ChristmasPackageService {
 
     private ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository;
 
+    private ChristmasPackageChangeRepository christmasPackageChangeRepository;
+
+    private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
+
     @Inject
     public ChristmasPackageService(ChristmasPackageRepository christmasPackageRepository,
                                    ChristmasPackageSearchRepository christmasPackageSearchRepository,
                                    ChristmasPackageNoteRepository christmasPackageNoteRepository,
-                                   ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository) {
+                                   ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository,
+                                   ChristmasPackageChangeRepository christmasPackageChangeRepository,
+                                   ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository) {
         this.christmasPackageRepository = christmasPackageRepository;
         this.christmasPackageSearchRepository = christmasPackageSearchRepository;
         this.christmasPackageNoteRepository = christmasPackageNoteRepository;
         this.christmasPackageNoteSearchRepository = christmasPackageNoteSearchRepository;
+        this.christmasPackageChangeRepository = christmasPackageChangeRepository;
+        this.christmasPackageChangeSearchRepository = christmasPackageChangeSearchRepository;
     }
 
     /**
@@ -100,6 +111,7 @@ public class ChristmasPackageService {
         log.debug("Request to get ChristmasPackage : {}", id);
         return christmasPackageRepository.findById(id);
     }
+
     /**
      *  Delete the  christmasPackage by id.
      *
@@ -169,4 +181,67 @@ public class ChristmasPackageService {
         christmasPackageNoteSearchRepository.delete(id);
     }
     ;
+
+    /**
+     * Add change to selected christmas package
+     *
+     *  @param id the id of christmas package
+     *  @param packageChange the entity to seve
+     *  @return the list of entities
+     */
+    public ChristmasPackageChange saveChange(Long id, ChristmasPackageChange packageChange) {
+        log.debug("Request to save ChristmasPackageChange : {}", packageChange);
+
+        ChristmasPackage christmasPackage = new ChristmasPackage();
+
+        christmasPackage.setId(id);
+        packageChange.setChristmasPackage(christmasPackage);
+
+        ChristmasPackageChange result = christmasPackageChangeRepository.save(packageChange);
+        christmasPackageChangeSearchRepository.save(result);
+
+        return result;
+    }
+
+    /**
+     * Get all changes of selected christmas package
+     *
+     *  @param id the id of christmas package
+     *  @param pageable the pagination information
+     *  @return the list of entities
+     */
+    public Page<ChristmasPackageChange> findAllChanges(Long id, Pageable pageable) {
+        log.debug("Request Changes for ChristmasPackage : {}", id);
+
+        return christmasPackageChangeRepository.findByChristmasPackage_id(id, pageable);
+    }
+
+    /**
+     * Get one changes of selected christmas package
+     *
+     *  @param  packageId the id of christmas package
+     *  @param id the id of change
+     *  @return the list of entities
+     */
+    public ChristmasPackageChange findOneChange(Long packageId, Long id) {
+        log.debug("Request Changes for ChristmasPackage : {}", id);
+
+        return christmasPackageChangeRepository.findByIdAndChristmasPackage_id(packageId, id);
+    }
+
+    /**
+     * Delete change
+     *
+     *  @param id the id of change
+     *  @return the list of entities
+     */
+    public void deleteChange(Long id) {
+        log.debug("Request delete Change : {}", id);
+
+        christmasPackageChangeRepository.delete(id);
+        christmasPackageChangeSearchRepository.delete(id);
+    }
+
+
+
 }
