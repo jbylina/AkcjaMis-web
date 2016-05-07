@@ -38,18 +38,13 @@ public class ChristmasPackageChangeResource {
 
     private final Logger log = LoggerFactory.getLogger(ChristmasPackageChangeResource.class);
 
-
-    private ChristmasPackageChangeRepository christmasPackageChangeRepository;
-
     private  ChristmasPackageService christmasPackageService;
 
     @Inject
     private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
 
     @Inject
-    public ChristmasPackageChangeResource(ChristmasPackageChangeRepository christmasPackageChangeRepository,
-                                          ChristmasPackageService christmasPackageService) {
-        this.christmasPackageChangeRepository = christmasPackageChangeRepository;
+    public ChristmasPackageChangeResource(ChristmasPackageService christmasPackageService) {
         this.christmasPackageService = christmasPackageService;
     }
 
@@ -116,7 +111,7 @@ public class ChristmasPackageChangeResource {
     public ResponseEntity<List<ChristmasPackageChange>> getAllChristmasPackageChanges(@PathVariable Long id, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of ChristmasPackageChanges");
-        Page<ChristmasPackageChange> page = (Page<ChristmasPackageChange>) christmasPackageService.findAllChanges(id, pageable);
+        Page<ChristmasPackageChange> page = christmasPackageService.findAllChanges(id, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/christmas-package/" + id + "/changes");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

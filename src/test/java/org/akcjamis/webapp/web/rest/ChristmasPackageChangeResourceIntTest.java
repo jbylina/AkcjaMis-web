@@ -107,7 +107,8 @@ public class ChristmasPackageChangeResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ChristmasPackageChangeResource christmasPackageChangeResource = new ChristmasPackageChangeResource(christmasPackageChangeRepository, christmasPackageService);
+        ChristmasPackageChangeResource christmasPackageChangeResource = new ChristmasPackageChangeResource(christmasPackageService);
+        ReflectionTestUtils.setField(christmasPackageChangeResource, "christmasPackageChangeSearchRepository", christmasPackageChangeSearchRepository);
         this.restChristmasPackageChangeMockMvc = MockMvcBuilders.standaloneSetup(christmasPackageChangeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -299,8 +300,10 @@ public class ChristmasPackageChangeResourceIntTest {
     @Test
     @Transactional
     public void searchChristmasPackageChange() throws Exception {
+        christmasPackageChange.setChristmasPackage(christmasPackage);
         // Initialize the database
         christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
+        christmasPackageChangeSearchRepository.save(christmasPackageChange);
 
         // Search the christmasPackageChange
         restChristmasPackageChangeMockMvc.perform(get("/api/_search/christmas-package-changes?query=id:" + christmasPackageChange.getId()))

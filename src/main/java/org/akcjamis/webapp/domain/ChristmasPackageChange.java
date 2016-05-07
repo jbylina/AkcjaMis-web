@@ -1,5 +1,6 @@
 package org.akcjamis.webapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -27,6 +28,7 @@ public class ChristmasPackageChange extends AbstractAuditingEntity implements Se
 
     @Size(min = 3, max = 20)
     @Column(name = "type_code", length = 20)
+    @JsonProperty("type_code")
     private String typeCode;
 
     //TODO wywalić tą kolumnę. Została zastąpiona przez audytową

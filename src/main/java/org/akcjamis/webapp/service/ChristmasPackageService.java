@@ -45,7 +45,7 @@ public class ChristmasPackageService {
     private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
 
     @Inject
-    private ChristmasPackageService(ChristmasPackageRepository christmasPackageRepository,
+    public ChristmasPackageService(ChristmasPackageRepository christmasPackageRepository,
                                     ChristmasPackageSearchRepository christmasPackageSearchRepository,
                                     ChristmasPackageNoteRepository christmasPackageNoteRepository,
                                     ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository,
