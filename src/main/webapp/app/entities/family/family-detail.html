@@ -50,10 +50,10 @@
         <div class="panel panel-info">
             <h3>Dzieci</h3>
 
-            <dd><span ng-repeat="children in vm.childrens"><hr><b>Imię:</b> {{children.first_name}}<br>
-            <b>Nazwisko:</b> {{children.last_name}}<br>
+            <dd><span ng-repeat="children in vm.childrens"><hr><b>Imię:</b> {{children.firstName}}<br>
+            <b>Nazwisko:</b> {{children.lastName}}<br>
             <b>Płeć:</b> {{children.sex}}<br>
-            <b>Rok urodzenia:</b> {{children.birth_year}}
+            <b>Urodziny:</b> {{children.birthYear}}
             </span></dd>
         </div>
     </div>
@@ -65,8 +65,8 @@
         <div class="panel panel-info">
             <h3>Notatki</h3>
 
-            <dd><span ng-repeat="note in vm.familyNotes"><hr><b>Autor:</b> {{note.created_by}}<br>
-            <b>Data dodania:</b> {{note.created_date}}<br>
+            <dd><span ng-repeat="note in vm.familyNotes"><hr><b>Autor:</b> {{note.createdBy}}<br>
+            <b>Data dodania:</b> {{note.createdDate}}<br>
             <b>Treść:</b> {{note.content}}<br>
             </span></dd>
         </div>

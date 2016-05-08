@@ -43,7 +43,7 @@
                         ascending: PaginationUtil.parseAscending($stateParams.sort),
                         search: $stateParams.search
                     };
-                }],
+                }]
             }
         })
         .state('family-detail', {
@@ -76,8 +76,23 @@
                 views:{
                     'content@': {
                         templateUrl: 'app/entities/family/new-family.html',
-                        controller: 'FamilyDialogController',
+                        controller: 'FamilyCreateController',
                         controllerAs: 'vm'
+                    }
+                },
+                resolve: {
+                    entity: function () {
+                        return {
+                            street: null,
+                            houseNo: null,
+                            flatNo: null,
+                            postalcode: null,
+                            district: null,
+                            city: null,
+                            region: null,
+                            source: null,
+                            id: null
+                        };
                     }
                 }
             })
