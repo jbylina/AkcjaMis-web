@@ -8,9 +8,9 @@
         .module('akcjamisApp')
         .controller('FamilyCreateController', FamilyCreateController);
 
-    FamilyCreateController.$inject = ['$scope', '$stateParams', 'entity', 'Family'];
+    FamilyCreateController.$inject = ['$scope', '$stateParams', 'entity', 'Family', '$state'];
 
-    function FamilyCreateController ($scope, $stateParams, entity, Family) {
+    function FamilyCreateController ($scope, $stateParams, entity, Family, $state) {
         var vm = this;
         vm.family = entity;
 
@@ -22,9 +22,8 @@
 
         var onSaveSuccess = function (result) {
             $scope.$emit('akcjamisApp:familyUpdate', result);
-           // $uibModalInstance.close(result);
-            alert('dbg:on save success');
             vm.isSaving = false;
+            $state.go('family');
         };
 
         var onSaveError = function () {
@@ -37,14 +36,11 @@
               Family.update(vm.family, onSaveSuccess, onSaveError);
            } else {
                Family.save(vm.family, onSaveSuccess, onSaveError);
-             //  $state.go('families');
            }
-           //var newFamily = $resource('/api/families');
-          //  vm.family.save();
+
         };
 
         vm.clear = function() {
-          //  $uibModalInstance.dismiss('cancel');
             alert('dbg: clear');
         };
     }
