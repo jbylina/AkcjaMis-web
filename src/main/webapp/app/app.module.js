@@ -3,7 +3,7 @@
 
     angular
         .module('akcjamisApp', [
-            'ngStorage', 
+            'ngStorage',
             'ngResource',
             'ngCookies',
             'ngAria',
@@ -15,7 +15,8 @@
             'infinite-scroll',
             'ds.objectDiff',
             // jhipster-needle-angularjs-add-module JHipster will add new module here
-            'angular-loading-bar'
+            'angular-loading-bar',
+            'ngAnimate'
         ])
         .run(run);
 
