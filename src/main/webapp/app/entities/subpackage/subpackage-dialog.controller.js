@@ -12,7 +12,7 @@
         vm.subpackage = entity;
         vm.subpackagenotes = SubpackageNote.query();
         vm.childs = Child.query();
-        vm.christmaspackages = ChristmasPackage.query();
+        vm.christmaspackages = ChristmasPackage.query({event_id : 1});
         vm.load = function(id) {
             Subpackage.get({id : id}, function(result) {
                 vm.subpackage = result;

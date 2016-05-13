@@ -18,8 +18,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * Service Implementation for managing ChristmasPackage.
  */
@@ -70,6 +68,17 @@ public class ChristmasPackageService {
     public Page<ChristmasPackage> findAll(Short eventYear, Pageable pageable) {
         log.debug("Request to get all ChristmasPackages");
         return christmasPackageRepository.findByEvent_year(eventYear, pageable);
+    }
+
+    /**
+     *  Get all the christmasPackages list of event.
+     *
+     *  @return the list of entities
+     */
+    @Transactional(readOnly = true)
+    public List<Object> getInfoList(Long eventId) throws JSONException{
+        log.debug("Request to get all ChristmasPackages");
+        return christmasPackageRepository.getInfo(eventId);
     }
 
     /**

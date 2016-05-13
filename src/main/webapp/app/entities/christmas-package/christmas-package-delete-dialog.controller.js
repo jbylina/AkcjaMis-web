@@ -14,7 +14,7 @@
             $uibModalInstance.dismiss('cancel');
         };
         vm.confirmDelete = function (id) {
-            ChristmasPackage.delete({id: id},
+            ChristmasPackage.delete({event_id : 1, id: id},
                 function () {
                     $uibModalInstance.close(true);
                 });

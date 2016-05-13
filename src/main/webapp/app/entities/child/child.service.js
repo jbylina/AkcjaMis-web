@@ -7,7 +7,7 @@
     Child.$inject = ['$resource', 'DateUtils'];
 
     function Child ($resource, DateUtils) {
-        var resourceUrl =  'api/children/:id';
+        var resourceUrl =  'api/families/1/children';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},

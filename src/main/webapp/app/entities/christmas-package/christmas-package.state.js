@@ -62,7 +62,7 @@
             },
             resolve: {
                 entity: ['$stateParams', 'ChristmasPackage', function($stateParams, ChristmasPackage) {
-                    return ChristmasPackage.get({id : $stateParams.id});
+                    return ChristmasPackage.get({event_id : 1,id : $stateParams.id});
                 }]
             }
         })
@@ -135,7 +135,7 @@
                     size: 'md',
                     resolve: {
                         entity: ['ChristmasPackage', function(ChristmasPackage) {
-                            return ChristmasPackage.get({id : $stateParams.id});
+                            return ChristmasPackage.get({event_id : 1, id : $stateParams.id});
                         }]
                     }
                 }).result.then(function() {

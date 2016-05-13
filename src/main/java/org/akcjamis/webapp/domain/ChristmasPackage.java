@@ -52,7 +52,7 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ChristmasPackageChange> christmasPackageChanges = new HashSet<>();
 
-    @OneToMany(mappedBy = "christmasPackage")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "christmasPackage")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Subpackage> subpackages = new HashSet<>();

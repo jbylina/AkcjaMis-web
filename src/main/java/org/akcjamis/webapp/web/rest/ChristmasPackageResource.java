@@ -113,6 +113,30 @@ public class ChristmasPackageResource {
     }
 
     /**
+     * GET  /events/:eventId/christmas-packages-list : get the "id" christmasPackageList.
+     *
+     * @param eventId the id of event
+     * @return the ResponseEntity with status 200 (OK) and with body the christmasPackage, or with status 404 (Not Found)
+     */
+    @RequestMapping(value = "/events/{eventId}/christmas-packages-list",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Object>> getChristmasPackageList(@PathVariable Long eventId) throws JSONException{
+        log.debug("REST request to get ChristmasPackageList : {}");
+
+        List<Object> jsonArray = christmasPackageService.getInfoList(eventId);
+
+//        log.debug(jsonArray.toString());
+
+        return Optional.ofNullable(jsonArray)
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
      * GET  /events/:year/christmas-packages/:id : get the "id" christmasPackage.
      *
      * @param year year of the event

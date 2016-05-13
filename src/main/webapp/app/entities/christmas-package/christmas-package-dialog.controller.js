@@ -17,7 +17,7 @@
         vm.subpackages = Subpackage.query();
         vm.familys = Family.query();
         vm.load = function(id) {
-            ChristmasPackage.get({id : id}, function(result) {
+            ChristmasPackage.get({event_id : 1, id : id}, function(result) {
                 vm.christmasPackage = result;
             });
         };
@@ -35,9 +35,9 @@
         vm.save = function () {
             vm.isSaving = true;
             if (vm.christmasPackage.id !== null) {
-                ChristmasPackage.update(vm.christmasPackage, onSaveSuccess, onSaveError);
+                ChristmasPackage.update({event_id : 1}, vm.christmasPackage, onSaveSuccess, onSaveError);
             } else {
-                ChristmasPackage.save(vm.christmasPackage, onSaveSuccess, onSaveError);
+                ChristmasPackage.save({event_id : 1}, vm.christmasPackage, onSaveSuccess, onSaveError);
             }
         };
 

@@ -3,11 +3,23 @@
 
     angular
         .module('akcjamisApp')
-        .controller('ChristmasPackageController', ChristmasPackageController);
+        .controller('ChristmasPackageController', ChristmasPackageController)
+        .service('dataService', function() {
+            var allExpanded  = true;
 
-    ChristmasPackageController.$inject = ['$scope', '$state', 'ChristmasPackage', 'ChristmasPackageSearch', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants'];
+            return {
+                getProperty: function () {
+                    return allExpanded;
+                },
+                setProperty: function(value) {
+                    allExpanded = value;
+                }
+            };
+        });
 
-    function ChristmasPackageController ($scope, $state, ChristmasPackage, ChristmasPackageSearch, ParseLinks, AlertService, pagingParams, paginationConstants) {
+    ChristmasPackageController.$inject = ['$scope', '$state', 'ChristmasPackage', 'ChristmasPackageSearch', 'ParseLinks', 'AlertService', 'pagingParams', 'paginationConstants', 'dataService'];
+
+    function ChristmasPackageController ($scope, $state, ChristmasPackage, ChristmasPackageSearch, ParseLinks, AlertService, pagingParams, paginationConstants, dataService) {
         var vm = this;
         vm.loadAll = loadAll;
         vm.loadPage = loadPage;
@@ -16,9 +28,12 @@
         vm.transition = transition;
         vm.clear = clear;
         vm.search = search;
+        vm.expandAll = expandAll;
         vm.searchQuery = pagingParams.search;
         vm.currentSearch = pagingParams.search;
         vm.loadAll();
+        vm.date = new Date();
+        vm.allExpanded = dataService.getProperty();
 
         function loadAll () {
             if (pagingParams.search) {
@@ -29,7 +44,8 @@
                     sort: sort()
                 }, onSuccess, onError);
             } else {
-                ChristmasPackage.query({
+                ChristmasPackage.getList( {
+                    event_id : 1,
                     page: pagingParams.page - 1,
                     size: paginationConstants.itemsPerPage,
                     sort: sort()
@@ -43,10 +59,12 @@
                 return result;
             }
             function onSuccess(data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
+                // vm.links = ParseLinks.parse(headers('link'));
+                // vm.totalItems = headers('X-Total-Count');
+                vm.totalItems = data.length;
                 vm.queryCount = vm.totalItems;
                 vm.christmasPackages = data;
+                console.log(data);
                 vm.page = pagingParams.page;
             }
             function onError(error) {
@@ -86,6 +104,10 @@
             vm.reverse = true;
             vm.currentSearch = null;
             vm.transition();
+        }
+
+        function expandAll(expanded) {
+            dataService.setProperty(expanded);
         }
 
     }

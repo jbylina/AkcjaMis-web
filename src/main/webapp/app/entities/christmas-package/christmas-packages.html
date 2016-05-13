@@ -1,5 +1,5 @@
 <div>
-    <h2>ChristmasPackages</h2>
+    <br>
     <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
@@ -7,14 +7,14 @@
                 <button class="btn btn-primary" ui-sref="christmas-package.new" >
                     <span class="glyphicon glyphicon-plus"></span>
                     <span class="hidden-xs" >
-                        Create new ChristmasPackage
+                        Dodaj paczkę
                     </span>
                 </button>
             </div>
             <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
                     <div class="input-group pull-right" >
-                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery" placeholder="Query">
+                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery">
                         <span  class="input-group-btn width-min" >
                             <button class="btn btn-info" ng-click="vm.search(vm.searchQuery)">
                                 <span class="glyphicon glyphicon-search"></span>
@@ -29,65 +29,75 @@
                 </form>
             </div>
         </div>
-    </div>
     <br/>
-    <div class="table-responsive">
-        <table class="jh-table table table-striped">
-            <thead>
-                <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="mark"><span>Mark</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="delivered"><span>Delivered</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="packageNumber"><span>PackageNumber</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="event.year"><span>event</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="team.teamNumber"><span>team</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="family.id"><span>family</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="christmasPackage in vm.christmasPackages track by christmasPackage.id">
-                    <td><a ui-sref="christmas-package-detail({id:christmasPackage.id})">{{christmasPackage.id}}</a></td>
-                    <td>{{christmasPackage.mark}}</td>
-                    <td>{{christmasPackage.delivered}}</td>
-                    <td>{{christmasPackage.packageNumber}}</td>
-                    <td>
-                        <a ui-sref="event-detail({id:christmasPackage.event.id})">{{christmasPackage.event.year}}</a>
-                    </td>
-                    <td>
-                        <a ui-sref="team-detail({id:christmasPackage.team.id})">{{christmasPackage.team.teamNumber}}</a>
-                    </td>
-                    <td>
-                        <a ui-sref="family-detail({id:christmasPackage.family.id})">{{christmasPackage.family.id}}</a>
-                    </td>
-                    <td class="text-right">
-                        <div class="btn-group flex-btn-group-container">
-                            <button type="submit"
-                                    ui-sref="christmas-package-detail({id:christmasPackage.id})"
-                                    class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                                <span class="hidden-xs hidden-sm"></span>
+        <div class="table-responsive">
+            <table class="jh-table table table-striped">
+                <thead>
+                    <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()" ng-init="allExpanded=vm.allExpanded">
+                        <th>
+                            <button type="button" ng-click="vm.expandAll(allExpanded = !allExpanded)">
+                                <span ng-bind="allExpanded ? '-' : '+'"></span>
                             </button>
-                            <button type="submit"
-                                    ui-sref="christmas-package.edit({id:christmasPackage.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="christmas-package.delete({id:christmasPackage.id})"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                        </th>
+                        <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="mark"><span>Ocena</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="delivered"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="team.id"><span>Zespół</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="family.id"><span>Rodzina</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th><span>Uwagi</span></th>
+                        <th ng-show="allExpanded">Imię dziecka</th>
+                        <th ng-show="allExpanded">Wiek dziecka</th>
+                        <th ng-show="allExpanded">Uwagi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="package in vm.christmasPackages">
+                        <td>
+                        </td>
+                        <td><a ui-sref="christmas-package-detail({id:package.id})" style="color:blue">{{package.id}}</a></td>
+                        <td>{{package.mark}}</td>
+                        <td><span ng-bind="package.delivered ? 'Dostarczona' : 'Oczekująca'"></span></td>
+                        <td>
+                            <a ui-sref="team-detail({id:package.team.id})" style="color:blue">{{package.team.id}}</a>
+                        </td>
+                        <td>
+                            <a ui-sref="family-detail({id:package.family.id})" style="color:blue">{{package.family.id}}</a>
+                        </td>
+                        <td>-</td>
+                        <td ng-show="allExpanded">
+                            <table>
+                                <tbody>
+                                <tr ng-repeat="subpackage in package.subpackages">
+                                    <td>{{subpackage.child.first_name}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td ng-show="allExpanded">
+                            <table>
+                                <tbody>
+                                <tr ng-repeat="subpackage in package.subpackages">
+                                    <td>{{(vm.date | date:'yyyy') - subpackage.child.birth_year}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td ng-show="allExpanded">
+                            <table>
+                                <tbody>
+                                <tr ng-repeat="subpackage in package.subpackages">
+                                    <td style="">{{subpackage.note}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="text-center">
         <jhi-item-count page="vm.page" total="vm.queryCount"></jhi-item-count>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
-    <uib-pager total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
 </div>
