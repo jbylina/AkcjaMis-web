@@ -41,6 +41,7 @@ public class Subpackage extends AbstractAuditingEntity implements Serializable {
     private Child child;
 
     @ManyToOne
+    @JsonIgnore
     private ChristmasPackage christmasPackage;
 
     public Long getId() {

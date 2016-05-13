@@ -20,6 +20,6 @@ public interface ChristmasPackageRepository extends JpaRepository<ChristmasPacka
 
     ChristmasPackage findById(Long id);
 
-    @Query("from ChristmasPackage christmasPackage left join christmasPackage.subpackages subpackages where christmasPackage.event.id =:id")
+    @Query("select christmasPackage from ChristmasPackage christmasPackage left join fetch christmasPackage.subpackages subpackages where christmasPackage.event.id =:id")
     List<Object> getInfo(@Param("id") Long id);
 }
