@@ -18,12 +18,8 @@
     -->
     <changeSet id="20160417195658" author="jhipster">
         <createTable tableName="events">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-
-            <column name="year" type="date">
-                <constraints nullable="false"/>
+            <column name="event_year" type="smallint" >
+                <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
 
             <column name="created_by" type="varchar(50)">

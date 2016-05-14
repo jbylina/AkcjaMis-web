@@ -59,7 +59,7 @@ public class ChristmasPackageChangeResourceIntTest {
 
     private static final Integer DEFAULT_PACKAGE_NUMBER = 1;
 
-    private static final LocalDate DEFAULT_YEAR = LocalDate.ofEpochDay(0L);
+    private static final Short DEFAULT_YEAR = 2016;
 
     private static final String DEFAULT_STREET = "AAAAA";
     private static final String DEFAULT_HOUSE_NO = "AAAAAAAAAA";

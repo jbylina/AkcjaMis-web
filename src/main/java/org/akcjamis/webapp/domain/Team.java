@@ -44,6 +44,7 @@ public class Team extends AbstractAuditingEntity implements Serializable {
     private Set<User> users = new HashSet<>();
 
     @ManyToOne
+    @JoinColumn(name = "event_year")
     private Event event;
 
     @OneToMany(mappedBy = "team")

@@ -30,7 +30,7 @@
                 <constraints nullable="true"/>
             </column>
 
-            <column name="event_id" type="bigint">
+            <column name="event_year" type="smallint">
                 <constraints nullable="false"/>
             </column>
 
@@ -70,10 +70,10 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
-        <addForeignKeyConstraint baseColumnNames="event_id"
+        <addForeignKeyConstraint baseColumnNames="event_year"
                                  baseTableName="teams"
-                                 constraintName="fk_team_event_id"
-                                 referencedColumnNames="id"
+                                 constraintName="fk_team_event_year"
+                                 referencedColumnNames="event_year"
                                  referencedTableName="events"/>
 
     </changeSet>

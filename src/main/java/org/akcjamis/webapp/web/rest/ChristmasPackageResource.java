@@ -21,10 +21,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing ChristmasPackage.
@@ -43,87 +39,87 @@ public class ChristmasPackageResource {
     }
 
     /**
-     * POST  /events/:id/christmas-packages : Create a new christmasPackage.
+     * POST  /events/:year/christmas-packages : Create a new christmasPackage.
      *
-     * @param id the event Id
+     * @param year the event Id
      * @param christmasPackage the christmasPackage to create
      * @return the ResponseEntity with status 201 (Created) and with body the new christmasPackage, or with status 400 (Bad Request) if the christmasPackage has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/events/{id}/christmas-packages",
+    @RequestMapping(value = "/events/{year}/christmas-packages",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackage> createChristmasPackage(@PathVariable Long id, @Valid @RequestBody ChristmasPackage christmasPackage) throws URISyntaxException {
+    public ResponseEntity<ChristmasPackage> createChristmasPackage(@PathVariable Short year, @Valid @RequestBody ChristmasPackage christmasPackage) throws URISyntaxException {
         log.debug("REST request to save ChristmasPackage : {}", christmasPackage);
         if (christmasPackage.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("christmasPackage", "idexists", "A new christmasPackage cannot already have an ID")).body(null);
         }
-        ChristmasPackage result = christmasPackageService.save(id, christmasPackage);
-        return ResponseEntity.created(new URI("/api/events/" + id + "/christmas-packages/" + result.getId()))
+        ChristmasPackage result = christmasPackageService.save(year, christmasPackage);
+        return ResponseEntity.created(new URI("/api/events/" + year + "/christmas-packages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("christmasPackage", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /events/:id/christmas-packages : Updates an existing christmasPackage.
+     * PUT  /events/:eventYear/christmas-packages : Updates an existing christmasPackage.
      *
-     * @param id the event Id
+     * @param eventYear year of the event
      * @param christmasPackage the christmasPackage to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated christmasPackage,
      * or with status 400 (Bad Request) if the christmasPackage is not valid,
      * or with status 500 (Internal Server Error) if the christmasPackage couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/events/{id}/christmas-packages",
+    @RequestMapping(value = "/events/{year}/christmas-packages",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackage> updateChristmasPackage(@PathVariable Long id, @Valid @RequestBody ChristmasPackage christmasPackage) throws URISyntaxException {
+    public ResponseEntity<ChristmasPackage> updateChristmasPackage(@PathVariable Short eventYear, @Valid @RequestBody ChristmasPackage christmasPackage) throws URISyntaxException {
         log.debug("REST request to update ChristmasPackage : {}", christmasPackage);
         if (christmasPackage.getId() == null) {
-            return createChristmasPackage(id, christmasPackage);
+            return createChristmasPackage(eventYear, christmasPackage);
         }
-        ChristmasPackage result = christmasPackageService.save(id, christmasPackage);
+        ChristmasPackage result = christmasPackageService.save(eventYear, christmasPackage);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("christmasPackage", christmasPackage.getId().toString()))
             .body(result);
     }
 
     /**
-     * GET  /events/:id/christmas-packages : get all the christmasPackages for given event.
+     * GET  /events/:eventYear/christmas-packages : get all the christmasPackages for given event.
      *
-     * @param id the event Id
+     * @param eventYear year of the event
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of christmasPackages in body
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
-    @RequestMapping(value = "/events/{id}/christmas-packages",
+    @RequestMapping(value = "/events/{eventYear}/christmas-packages",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ChristmasPackage>> getAllChristmasPackages(@PathVariable Long id, Pageable pageable)
+    public ResponseEntity<List<ChristmasPackage>> getAllChristmasPackages(@PathVariable Short eventYear, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of ChristmasPackages");
-        Page<ChristmasPackage> page = christmasPackageService.findAll(id, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events/" + id + "/christmas-packages");
+        Page<ChristmasPackage> page = christmasPackageService.findAll(eventYear, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events/" + eventYear + "/christmas-packages");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**
-     * GET  /events/:eventId/christmas-packages/:id : get the "id" christmasPackage.
+     * GET  /events/:eventYear/christmas-packages/:id : get the "id" christmasPackage.
      *
-     * @param eventId the id of event
+     * @param eventYear year of the event
      * @param id the id of the christmasPackage to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the christmasPackage, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/events/{eventId}/christmas-packages/{id}",
+    @RequestMapping(value = "/events/{eventYear}/christmas-packages/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackage> getChristmasPackage(@PathVariable Long eventId, @PathVariable Long id) {
+    public ResponseEntity<ChristmasPackage> getChristmasPackage(@PathVariable Short eventYear, @PathVariable Long id) {
         log.debug("REST request to get ChristmasPackage : {}", id);
-        ChristmasPackage christmasPackage = christmasPackageService.findOne(eventId, id);
+        ChristmasPackage christmasPackage = christmasPackageService.findOne(eventYear, id);
         return Optional.ofNullable(christmasPackage)
             .map(result -> new ResponseEntity<>(
                 result,
@@ -132,16 +128,17 @@ public class ChristmasPackageResource {
     }
 
     /**
-     * DELETE  /events/:eventId/christmas-packages/:id : delete the "id" christmasPackage.
+     * DELETE  /events/:eventYear/christmas-packages/:id : delete the "id" christmasPackage.
      *
+     * @param eventYear year of the event
      * @param id the id of the christmasPackage to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @RequestMapping(value = "/events/{eventId}/christmas-packages/{id}",
+    @RequestMapping(value = "/events/{eventYear}/christmas-packages/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteChristmasPackage(@PathVariable Long eventId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteChristmasPackage(@PathVariable Long eventYear, @PathVariable Long id) {
         log.debug("REST request to delete ChristmasPackage : {}", id);
         christmasPackageService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("christmasPackage", id.toString())).build();

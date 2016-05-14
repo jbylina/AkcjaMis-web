@@ -62,14 +62,14 @@ public class ChristmasPackageService {
     /**
      * Save a christmasPackage for given event.
      *
-     * @param eventId the eventId
+     * @param eventYear year of the event
      * @param christmasPackage the entity to save
      * @return the persisted entity
      */
-    public ChristmasPackage save(Long eventId, ChristmasPackage christmasPackage) {
+    public ChristmasPackage save(Short eventYear, ChristmasPackage christmasPackage) {
         log.debug("Request to save ChristmasPackage : {}", christmasPackage);
         Event event = new Event();
-        event.setId(eventId);
+        event.setYear(eventYear);
         christmasPackage.setEvent(event);
         ChristmasPackage result = christmasPackageRepository.save(christmasPackage);
         christmasPackageSearchRepository.save(result);
@@ -79,25 +79,27 @@ public class ChristmasPackageService {
     /**
      *  Get all the christmasPackages of event.
      *
+     *  @param eventYear year of event
      *  @param pageable the pagination information
      *  @return the list of entities
      */
     @Transactional(readOnly = true)
-    public Page<ChristmasPackage> findAll(Long eventId, Pageable pageable) {
+    public Page<ChristmasPackage> findAll(Short eventYear, Pageable pageable) {
         log.debug("Request to get all ChristmasPackages");
-        return christmasPackageRepository.findByEvent_id(eventId, pageable);
+        return christmasPackageRepository.findByEvent_year(eventYear, pageable);
     }
 
     /**
-     *  Get one christmasPackage by id.
+     *  Get one christmasPackage by year and id.
      *
+     *  @param eventYear year of event
      *  @param id the id of the entity
      *  @return the entity
      */
     @Transactional(readOnly = true)
-    public ChristmasPackage findOne(Long eventId, Long id) {
+    public ChristmasPackage findOne(Short eventYear, Long id) {
         log.debug("Request to get ChristmasPackage : {}", id);
-        return christmasPackageRepository.findByIdAndEvent_id(eventId, id);
+        return christmasPackageRepository.findByEvent_yearAndId(eventYear, id);
     }
 
     /**

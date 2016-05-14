@@ -34,7 +34,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="event_id" type="bigint">
+            <column name="event_year" type="smallint">
                 <constraints nullable="false"/>
             </column>
 
@@ -57,10 +57,10 @@
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
 
-        <addForeignKeyConstraint baseColumnNames="event_id"
+        <addForeignKeyConstraint baseColumnNames="event_year"
                                  baseTableName="christmas_packages"
-                                 constraintName="fk_christmaspackage_event_id"
-                                 referencedColumnNames="id"
+                                 constraintName="fk_christmaspackage_event_year"
+                                 referencedColumnNames="event_year"
                                  referencedTableName="events"/>
 
         <addForeignKeyConstraint baseColumnNames="team_id"

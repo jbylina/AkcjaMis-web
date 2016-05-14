@@ -10,8 +10,11 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import javax.persistence.Id;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.stream.Collector;
 
 /**
  * Async Entity Audit Event writer
@@ -59,18 +62,35 @@ public class AsyncEntityAuditEventWriter {
         Long entityId;
         String entityData;
         log.trace("Getting Entity Id and Content");
+
+        Field privateIdField;
         try {
-            Field privateLongField = entityClass.getDeclaredField("id");
-            privateLongField.setAccessible(true);
-            entityId = (Long) privateLongField.get(entity);
-            privateLongField.setAccessible(false);
+            privateIdField = entityClass.getDeclaredField("id");
+        } catch (NoSuchFieldException e) {
+            Field[] array = Arrays.stream(entityClass.getDeclaredFields())
+                .filter(f -> f.isAnnotationPresent(Id.class))
+                .toArray(Field[]::new);
+
+            if(array.length != 1){
+                log.error("Exception while getting entity ID and content {}", e);
+                return null;
+            }
+            else{
+                privateIdField = array[0];
+            }
+        }
+
+        try {
+            privateIdField.setAccessible(true);
+            entityId = ((Number) privateIdField.get(entity)).longValue();
+            privateIdField.setAccessible(false);
             entityData = objectMapper.writeValueAsString(entity);
-        } catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException |
-            IOException e) {
+        } catch (IllegalArgumentException | IllegalAccessException | SecurityException | IOException e) {
             log.error("Exception while getting entity ID and content {}", e);
             // returning null as we dont want to raise an application exception here
             return null;
         }
+
         auditedEntity.setEntityId(entityId);
         auditedEntity.setEntityValue(entityData);
         final AbstractAuditingEntity abstractAuditEntity = (AbstractAuditingEntity) entity;

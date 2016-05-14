@@ -6,7 +6,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -25,12 +26,10 @@ public class Event extends AbstractAuditingEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @NotNull
-    @Column(name = "year", nullable = false)
-    private LocalDate year;
+    @Column(name = "event_year", nullable = false)
+    @Min(value = 2000)
+    @Max(value = 2050)
+    private Short year;
 
     @OneToMany(mappedBy = "event")
     @JsonIgnore
@@ -42,19 +41,11 @@ public class Event extends AbstractAuditingEntity implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ChristmasPackage> christmasPackages = new HashSet<>();
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDate getYear() {
+    public Short getYear() {
         return year;
     }
 
-    public void setYear(LocalDate year) {
+    public void setYear(Short year) {
         this.year = year;
     }
 
@@ -83,21 +74,20 @@ public class Event extends AbstractAuditingEntity implements Serializable {
             return false;
         }
         Event event = (Event) o;
-        if(event.id == null || id == null) {
+        if(event.year == null || year == null) {
             return false;
         }
-        return Objects.equals(id, event.id);
+        return Objects.equals(year, event.year);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(year);
     }
 
     @Override
     public String toString() {
         return "Event{" +
-            "id=" + id +
             ", year='" + year + "'" +
             '}';
     }

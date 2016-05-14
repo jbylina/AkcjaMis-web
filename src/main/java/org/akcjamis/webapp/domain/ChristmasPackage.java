@@ -42,6 +42,7 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     private Integer packageNumber;
 
     @ManyToOne
+    @JoinColumn(name = "event_year")
     private Event event;
 
     @ManyToOne

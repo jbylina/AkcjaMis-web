@@ -53,6 +53,8 @@ public class ChristmasPackageResourceIntTest {
     private static final Integer DEFAULT_PACKAGE_NUMBER = 1;
     private static final Integer UPDATED_PACKAGE_NUMBER = 2;
 
+    private static final Short DEFAULT_YEAR = 2016;
+
     @Inject
     private ChristmasPackageRepository christmasPackageRepository;
 
@@ -196,7 +198,7 @@ public class ChristmasPackageResourceIntTest {
     @Transactional
     public void updateChristmasPackage() throws Exception {
         // Initialize the database
-        christmasPackageService.save((long) 1, christmasPackage);
+        christmasPackageService.save(DEFAULT_YEAR, christmasPackage);
 
         int databaseSizeBeforeUpdate = christmasPackageRepository.findAll().size();
 
@@ -229,7 +231,7 @@ public class ChristmasPackageResourceIntTest {
     @Transactional
     public void deleteChristmasPackage() throws Exception {
         // Initialize the database
-        christmasPackageService.save((long) 1, christmasPackage);
+        christmasPackageService.save(DEFAULT_YEAR, christmasPackage);
 
         int databaseSizeBeforeDelete = christmasPackageRepository.findAll().size();
 
@@ -251,7 +253,7 @@ public class ChristmasPackageResourceIntTest {
     @Transactional
     public void searchChristmasPackage() throws Exception {
         // Initialize the database
-        christmasPackageService.save((long) 1, christmasPackage);
+        christmasPackageService.save(DEFAULT_YEAR, christmasPackage);
 
         // Search the christmasPackage
         restChristmasPackageMockMvc.perform(get("/api/_search/christmas-packages?query=id:" + christmasPackage.getId()))

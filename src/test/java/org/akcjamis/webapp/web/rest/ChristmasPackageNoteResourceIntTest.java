@@ -65,6 +65,8 @@ public class ChristmasPackageNoteResourceIntTest {
     private static final String DEFAULT_REGION = "AAAAA";
     private static final String DEFAULT_SOURCE = "AAAAA";
 
+    private static final Short DEFAULT_YEAR = 2016;
+
     @Inject
     private ChristmasPackageNoteRepository christmasPackageNoteRepository;
 
@@ -98,10 +100,6 @@ public class ChristmasPackageNoteResourceIntTest {
     private ChristmasPackage christmasPackage;
     private ChristmasPackage christmasPackageSecond;
 
-    private org.akcjamis.webapp.domain.Event event;
-
-    private Family family;
-
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -121,12 +119,12 @@ public class ChristmasPackageNoteResourceIntTest {
         christmasPackageNoteSecond.setContent(DEFAULT_CONTENT_SECOND);
 
         eventRepository.deleteAll();
-        event = new Event();
-        event.setYear(LocalDate.now());
+        Event event = new Event();
+        event.setYear(DEFAULT_YEAR);
         event = eventRepository.save(event);
 
         familyRepository.deleteAll();
-        family = new Family();
+        Family family = new Family();
         family.setStreet(DEFAULT_STREET);
         family.setHouseNo(DEFAULT_HOUSE_NO);
         family.setFlatNo(DEFAULT_FLAT_NO);

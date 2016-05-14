@@ -9,6 +9,6 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the Event entity.
  */
-public interface EventRepository extends JpaRepository<Event,Long> {
+public interface EventRepository extends JpaRepository<Event,Short> {
 
 }
