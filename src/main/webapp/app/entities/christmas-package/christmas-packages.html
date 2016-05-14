@@ -63,31 +63,45 @@
                         <td>
                             <a ui-sref="family-detail({id:package.family.id})" style="color:blue">{{package.family.id}}</a>
                         </td>
-                        <td>-</td>
-                        <td ng-show="allExpanded">
+                        <td>
                             <table>
                                 <tbody>
-                                <tr ng-repeat="subpackage in package.subpackages">
-                                    <td>{{subpackage.child.first_name}}</td>
-                                </tr>
+                                    <tr ng-repeat="note in package.christmasPackageNotes">
+                                        <td>{{note.content}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </td>
                         <td ng-show="allExpanded">
                             <table>
                                 <tbody>
-                                <tr ng-repeat="subpackage in package.subpackages">
-                                    <td>{{(vm.date | date:'yyyy') - subpackage.child.birth_year}}</td>
-                                </tr>
+                                    <tr ng-repeat="subpackage in package.subpackages">
+                                        <td>{{subpackage.child.firstName}}</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </td>
                         <td ng-show="allExpanded">
                             <table>
                                 <tbody>
-                                <tr ng-repeat="subpackage in package.subpackages">
-                                    <td style="">{{subpackage.note}}</td>
-                                </tr>
+                                    <tr ng-repeat="subpackage in package.subpackages">
+                                        <td>{{(vm.date | date:'yyyy') - (subpackage.child.birthYear | date:'yyyy')}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td ng-show="allExpanded">
+
+                            <table>
+                                <tbody>
+                                    <tr ng-repeat="subpackage in package.subpackages">
+                                        <td>
+                                            <span ng-if="subpackage.subpackageNotes.length == 0"> - </span>
+                                            <span ng-repeat="note in subpackage.subpackageNotes">
+                                                {{note.content}},
+                                            </span>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </td>

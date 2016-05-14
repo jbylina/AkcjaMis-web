@@ -59,8 +59,8 @@
                 return result;
             }
             function onSuccess(data, headers) {
-                // vm.links = ParseLinks.parse(headers('link'));
-                // vm.totalItems = headers('X-Total-Count');
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
                 vm.totalItems = data.length;
                 vm.queryCount = vm.totalItems;
                 vm.christmasPackages = data;

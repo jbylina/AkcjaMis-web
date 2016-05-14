@@ -73,12 +73,13 @@ public class ChristmasPackageService {
     /**
      *  Get all the christmasPackages list of event.
      *
+     *  @param pageable the pagination information
      *  @return the list of entities
      */
     @Transactional(readOnly = true)
-    public List<Object> getInfoList(Long eventId) throws JSONException{
+    public Page<ChristmasPackage> getList(Long eventId, Pageable pageable){
         log.debug("Request to get all ChristmasPackages");
-        return christmasPackageRepository.getInfo(eventId);
+        return christmasPackageRepository.getList(eventId, pageable);
     }
 
     /**

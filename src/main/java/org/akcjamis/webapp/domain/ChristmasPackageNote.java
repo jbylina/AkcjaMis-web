@@ -2,6 +2,7 @@ package org.akcjamis.webapp.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class ChristmasPackageNote extends AbstractAuditingEntity implements Seri
     private String content;
 
     @ManyToOne
+    @JsonIgnore
     private ChristmasPackage christmasPackage;
 
     public Long getId() {

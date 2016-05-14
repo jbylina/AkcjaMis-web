@@ -33,7 +33,6 @@ public class Subpackage extends AbstractAuditingEntity implements Serializable {
     private Integer subpackageNumber;
 
     @OneToMany(mappedBy = "subpackage")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<SubpackageNote> subpackageNotes = new HashSet<>();
 

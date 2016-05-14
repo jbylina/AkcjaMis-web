@@ -3,6 +3,7 @@ package org.akcjamis.webapp.domain;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -30,6 +31,7 @@ public class SubpackageNote extends AbstractAuditingEntity implements Serializab
     private String content;
 
     @ManyToOne
+    @JsonIgnore
     private Subpackage subpackage;
 
     public Long getId() {

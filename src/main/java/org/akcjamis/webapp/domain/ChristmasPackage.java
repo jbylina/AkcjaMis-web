@@ -42,8 +42,7 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     @ManyToOne
     private Team team;
 
-    @OneToMany(mappedBy = "christmasPackage")
-    @JsonIgnore
+    @OneToMany(fetch=FetchType.LAZY, mappedBy = "christmasPackage")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ChristmasPackageNote> christmasPackageNotes = new HashSet<>();
 
