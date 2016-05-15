@@ -6,10 +6,7 @@ import org.akcjamis.webapp.domain.ChristmasPackageNote;
 import org.akcjamis.webapp.domain.Event;
 import org.akcjamis.webapp.repository.ChristmasPackageNoteRepository;
 import org.akcjamis.webapp.repository.ChristmasPackageRepository;
-import org.akcjamis.webapp.repository.search.ChristmasPackageNoteSearchRepository;
 import org.akcjamis.webapp.repository.ChristmasPackageChangeRepository;
-import org.akcjamis.webapp.repository.search.ChristmasPackageSearchRepository;
-import org.akcjamis.webapp.repository.search.ChristmasPackageChangeSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -34,29 +31,17 @@ public class ChristmasPackageService {
 
     private ChristmasPackageRepository christmasPackageRepository;
 
-    private ChristmasPackageSearchRepository christmasPackageSearchRepository;
-
     private ChristmasPackageNoteRepository christmasPackageNoteRepository;
-
-    private ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository;
 
     private ChristmasPackageChangeRepository christmasPackageChangeRepository;
 
-    private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
-
     @Inject
     public ChristmasPackageService(ChristmasPackageRepository christmasPackageRepository,
-                                    ChristmasPackageSearchRepository christmasPackageSearchRepository,
                                     ChristmasPackageNoteRepository christmasPackageNoteRepository,
-                                    ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository,
-                                    ChristmasPackageChangeRepository christmasPackageChangeRepository,
-                                    ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository) {
+                                    ChristmasPackageChangeRepository christmasPackageChangeRepository) {
         this.christmasPackageRepository = christmasPackageRepository;
-        this.christmasPackageSearchRepository = christmasPackageSearchRepository;
         this.christmasPackageNoteRepository = christmasPackageNoteRepository;
-        this.christmasPackageNoteSearchRepository = christmasPackageNoteSearchRepository;
         this.christmasPackageChangeRepository = christmasPackageChangeRepository;
-        this.christmasPackageChangeSearchRepository = christmasPackageChangeSearchRepository;
     }
 
     /**
@@ -66,14 +51,12 @@ public class ChristmasPackageService {
      * @param christmasPackage the entity to save
      * @return the persisted entity
      */
-    public ChristmasPackage save(Short eventYear, ChristmasPackage christmasPackage) {
+    public ChristmasPackage savePackage(Short eventYear, ChristmasPackage christmasPackage) {
         log.debug("Request to save ChristmasPackage : {}", christmasPackage);
         Event event = new Event();
         event.setYear(eventYear);
         christmasPackage.setEvent(event);
-        ChristmasPackage result = christmasPackageRepository.save(christmasPackage);
-        christmasPackageSearchRepository.save(result);
-        return result;
+        return christmasPackageRepository.save(christmasPackage);
     }
 
     /**
@@ -122,19 +105,6 @@ public class ChristmasPackageService {
     public void delete(Long id) {
         log.debug("Request to delete ChristmasPackage : {}", id);
         christmasPackageRepository.delete(id);
-        christmasPackageSearchRepository.delete(id);
-    }
-
-    /**
-     * Search for the christmasPackage corresponding to the query.
-     *
-     *  @param query the query of the search
-     *  @return the list of entities
-     */
-    @Transactional(readOnly = true)
-    public Page<ChristmasPackage> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of ChristmasPackages for query {}", query);
-        return christmasPackageSearchRepository.search(queryStringQuery(query), pageable);
     }
 
     /**
@@ -153,7 +123,6 @@ public class ChristmasPackageService {
         packageNote.setChristmasPackage(christmasPackage);
 
         ChristmasPackageNote result = christmasPackageNoteRepository.save(packageNote);
-        christmasPackageNoteSearchRepository.save(result);
 
         return result;
     }
@@ -180,7 +149,6 @@ public class ChristmasPackageService {
     public void deletePackageNote(Long id) {
         log.debug("Request contacts for ChristamasPackageNote : {}", id);
         christmasPackageNoteRepository.delete(id);
-        christmasPackageNoteSearchRepository.delete(id);
     }
     ;
 
@@ -199,10 +167,7 @@ public class ChristmasPackageService {
         christmasPackage.setId(id);
         packageChange.setChristmasPackage(christmasPackage);
 
-        ChristmasPackageChange result = christmasPackageChangeRepository.save(packageChange);
-        christmasPackageChangeSearchRepository.save(result);
-
-        return result;
+        return christmasPackageChangeRepository.save(packageChange);
     }
 
     /**
@@ -241,7 +206,6 @@ public class ChristmasPackageService {
         log.debug("Request delete Change : {}", id);
 
         christmasPackageChangeRepository.delete(id);
-        christmasPackageChangeSearchRepository.delete(id);
     }
 
 

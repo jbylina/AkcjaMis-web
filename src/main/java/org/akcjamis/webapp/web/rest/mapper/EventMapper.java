@@ -16,7 +16,7 @@ public interface EventMapper {
 
     @Mapping(target = "teams", ignore = true)
     @Mapping(target = "christmasPackages", ignore = true)
-    Event eventDTOToEvent(EventDTO eventDTO);
+    Event toEvent(EventDTO eventDTO);
 
-    List<EventDTO> eventsToEventDTOs(List<Event> events);
+    List<EventDTO> toEventDTOs(List<Event> events);
 }

@@ -32,9 +32,8 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     @Column(name = "mark")
     private Integer mark;
 
-    @NotNull
     @Column(name = "delivered", nullable = false)
-    private Boolean delivered;
+    private Boolean delivered = Boolean.FALSE;
 
     @NotNull
     @Min(value = 1)

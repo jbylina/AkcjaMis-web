@@ -2,23 +2,25 @@ package org.akcjamis.webapp.web.rest;
 
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.ChristmasPackage;
+import org.akcjamis.webapp.domain.Event;
+import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ChristmasPackageRepository;
+import org.akcjamis.webapp.repository.EventRepository;
+import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.service.ChristmasPackageService;
-import org.akcjamis.webapp.repository.search.ChristmasPackageSearchRepository;
-
+import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
+import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -55,6 +58,16 @@ public class ChristmasPackageResourceIntTest {
 
     private static final Short DEFAULT_YEAR = 2016;
 
+    private static final String DEFAULT_STREET = "AAAAA";
+    private static final String DEFAULT_HOUSE_NO = "AAAAAAAAAA";
+    private static final String DEFAULT_FLAT_NO = "AAAAAAAAAA";
+    private static final String DEFAULT_POSTALCODE = "AAAAAA";
+    private static final String DEFAULT_DISTRICT = "AAAAA";
+    private static final String DEFAULT_CITY = "AAAAA";
+    private static final String DEFAULT_REGION = "AAAAA";
+    private static final String DEFAULT_SOURCE = "AAAAA";
+
+
     @Inject
     private ChristmasPackageRepository christmasPackageRepository;
 
@@ -62,7 +75,7 @@ public class ChristmasPackageResourceIntTest {
     private ChristmasPackageService christmasPackageService;
 
     @Inject
-    private ChristmasPackageSearchRepository christmasPackageSearchRepository;
+    private ChristmasPackageMapper mapper;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -70,15 +83,26 @@ public class ChristmasPackageResourceIntTest {
     @Inject
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
+    @Inject
+    private EventRepository eventRepository;
+
+    @Inject
+    private FamilyRepository familyRepository;
+
     private MockMvc restChristmasPackageMockMvc;
 
     private ChristmasPackage christmasPackage;
 
+    private ChristmasPackageDTO christmasPackageDTO;
+
+    private Event event;
+
+    private Family family;
+
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ChristmasPackageResource christmasPackageResource = new ChristmasPackageResource(christmasPackageService);
-        ReflectionTestUtils.setField(christmasPackageResource, "christmasPackageService", christmasPackageService);
+        ChristmasPackageResource christmasPackageResource = new ChristmasPackageResource(christmasPackageService, mapper);
         this.restChristmasPackageMockMvc = MockMvcBuilders.standaloneSetup(christmasPackageResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -86,11 +110,30 @@ public class ChristmasPackageResourceIntTest {
 
     @Before
     public void initTest() {
-        christmasPackageSearchRepository.deleteAll();
+        event = new Event();
+        event.setYear(DEFAULT_YEAR);
+        eventRepository.save(event);
+
+        family = new Family();
+        family.setStreet(DEFAULT_STREET);
+        family.setHouseNo(DEFAULT_HOUSE_NO);
+        family.setFlatNo(DEFAULT_FLAT_NO);
+        family.setPostalcode(DEFAULT_POSTALCODE);
+        family.setDistrict(DEFAULT_DISTRICT);
+        family.setCity(DEFAULT_CITY);
+        family.setRegion(DEFAULT_REGION);
+        family.setSource(DEFAULT_SOURCE);
+        family = familyRepository.save(family);
+
         christmasPackage = new ChristmasPackage();
         christmasPackage.setMark(DEFAULT_MARK);
         christmasPackage.setDelivered(DEFAULT_DELIVERED);
         christmasPackage.setPackageNumber(DEFAULT_PACKAGE_NUMBER);
+
+        christmasPackageDTO = new ChristmasPackageDTO();
+        christmasPackageDTO.setMark(DEFAULT_MARK);
+        christmasPackageDTO.setPackageNumber(DEFAULT_PACKAGE_NUMBER);
+        christmasPackageDTO.setFamilyId(family.getId());
     }
 
     @Test
@@ -99,10 +142,9 @@ public class ChristmasPackageResourceIntTest {
         int databaseSizeBeforeCreate = christmasPackageRepository.findAll().size();
 
         // Create the ChristmasPackage
-
-        restChristmasPackageMockMvc.perform(post("/api/christmas-packages")
+        restChristmasPackageMockMvc.perform(post("/api/events/{year}/christmas-packages", DEFAULT_YEAR)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(christmasPackage)))
+                .content(TestUtil.convertObjectToJsonBytes(christmasPackageDTO)))
                 .andExpect(status().isCreated());
 
         // Validate the ChristmasPackage in the database
@@ -112,28 +154,26 @@ public class ChristmasPackageResourceIntTest {
         assertThat(testChristmasPackage.getMark()).isEqualTo(DEFAULT_MARK);
         assertThat(testChristmasPackage.isDelivered()).isEqualTo(DEFAULT_DELIVERED);
         assertThat(testChristmasPackage.getPackageNumber()).isEqualTo(DEFAULT_PACKAGE_NUMBER);
-
-        // Validate the ChristmasPackage in ElasticSearch
-        ChristmasPackage christmasPackageEs = christmasPackageSearchRepository.findOne(testChristmasPackage.getId());
-        assertThat(christmasPackageEs).isEqualToComparingFieldByField(testChristmasPackage);
+        assertThat(testChristmasPackage.getEvent().getYear()).isEqualTo(DEFAULT_YEAR);
     }
 
     @Test
     @Transactional
-    public void checkDeliveredIsRequired() throws Exception {
+    public void checkDeliveredIsSetToFalse() throws Exception {
         int databaseSizeBeforeTest = christmasPackageRepository.findAll().size();
         // set the field null
-        christmasPackage.setDelivered(null);
+        christmasPackageDTO.setDelivered(true);
 
         // Create the ChristmasPackage, which fails.
-
-        restChristmasPackageMockMvc.perform(post("/api/christmas-packages")
+        restChristmasPackageMockMvc.perform(post("/api/events/{year}/christmas-packages", DEFAULT_YEAR)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(christmasPackage)))
-                .andExpect(status().isBadRequest());
+                .content(TestUtil.convertObjectToJsonBytes(christmasPackageDTO)))
+                .andExpect(status().isCreated());
 
         List<ChristmasPackage> christmasPackages = christmasPackageRepository.findAll();
-        assertThat(christmasPackages).hasSize(databaseSizeBeforeTest);
+        assertThat(christmasPackages).hasSize(databaseSizeBeforeTest + 1);
+        ChristmasPackage testChristmasPackage = christmasPackages.get(christmasPackages.size() - 1);
+        assertThat(testChristmasPackage.isDelivered()).isEqualTo(Boolean.FALSE);
     }
 
     @Test
@@ -141,13 +181,12 @@ public class ChristmasPackageResourceIntTest {
     public void checkPackageNumberIsRequired() throws Exception {
         int databaseSizeBeforeTest = christmasPackageRepository.findAll().size();
         // set the field null
-        christmasPackage.setPackageNumber(null);
+        christmasPackageDTO.setPackageNumber(null);
 
         // Create the ChristmasPackage, which fails.
-
-        restChristmasPackageMockMvc.perform(post("/api/christmas-packages")
+        restChristmasPackageMockMvc.perform(post("/api/events/{year}/christmas-packages", DEFAULT_YEAR)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(christmasPackage)))
+                .content(TestUtil.convertObjectToJsonBytes(christmasPackageDTO)))
                 .andExpect(status().isBadRequest());
 
         List<ChristmasPackage> christmasPackages = christmasPackageRepository.findAll();
@@ -157,32 +196,34 @@ public class ChristmasPackageResourceIntTest {
     @Test
     @Transactional
     public void getAllChristmasPackages() throws Exception {
-        // Initialize the database
+        christmasPackage.setFamily(family);
+        christmasPackage.setEvent(event);
         christmasPackageRepository.saveAndFlush(christmasPackage);
 
         // Get all the christmasPackages
-        restChristmasPackageMockMvc.perform(get("/api/christmas-packages?sort=id,desc"))
+        restChristmasPackageMockMvc.perform(get("/api/events/{year}/christmas-packages?sort=id,desc", DEFAULT_YEAR))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackage.getId().intValue())))
                 .andExpect(jsonPath("$.[*].mark").value(hasItem(DEFAULT_MARK)))
-                .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED.booleanValue())))
+                .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED)))
                 .andExpect(jsonPath("$.[*].packageNumber").value(hasItem(DEFAULT_PACKAGE_NUMBER)));
     }
 
     @Test
     @Transactional
     public void getChristmasPackage() throws Exception {
-        // Initialize the database
+        christmasPackage.setFamily(family);
+        christmasPackage.setEvent(event);
         christmasPackageRepository.saveAndFlush(christmasPackage);
 
         // Get the christmasPackage
-        restChristmasPackageMockMvc.perform(get("/api/christmas-packages/{id}", christmasPackage.getId()))
+        restChristmasPackageMockMvc.perform(get("/api/events/{year}/christmas-packages/{id}", DEFAULT_YEAR, christmasPackage.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(christmasPackage.getId().intValue()))
             .andExpect(jsonPath("$.mark").value(DEFAULT_MARK))
-            .andExpect(jsonPath("$.delivered").value(DEFAULT_DELIVERED.booleanValue()))
+            .andExpect(jsonPath("$.delivered").value(DEFAULT_DELIVERED))
             .andExpect(jsonPath("$.packageNumber").value(DEFAULT_PACKAGE_NUMBER));
     }
 
@@ -190,28 +231,30 @@ public class ChristmasPackageResourceIntTest {
     @Transactional
     public void getNonExistingChristmasPackage() throws Exception {
         // Get the christmasPackage
-        restChristmasPackageMockMvc.perform(get("/api/christmas-packages/{id}", Long.MAX_VALUE))
+        restChristmasPackageMockMvc.perform(get("/api/events/{year}/christmas-packages/{id}", DEFAULT_YEAR, Long.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     @Transactional
     public void updateChristmasPackage() throws Exception {
-        // Initialize the database
-        christmasPackageService.save(DEFAULT_YEAR, christmasPackage);
+        christmasPackage.setFamily(family);
+        christmasPackage.setEvent(event);
+        christmasPackageService.savePackage(DEFAULT_YEAR, christmasPackage);
 
         int databaseSizeBeforeUpdate = christmasPackageRepository.findAll().size();
 
         // Update the christmasPackage
-        ChristmasPackage updatedChristmasPackage = new ChristmasPackage();
-        updatedChristmasPackage.setId(christmasPackage.getId());
-        updatedChristmasPackage.setMark(UPDATED_MARK);
-        updatedChristmasPackage.setDelivered(UPDATED_DELIVERED);
-        updatedChristmasPackage.setPackageNumber(UPDATED_PACKAGE_NUMBER);
+        ChristmasPackageDTO updatedChristmasPackageDTO = new ChristmasPackageDTO();
+        updatedChristmasPackageDTO.setId(christmasPackage.getId());
+        updatedChristmasPackageDTO.setMark(UPDATED_MARK);
+        updatedChristmasPackageDTO.setDelivered(UPDATED_DELIVERED);
+        updatedChristmasPackageDTO.setPackageNumber(UPDATED_PACKAGE_NUMBER);
+        updatedChristmasPackageDTO.setFamilyId(family.getId());
 
-        restChristmasPackageMockMvc.perform(put("/api/christmas-packages")
+        restChristmasPackageMockMvc.perform(put("/api/events/{year}/christmas-packages", DEFAULT_YEAR)
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedChristmasPackage)))
+                .content(TestUtil.convertObjectToJsonBytes(updatedChristmasPackageDTO)))
                 .andExpect(status().isOk());
 
         // Validate the ChristmasPackage in the database
@@ -219,49 +262,27 @@ public class ChristmasPackageResourceIntTest {
         assertThat(christmasPackages).hasSize(databaseSizeBeforeUpdate);
         ChristmasPackage testChristmasPackage = christmasPackages.get(christmasPackages.size() - 1);
         assertThat(testChristmasPackage.getMark()).isEqualTo(UPDATED_MARK);
-        assertThat(testChristmasPackage.isDelivered()).isEqualTo(UPDATED_DELIVERED);
+        assertThat(testChristmasPackage.isDelivered()).isEqualTo(Boolean.FALSE);
         assertThat(testChristmasPackage.getPackageNumber()).isEqualTo(UPDATED_PACKAGE_NUMBER);
 
-        // Validate the ChristmasPackage in ElasticSearch
-        ChristmasPackage christmasPackageEs = christmasPackageSearchRepository.findOne(testChristmasPackage.getId());
-        assertThat(christmasPackageEs).isEqualToComparingFieldByField(testChristmasPackage);
     }
 
     @Test
     @Transactional
     public void deleteChristmasPackage() throws Exception {
-        // Initialize the database
-        christmasPackageService.save(DEFAULT_YEAR, christmasPackage);
+        christmasPackage.setFamily(family);
+        christmasPackage.setEvent(event);
+        christmasPackageService.savePackage(DEFAULT_YEAR, christmasPackage);
 
         int databaseSizeBeforeDelete = christmasPackageRepository.findAll().size();
 
         // Get the christmasPackage
-        restChristmasPackageMockMvc.perform(delete("/api/christmas-packages/{id}", christmasPackage.getId())
+        restChristmasPackageMockMvc.perform(delete("/api/events/{year}/christmas-packages/{id}", DEFAULT_YEAR, christmasPackage.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
-
-        // Validate ElasticSearch is empty
-        boolean christmasPackageExistsInEs = christmasPackageSearchRepository.exists(christmasPackage.getId());
-        assertThat(christmasPackageExistsInEs).isFalse();
 
         // Validate the database is empty
         List<ChristmasPackage> christmasPackages = christmasPackageRepository.findAll();
         assertThat(christmasPackages).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchChristmasPackage() throws Exception {
-        // Initialize the database
-        christmasPackageService.save(DEFAULT_YEAR, christmasPackage);
-
-        // Search the christmasPackage
-        restChristmasPackageMockMvc.perform(get("/api/_search/christmas-packages?query=id:" + christmasPackage.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackage.getId().intValue())))
-            .andExpect(jsonPath("$.[*].mark").value(hasItem(DEFAULT_MARK)))
-            .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED.booleanValue())))
-            .andExpect(jsonPath("$.[*].packageNumber").value(hasItem(DEFAULT_PACKAGE_NUMBER)));
     }
 }

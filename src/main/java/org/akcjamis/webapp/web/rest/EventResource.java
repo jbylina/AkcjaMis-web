@@ -53,7 +53,7 @@ public class EventResource {
     public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO event) throws URISyntaxException {
         log.debug("REST request to save Event : {}", event);
 
-        Event result = eventService.createEvent(mapper.eventDTOToEvent(event));
+        Event result = eventService.createEvent(mapper.toEvent(event));
 
         return ResponseEntity.created(new URI("/api/events/" + result.getYear()))
             .headers(HeaderUtil.createEntityCreationAlert("event", result.getYear().toString()))
@@ -71,7 +71,7 @@ public class EventResource {
     @Timed
     public List<EventDTO> getAllEvents() {
         log.debug("REST request to get all Events");
-        return mapper.eventsToEventDTOs(eventService.getAllEvents());
+        return mapper.toEventDTOs(eventService.getAllEvents());
     }
 
     /**
