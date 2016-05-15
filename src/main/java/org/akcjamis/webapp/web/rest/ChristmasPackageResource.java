@@ -124,14 +124,14 @@ public class ChristmasPackageResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ChristmasPackage>> getChristmasPackageList(@PathVariable Long eventId, Pageable pageable)
+    public ResponseEntity<List<ChristmasPackageDTO>> getChristmasPackageList(@PathVariable Short eventId, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get ChristmasPackageList : {}");
 
         Page<ChristmasPackage> page = christmasPackageService.getList(eventId, pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events/" + eventId + "/christmas-packages-list");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(mapper.toChristmasPackageDTOs(page.getContent()), headers, HttpStatus.OK);
     }
 
     /**

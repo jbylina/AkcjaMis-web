@@ -27,5 +27,5 @@ public interface ChristmasPackageRepository extends JpaRepository<ChristmasPacka
         "where christmasPackage.event.id =:id",
         countQuery = "select count(christmasPackage) from ChristmasPackage christmasPackage " +
             "where christmasPackage.event.id =:id")
-    Page<ChristmasPackage> getList(@Param("id") Long id, Pageable page);
+    Page<ChristmasPackage> getList(@Param("id") Short id, Pageable page);
 }
