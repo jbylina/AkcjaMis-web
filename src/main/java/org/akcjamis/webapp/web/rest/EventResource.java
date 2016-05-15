@@ -2,7 +2,9 @@ package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Event;
-import org.akcjamis.webapp.repository.EventRepository;
+import org.akcjamis.webapp.service.EventService;
+import org.akcjamis.webapp.web.rest.dto.EventDTO;
+import org.akcjamis.webapp.web.rest.mapper.EventMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +29,14 @@ public class EventResource {
 
     private final Logger log = LoggerFactory.getLogger(EventResource.class);
 
-    private EventRepository eventRepository;
+    private EventService eventService;
+
+    private EventMapper mapper;
 
     @Inject
-    public EventResource(EventRepository eventRepository) {
-        this.eventRepository = eventRepository;
+    public EventResource(EventService eventService, EventMapper eventMapper) {
+        this.eventService = eventService;
+        this.mapper = eventMapper;
     }
 
     /**
@@ -45,13 +50,14 @@ public class EventResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Event> createEvent(@Valid @RequestBody Event event) throws URISyntaxException {
+    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO event) throws URISyntaxException {
         log.debug("REST request to save Event : {}", event);
 
-        Event result = eventRepository.save(event);
+        Event result = eventService.createEvent(mapper.eventDTOToEvent(event));
+
         return ResponseEntity.created(new URI("/api/events/" + result.getYear()))
             .headers(HeaderUtil.createEntityCreationAlert("event", result.getYear().toString()))
-            .body(result);
+            .body(mapper.eventToEventDTO(result));
     }
 
     /**
@@ -63,9 +69,9 @@ public class EventResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Event> getAllEvents() {
+    public List<EventDTO> getAllEvents() {
         log.debug("REST request to get all Events");
-        return eventRepository.findAll();
+        return mapper.eventsToEventDTOs(eventService.getAllEvents());
     }
 
     /**
@@ -78,10 +84,10 @@ public class EventResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Event> getEvent(@PathVariable Short year) {
+    public ResponseEntity<EventDTO> getEvent(@PathVariable Short year) {
         log.debug("REST request to get Event : {}", year);
-        Event event = eventRepository.findOne(year);
-        return Optional.ofNullable(event)
+        Event event = eventService.getEvent(year);
+        return Optional.ofNullable(mapper.eventToEventDTO(event))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))
@@ -100,7 +106,7 @@ public class EventResource {
     @Timed
     public ResponseEntity<Void> deleteEvent(@PathVariable Short year) {
         log.debug("REST request to delete Event : {}", year);
-        eventRepository.delete(year);
+        eventService.deleteEvent(year);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", year.toString())).build();
     }
 }

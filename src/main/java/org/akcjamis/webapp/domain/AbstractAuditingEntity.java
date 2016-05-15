@@ -1,5 +1,6 @@
 package org.akcjamis.webapp.domain;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.akcjamis.webapp.config.audit.EntityAuditEventListener;
 import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;
@@ -26,23 +27,28 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    // TODO remove
+    @ApiModelProperty(readOnly = true, hidden = true)
     @CreatedBy
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
     private String createdBy;
 
+    // TODO remove
+    @ApiModelProperty(readOnly = true, hidden = true)
     @CreatedDate
     @Column(name = "created_date", nullable = false)
-
     private ZonedDateTime createdDate = ZonedDateTime.now();
 
+    // TODO remove
+    @ApiModelProperty(readOnly = true, hidden = true)
     @LastModifiedBy
     @Column(name = "last_modified_by", length = 50)
-
     private String lastModifiedBy;
 
+    // TODO remove
+    @ApiModelProperty(readOnly = true, hidden = true)
     @LastModifiedDate
     @Column(name = "last_modified_date")
-
     private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
 
     public String getCreatedBy() {

@@ -2,7 +2,11 @@ package org.akcjamis.webapp.web.rest.dto;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import org.springframework.data.annotation.ReadOnlyProperty;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.*;
 
 /**
  * Base abstract class for DTO which will hold definitions for created, last modified by and created,
@@ -12,14 +16,18 @@ public abstract class AbstractAuditingDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ReadOnlyProperty
+    @ApiModelProperty(readOnly = true, hidden = true)
+    @JsonProperty(access = Access.READ_ONLY)
     private String createdBy;
 
-    @ReadOnlyProperty
+    @ApiModelProperty(readOnly = true, hidden = true)
+    @JsonProperty(access = Access.READ_ONLY)
     private ZonedDateTime createdDate = ZonedDateTime.now();
 
+    @ApiModelProperty(readOnly = true, hidden = true)
     private String lastModifiedBy;
 
+    @ApiModelProperty(readOnly = true, hidden = true)
     private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
 
     public String getCreatedBy() {

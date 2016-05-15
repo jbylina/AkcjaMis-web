@@ -1,43 +1,33 @@
 package org.akcjamis.webapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
 
 /**
- * A Event.
+ * A Event table
  */
 @Entity
 @Table(name = "events")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "event")
 public class Event extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "event_year", nullable = false)
-    @Min(value = 2000)
-    @Max(value = 2050)
+    @Column(name = "event_year", nullable = false, unique = true)
     private Short year;
 
     @OneToMany(mappedBy = "event")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Team> teams = new HashSet<>();
 
     @OneToMany(mappedBy = "event")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ChristmasPackage> christmasPackages = new HashSet<>();
 

@@ -4,6 +4,9 @@ import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Event;
 import org.akcjamis.webapp.repository.EventRepository;
 
+import org.akcjamis.webapp.service.EventService;
+import org.akcjamis.webapp.web.rest.dto.EventDTO;
+import org.akcjamis.webapp.web.rest.mapper.EventMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +19,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,10 +45,15 @@ public class EventResourceIntTest {
 
 
     private static final Short DEFAULT_YEAR = 2016;
-    private static final Short UPDATED_YEAR = 2016;
 
     @Inject
     private EventRepository eventRepository;
+
+    @Inject
+    private EventService eventService;
+
+    @Inject
+    private EventMapper mapper;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -58,11 +65,12 @@ public class EventResourceIntTest {
 
     private Event event;
 
+    private EventDTO eventDTO;
+
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        EventResource eventResource = new EventResource(eventRepository);
-        ReflectionTestUtils.setField(eventResource, "eventRepository", eventRepository);
+        EventResource eventResource = new EventResource(eventService, mapper);
         this.restEventMockMvc = MockMvcBuilders.standaloneSetup(eventResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -72,6 +80,9 @@ public class EventResourceIntTest {
     public void initTest() {
         event = new Event();
         event.setYear(DEFAULT_YEAR);
+
+        eventDTO = new EventDTO();
+        eventDTO.setYear(DEFAULT_YEAR);
     }
 
     @Test
@@ -83,7 +94,7 @@ public class EventResourceIntTest {
 
         restEventMockMvc.perform(post("/api/events")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(event)))
+                .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
                 .andExpect(status().isCreated());
 
         // Validate the Event in the database
@@ -98,13 +109,12 @@ public class EventResourceIntTest {
     public void checkYearIsRequired() throws Exception {
         int databaseSizeBeforeTest = eventRepository.findAll().size();
         // set the field null
-        event.setYear(null);
+        eventDTO.setYear(null);
 
         // Create the Event, which fails.
-
         restEventMockMvc.perform(post("/api/events")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(event)))
+                .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
                 .andExpect(status().isBadRequest());
 
         List<Event> events = eventRepository.findAll();
@@ -121,8 +131,7 @@ public class EventResourceIntTest {
         restEventMockMvc.perform(get("/api/events?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[*].id").value(hasItem(event.getYear().intValue())))
-                .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR.toString())));
+                .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR.intValue())));
     }
 
     @Test
@@ -135,40 +144,15 @@ public class EventResourceIntTest {
         restEventMockMvc.perform(get("/api/events/{id}", event.getYear()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id").value(event.getYear().intValue()))
-            .andExpect(jsonPath("$.year").value(DEFAULT_YEAR.toString()));
+            .andExpect(jsonPath("$.year").value(DEFAULT_YEAR.intValue()));
     }
 
     @Test
     @Transactional
     public void getNonExistingEvent() throws Exception {
         // Get the event
-        restEventMockMvc.perform(get("/api/events/{id}", Long.MAX_VALUE))
+        restEventMockMvc.perform(get("/api/events/{id}", Short.MAX_VALUE))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Transactional
-    public void updateEvent() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-        int databaseSizeBeforeUpdate = eventRepository.findAll().size();
-
-        // Update the event
-        Event updatedEvent = new Event();
-        updatedEvent.setYear(event.getYear());
-        updatedEvent.setYear(UPDATED_YEAR);
-
-        restEventMockMvc.perform(put("/api/events")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(updatedEvent)))
-                .andExpect(status().isOk());
-
-        // Validate the Event in the database
-        List<Event> events = eventRepository.findAll();
-        assertThat(events).hasSize(databaseSizeBeforeUpdate);
-        Event testEvent = events.get(events.size() - 1);
-        assertThat(testEvent.getYear()).isEqualTo(UPDATED_YEAR);
     }
 
     @Test
@@ -186,19 +170,5 @@ public class EventResourceIntTest {
         // Validate the database is empty
         List<Event> events = eventRepository.findAll();
         assertThat(events).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchEvent() throws Exception {
-        // Initialize the database
-        eventRepository.saveAndFlush(event);
-
-        // Search the event
-        restEventMockMvc.perform(get("/api/_search/events?query=id:" + event.getYear()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(event.getYear().intValue())))
-            .andExpect(jsonPath("$.[*].year").value(hasItem(DEFAULT_YEAR.toString())));
     }
 }

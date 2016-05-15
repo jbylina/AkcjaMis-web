@@ -12,6 +12,7 @@ import java.util.Set;
  * A DTO representing a family note, with tags.
  * TODO separate somehow input and output DTO
  */
+
 public class FamilyNoteDTO extends AbstractAuditingDTO {
 
     private Long id;
