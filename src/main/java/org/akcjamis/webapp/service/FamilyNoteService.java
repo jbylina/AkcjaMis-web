@@ -31,35 +31,30 @@ public class FamilyNoteService {
 
     private TagRepository tagRepository;
 
-    private FamilyNoteMapper familyNoteMapper;
-
     @Inject
     private FamilyNoteSearchRepository familyNoteSearchRepository;
 
     @Inject
-    public FamilyNoteService(FamilyNoteRepository familyNoteRepository, TagRepository tagRepository, FamilyNoteMapper familyNoteMapper) {
+    public FamilyNoteService(FamilyNoteRepository familyNoteRepository, TagRepository tagRepository) {
         this.familyNoteRepository = familyNoteRepository;
         this.tagRepository = tagRepository;
-        this.familyNoteMapper = familyNoteMapper;
     }
 
     /**
      * Save a familyNote for given family id.
      *
      * @param familyId family id
-     * @param familyNoteDTO the DTO to save
+     * @param familyNote the note to save
      * @return the persisted entity
      */
-    public FamilyNoteDTO save(Long familyId, FamilyNoteDTO familyNoteDTO) {
-        log.debug("Request to save FamilyNote : {}", familyNoteDTO);
-        FamilyNote familyNote = familyNoteMapper.toFamilyNote(familyNoteDTO);
+    public FamilyNote save(Long familyId, FamilyNote familyNote) {
+        log.debug("Request to save FamilyNote : {}", familyNote);
         Family family = new Family();
         family.setId(familyId);
         familyNote.setFamily(family);
         FamilyNote result = familyNoteRepository.save(familyNote);
         familyNoteSearchRepository.save(result);
-
-        return familyNoteMapper.toFamilyNoteDTO(result);
+        return result;
     }
 
     /**

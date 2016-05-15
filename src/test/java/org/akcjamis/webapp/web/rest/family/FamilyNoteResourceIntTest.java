@@ -14,6 +14,7 @@ import org.akcjamis.webapp.repository.search.FamilyNoteSearchRepository;
 import org.akcjamis.webapp.web.rest.FamilyNoteResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
 import org.akcjamis.webapp.web.rest.dto.FamilyNoteDTO;
+import org.akcjamis.webapp.web.rest.mapper.FamilyNoteMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,6 +80,9 @@ public class FamilyNoteResourceIntTest {
     private FamilyNoteService familyNoteService;
 
     @Inject
+    FamilyNoteMapper mapper;
+
+    @Inject
     private TagRepository tagRepository;
 
     @Inject
@@ -104,7 +108,7 @@ public class FamilyNoteResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        FamilyNoteResource familyNoteResource = new FamilyNoteResource(familyNoteService);
+        FamilyNoteResource familyNoteResource = new FamilyNoteResource(familyNoteService, mapper);
         this.restFamilyNoteMockMvc = MockMvcBuilders.standaloneSetup(familyNoteResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -123,14 +127,14 @@ public class FamilyNoteResourceIntTest {
         family.setSource(DEFAULT_SOURCE);
         family = familyRepository.save(family);
 
-        Tag tag = new Tag();
-        tag.setCode(DEFAULT_CODE_1);
-        tag.setColor(DEFAULT_COLOR_1);
-        tagRepository.save(tag);
-        tag = new Tag();
-        tag.setCode(DEFAULT_CODE_2);
-        tag.setColor(DEFAULT_COLOR_2);
-        tagRepository.save(tag);
+        Tag tag1 = new Tag();
+        tag1.setCode(DEFAULT_CODE_1);
+        tag1.setColor(DEFAULT_COLOR_1);
+        tagRepository.save(tag1);
+        Tag tag2 = new Tag();
+        tag2.setCode(DEFAULT_CODE_2);
+        tag2.setColor(DEFAULT_COLOR_2);
+        tagRepository.save(tag2);
 
         familyNoteDTO = new FamilyNoteDTO();
         familyNoteDTO.setContent(DEFAULT_CONTENT);
@@ -140,6 +144,7 @@ public class FamilyNoteResourceIntTest {
         familyNote = new FamilyNote();
         familyNote.setContent(DEFAULT_CONTENT);
         familyNote.setArchived(DEFAULT_ARCHIVED);
+        familyNote.setTags(Sets.newHashSet(tag1, tag2));
     }
 
     @Test
@@ -245,12 +250,12 @@ public class FamilyNoteResourceIntTest {
     @Transactional
     public void updateFamilyNote() throws Exception {
         // Initialize the database
-        familyNoteDTO = familyNoteService.save(family.getId(), familyNoteDTO);
+        familyNote = familyNoteService.save(family.getId(), familyNote);
         int databaseSizeBeforeUpdate = familyNoteRepository.findAll().size();
 
         // Update the familyNoteDTO
         FamilyNoteDTO updatedFamilyNoteDTO = new FamilyNoteDTO();
-        updatedFamilyNoteDTO.setId(familyNoteDTO.getId());
+        updatedFamilyNoteDTO.setId(familyNote.getId());
         updatedFamilyNoteDTO.setContent(UPDATED_CONTENT);
 
         restFamilyNoteMockMvc.perform(put("/api/families/{id}/family-notes", family.getId())
@@ -269,11 +274,11 @@ public class FamilyNoteResourceIntTest {
     @Transactional
     public void deleteFamilyNote() throws Exception {
         // Initialize the database
-        familyNoteDTO = familyNoteService.save(family.getId(), familyNoteDTO);
+        familyNote = familyNoteService.save(family.getId(), familyNote);
         int databaseSizeBeforeDelete = familyNoteRepository.findAll().size();
 
         // Get the familyNoteDTO
-        restFamilyNoteMockMvc.perform(delete("/api/families/{id}/family-notes/{id}", family.getId(), familyNoteDTO.getId())
+        restFamilyNoteMockMvc.perform(delete("/api/families/{id}/family-notes/{id}", family.getId(), familyNote.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
@@ -286,13 +291,13 @@ public class FamilyNoteResourceIntTest {
     @Transactional
     public void searchFamilyNote() throws Exception {
         // Initialize the database
-        familyNoteDTO = familyNoteService.save(family.getId(), familyNoteDTO);
+        familyNote = familyNoteService.save(family.getId(), familyNote);
 
         // Search the familyNoteDTO
-        restFamilyNoteMockMvc.perform(get("/api/_search/family-notes?query=id:" + familyNoteDTO.getId()))
+        restFamilyNoteMockMvc.perform(get("/api/_search/family-notes?query=id:" + familyNote.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(familyNoteDTO.getId().intValue())))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(familyNote.getId().intValue())))
             .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)))
             .andExpect(jsonPath("$.[*].archived").value(hasItem(DEFAULT_ARCHIVED)));
     }

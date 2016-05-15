@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.FamilyNote;
 import org.akcjamis.webapp.service.FamilyNoteService;
 import org.akcjamis.webapp.web.rest.dto.FamilyNoteDTO;
+import org.akcjamis.webapp.web.rest.mapper.FamilyNoteMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -39,9 +40,12 @@ public class FamilyNoteResource {
 
     private FamilyNoteService familyNoteService;
 
+    private FamilyNoteMapper mapper;
+
     @Inject
-    public FamilyNoteResource(FamilyNoteService familyNoteService) {
+    public FamilyNoteResource(FamilyNoteService familyNoteService, FamilyNoteMapper familyNoteMapper) {
         this.familyNoteService = familyNoteService;
+        this.mapper = familyNoteMapper;
     }
 
     /**
@@ -61,10 +65,10 @@ public class FamilyNoteResource {
         if (familyNoteDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("familyNote", "idexists", "A new familyNote cannot already have an ID")).body(null);
         }
-        FamilyNoteDTO result = familyNoteService.save(id, familyNoteDTO);
+        FamilyNote result = familyNoteService.save(id, mapper.toFamilyNote(familyNoteDTO));
         return ResponseEntity.created(new URI("/api/families/" + id + "/family-notes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("familyNote", result.getId().toString()))
-            .body(result);
+            .body(mapper.toFamilyNoteDTO(result));
     }
 
     /**
@@ -86,10 +90,10 @@ public class FamilyNoteResource {
         if (familyNoteDTO.getId() == null) {
             return createFamilyNote(id, familyNoteDTO);
         }
-        FamilyNoteDTO result = familyNoteService.save(id, familyNoteDTO);
+        FamilyNote result = familyNoteService.save(id, mapper.toFamilyNote(familyNoteDTO));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("familyNote", familyNoteDTO.getId().toString()))
-            .body(result);
+            .body(mapper.toFamilyNoteDTO(result));
     }
 
     /**
