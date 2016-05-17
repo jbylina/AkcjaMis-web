@@ -1,12 +1,12 @@
 package org.akcjamis.webapp.domain.util;
 
-import org.hibernate.dialect.PostgreSQL82Dialect;
+import org.hibernate.spatial.dialect.postgis.PostgisDialect;
 import org.hibernate.type.descriptor.sql.BinaryTypeDescriptor;
 import org.hibernate.type.descriptor.sql.SqlTypeDescriptor;
 
 import java.sql.Types;
 
-public class FixedPostgreSQL82Dialect extends PostgreSQL82Dialect {
+public class FixedPostgreSQL82Dialect extends PostgisDialect {
 
     public FixedPostgreSQL82Dialect() {
         super();

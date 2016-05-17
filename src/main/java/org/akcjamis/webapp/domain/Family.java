@@ -3,9 +3,11 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.elasticsearch.annotations.Document;
+import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -24,6 +26,7 @@ import java.util.Objects;
 public class Family extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public static final int SRID = 4326;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -58,6 +61,10 @@ public class Family extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "source")
     private String source;
+
+    @Column(name = "location_geom")
+    @Type(type = "org.hibernate.spatial.GeometryType")
+    private Point locationGeom;
 
     @OneToMany(mappedBy = "family")
     @JsonIgnore
@@ -181,6 +188,15 @@ public class Family extends AbstractAuditingEntity implements Serializable {
 
     public void setChristmasPackages(Set<ChristmasPackage> christmasPackages) {
         this.christmasPackages = christmasPackages;
+    }
+
+    public Point getLocationGeom() {
+        return locationGeom;
+    }
+
+    public void setLocationGeom(Point locationGeom) {
+        locationGeom.setSRID(SRID);
+        this.locationGeom = locationGeom;
     }
 
     @Override

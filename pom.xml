@@ -17,6 +17,10 @@
 
     <repositories>
         <repository>
+            <id>Hibernate Spatial repo</id>
+            <url>http://www.hibernatespatial.org/repository</url>
+        </repository>
+        <repository>
             <id>spring-milestones</id>
             <url>http://repo.spring.io/milestone</url>
         </repository>
@@ -39,6 +43,8 @@
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <hibernate.version>4.3.11.Final</hibernate.version>
+        <hibernate-spatial.version>4.3</hibernate-spatial.version>
+        <jackson-jts.version>2.2</jackson-jts.version>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -145,6 +151,11 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.bedatadriven</groupId>
+            <artifactId>jackson-datatype-jts</artifactId>
+            <version>${jackson-jts.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
@@ -242,6 +253,17 @@
                 <exclusion>
                     <groupId>net.sf.ehcache</groupId>
                     <artifactId>ehcache-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>${hibernate-spatial.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>postgresql</artifactId>
+                    <groupId>postgresql</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
