@@ -20,6 +20,8 @@
     <include file="classpath:config/liquibase/changelog/20160417192113_added_entity_ChristmasPackageChange.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160417192228_added_entity_ChristmasPackageNote.xml" relativeToChangelogFile="false"/>
 
+    <include file="classpath:config/liquibase/changelog/20160517185730_added_entity_Family_geospatial.xml" relativeToChangelogFile="false"/>
+
     <include file="classpath:config/liquibase/changelog/20160417220630_added_entity_EntityAuditEvent.xml" relativeToChangelogFile="false"/>
 
     <include file="classpath:config/liquibase/changelog/20160524154015_load_data.xml" relativeToChangelogFile="false"/>

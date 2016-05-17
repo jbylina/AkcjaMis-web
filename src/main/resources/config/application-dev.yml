@@ -18,16 +18,13 @@ spring:
         livereload:
             enabled: false # we use gulp + BrowserSync for livereload
     datasource:
-        url: jdbc:h2:file:./target/h2db/db/akcjamis;DB_CLOSE_DELAY=-1
+        url: jdbc:postgresql://localhost:5432/akcjamis
         name:
         username: akcjamis
         password:
-    h2:
-        console:
-            enabled: false
     jpa:
-        database-platform: org.akcjamis.webapp.domain.util.FixedH2Dialect
-        database: H2
+        database-platform: org.akcjamis.webapp.domain.util.FixedPostgreSQL82Dialect
+        database: POSTGRESQL
         show_sql: true
         properties:
             hibernate.cache.use_second_level_cache: true
