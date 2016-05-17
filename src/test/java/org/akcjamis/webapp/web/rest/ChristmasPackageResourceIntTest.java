@@ -258,4 +258,21 @@ public class ChristmasPackageResourceIntTest {
         List<ChristmasPackage> christmasPackages = christmasPackageRepository.findAll();
         assertThat(christmasPackages).hasSize(databaseSizeBeforeDelete - 1);
     }
+
+    @Test
+    @Transactional
+    public void getChristmasPackageList() throws Exception {
+        christmasPackage.setFamily(family);
+        christmasPackage.setEvent(event);
+        christmasPackageRepository.saveAndFlush(christmasPackage);
+
+        // Get the christmasPackage
+        restChristmasPackageMockMvc.perform(get("/api/events/{year}/christmas-packages-list", DEFAULT_YEAR))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackage.getId().intValue())))
+            .andExpect(jsonPath("$.[*].mark").value(hasItem(DEFAULT_MARK)))
+            .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED)))
+            .andExpect(jsonPath("$.[*].packageNumber").value(hasItem(DEFAULT_PACKAGE_NUMBER)));
+    }
 }

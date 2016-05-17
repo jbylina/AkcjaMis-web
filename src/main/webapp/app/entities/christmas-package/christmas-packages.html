@@ -42,7 +42,6 @@
                         <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
                         <th jh-sort-by="mark"><span>Ocena</span> <span class="glyphicon glyphicon-sort"></span></th>
                         <th jh-sort-by="delivered"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
-                        <th jh-sort-by="team.id"><span>Zespół</span> <span class="glyphicon glyphicon-sort"></span></th>
                         <th jh-sort-by="family.id"><span>Rodzina</span> <span class="glyphicon glyphicon-sort"></span></th>
                         <th><span>Uwagi</span></th>
                         <th ng-show="allExpanded">Imię dziecka</th>
@@ -58,10 +57,7 @@
                         <td>{{package.mark}}</td>
                         <td><span ng-bind="package.delivered ? 'Dostarczona' : 'Oczekująca'"></span></td>
                         <td>
-                            <a ui-sref="team-detail({id:package.team.id})" style="color:blue">{{package.team.id}}</a>
-                        </td>
-                        <td>
-                            <a ui-sref="family-detail({id:package.family.id})" style="color:blue">{{package.family.id}}</a>
+                            <a ui-sref="family-detail({id:package.family.id})" style="color:blue">{{package.familyId}}</a>
                         </td>
                         <td>
                             <table>

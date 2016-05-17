@@ -21,6 +21,7 @@
 
     function ChristmasPackageController ($scope, $state, ChristmasPackage, ChristmasPackageSearch, ParseLinks, AlertService, pagingParams, paginationConstants, dataService) {
         var vm = this;
+        vm.year = $state.params.year;
         vm.loadAll = loadAll;
         vm.loadPage = loadPage;
         vm.predicate = pagingParams.predicate;
@@ -31,11 +32,11 @@
         vm.expandAll = expandAll;
         vm.searchQuery = pagingParams.search;
         vm.currentSearch = pagingParams.search;
-        vm.loadAll();
+        vm.loadAll(vm.year);
         vm.date = new Date();
         vm.allExpanded = dataService.getProperty();
 
-        function loadAll () {
+        function loadAll (year) {
             if (pagingParams.search) {
                 ChristmasPackageSearch.query({
                     query: pagingParams.search,
@@ -45,7 +46,7 @@
                 }, onSuccess, onError);
             } else {
                 ChristmasPackage.getList( {
-                    event_id : 1,
+                    year : year,
                     page: pagingParams.page - 1,
                     size: paginationConstants.itemsPerPage,
                     sort: sort()
@@ -64,7 +65,6 @@
                 vm.totalItems = data.length;
                 vm.queryCount = vm.totalItems;
                 vm.christmasPackages = data;
-                console.log(data);
                 vm.page = pagingParams.page;
             }
             function onError(error) {
@@ -79,6 +79,7 @@
 
         function transition () {
             $state.transitionTo($state.$current, {
+                year: vm.year,
                 page: vm.page,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 search: vm.currentSearch

@@ -77,9 +77,9 @@ public class ChristmasPackageService {
      *  @return the list of entities
      */
     @Transactional(readOnly = true)
-    public Page<ChristmasPackage> getList(Short eventId, Pageable pageable){
+    public Page<ChristmasPackage> getList(Short eventYear, Pageable pageable){
         log.debug("Request to get all ChristmasPackages");
-        return christmasPackageRepository.getList(eventId, pageable);
+        return christmasPackageRepository.getList(eventYear, pageable);
     }
 
     /**

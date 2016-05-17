@@ -115,22 +115,22 @@ public class ChristmasPackageResource {
     /**
      * GET  /events/:eventId/christmas-packages-list : get the "id" christmasPackageList.
      *
-     * @param eventId the id of event
+     * @param year year of the event
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and with body the christmasPackage, or with status 404 (Not Found)
      * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
-    @RequestMapping(value = "/events/{eventId}/christmas-packages-list",
+    @RequestMapping(value = "/events/{year}/christmas-packages-list",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ChristmasPackageDTO>> getChristmasPackageList(@PathVariable Short eventId, Pageable pageable)
+    public ResponseEntity<List<ChristmasPackageDTO>> getChristmasPackageList(@PathVariable Short year, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get ChristmasPackageList : {}");
 
-        Page<ChristmasPackage> page = christmasPackageService.getList(eventId, pageable);
+        Page<ChristmasPackage> page = christmasPackageService.getList(year, pageable);
 
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events/" + eventId + "/christmas-packages-list");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events/" + year + "/christmas-packages-list");
         return new ResponseEntity<>(mapper.toChristmasPackageDTOs(page.getContent()), headers, HttpStatus.OK);
     }
 

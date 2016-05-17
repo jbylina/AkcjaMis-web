@@ -7,7 +7,7 @@
     ChristmasPackage.$inject = ['$resource'];
 
     function ChristmasPackage ($resource) {
-        var resourceUrl =  '/api/events/:event_id/christmas-packages/:id';
+        var resourceUrl =  '/api/events/:year/christmas-packages/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
@@ -20,7 +20,7 @@
             },
             'getList': {
                 method: 'GET',
-                url: '/api/events/:event_id/christmas-packages-list',
+                url: '/api/events/:year/christmas-packages-list',
                 isArray: true,
                 transformResponse: function (data) {
                     data = angular.fromJson(data);

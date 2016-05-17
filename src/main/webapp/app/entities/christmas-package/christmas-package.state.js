@@ -11,7 +11,7 @@
         $stateProvider
         .state('christmas-package', {
             parent: 'entity',
-            url: '/christmas-package?page&sort&search',
+            url: '/event/:year/christmas-package?page&sort&search',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'ChristmasPackages'
@@ -62,7 +62,7 @@
             },
             resolve: {
                 entity: ['$stateParams', 'ChristmasPackage', function($stateParams, ChristmasPackage) {
-                    return ChristmasPackage.get({event_id : 1,id : $stateParams.id});
+                    return ChristmasPackage.get({year : 2016, id : $stateParams.id});
                 }]
             }
         })
@@ -135,7 +135,7 @@
                     size: 'md',
                     resolve: {
                         entity: ['ChristmasPackage', function(ChristmasPackage) {
-                            return ChristmasPackage.get({event_id : 1, id : $stateParams.id});
+                            return ChristmasPackage.get({year : 2016, id : $stateParams.id});
                         }]
                     }
                 }).result.then(function() {

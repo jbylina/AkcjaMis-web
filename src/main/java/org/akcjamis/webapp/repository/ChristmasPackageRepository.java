@@ -24,8 +24,8 @@ public interface ChristmasPackageRepository extends JpaRepository<ChristmasPacka
         "left join fetch christmasPackage.subpackages subpackages " +
         "left join fetch subpackages.subpackageNotes subpackageNotes " +
         "left join fetch christmasPackage.christmasPackageNotes christmasPackageNotes " +
-        "where christmasPackage.event.id =:id",
+        "where christmasPackage.event.year =:eventYear",
         countQuery = "select count(christmasPackage) from ChristmasPackage christmasPackage " +
-            "where christmasPackage.event.id =:id")
-    Page<ChristmasPackage> getList(@Param("id") Short id, Pageable page);
+            "where christmasPackage.event.year =:eventYear")
+    Page<ChristmasPackage> getList(@Param("eventYear") Short eventYear, Pageable page);
 }
