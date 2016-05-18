@@ -65,7 +65,26 @@
                     return Family.get({id : $stateParams.id});
                 }]
             }
-        })
+        }) .state('family-edit', {
+                parent: 'entity',
+                url: '/family/{id}/edit',
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: 'Family'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/entities/family/family-edit.html',
+                        controller: 'FamilyEditController',
+                        controllerAs: 'vm'
+                    }
+                },
+                resolve: {
+                    entity: ['$stateParams', 'Family', function($stateParams, Family) {
+                        return Family.get({id : $stateParams.id});
+                    }]
+                }
+            })
             .state('family.create',{
                 parent:'entity',
                 url: '/family/create',
@@ -128,31 +147,6 @@
                     $state.go('family', null, { reload: true });
                 }, function() {
                     $state.go('family');
-                });
-            }]
-        })
-        .state('family.edit', {
-            parent: 'family',
-            url: '/{id}/edit',
-            data: {
-                authorities: ['ROLE_USER']
-            },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                $uibModal.open({
-                    templateUrl: 'app/entities/family/family-dialog.html',
-                    controller: 'FamilyDialogController',
-                    controllerAs: 'vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        entity: ['Family', function(Family) {
-                            return Family.get({id : $stateParams.id});
-                        }]
-                    }
-                }).result.then(function() {
-                    $state.go('family', null, { reload: true });
-                }, function() {
-                    $state.go('^');
                 });
             }]
         })
