@@ -18,7 +18,10 @@
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': { method:'PUT',
+                transformRequest: function (data) {
+                    return angular.toJson(data);
+                }}
         });
     }
 })();

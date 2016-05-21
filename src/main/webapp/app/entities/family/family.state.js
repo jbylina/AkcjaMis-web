@@ -65,7 +65,72 @@
                     return Family.get({id : $stateParams.id});
                 }]
             }
-        }) .state('family-edit', {
+        })
+            .state('address-edit', {
+                parent: 'family-detail',
+                url: '/edit-address',
+                data: {
+                    authorities: ['ROLE_USER']
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/family/edit-address.html',
+                        controller: 'EditAddressController',
+                        controllerAs: 'vm',
+                        backdrop: 'static',
+                        size: 'lg',
+                        resolve: {
+                            entity: function () {
+                                return {
+                                    street: null,
+                                    houseNo: null,
+                                    flatNo: null,
+                                    postalcode: null,
+                                    city: null
+                                };
+                            }
+                        }
+                    }).result.then(function() {
+                        $state.go('family-detail', null, { reload: true });
+                    }, function() {
+                        $state.go('family-detail');
+                    });
+                }]
+
+        })
+            .state('contact-edit', {
+                parent: 'family-detail',
+                url: '/edit-contact',
+                data: {
+                    authorities: ['ROLE_USER']
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/family/edit-contact.html',
+                        controller: 'EditAddressController',
+                        controllerAs: 'vm',
+                        backdrop: 'static',
+                        size: 'lg',
+                        resolve: {
+                            entity: function () {
+                                return {
+                                    street: null,
+                                    houseNo: null,
+                                    flatNo: null,
+                                    postalcode: null,
+                                    city: null
+                                };
+                            }
+                        }
+                    }).result.then(function() {
+                        $state.go('family-detail', null, { reload: true });
+                    }, function() {
+                        $state.go('family-detail');
+                    });
+                }]
+
+            })
+            .state('family-edit', {
                 parent: 'entity',
                 url: '/family/{id}/edit',
                 data: {
