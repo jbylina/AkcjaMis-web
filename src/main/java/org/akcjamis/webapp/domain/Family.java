@@ -68,7 +68,6 @@ public class Family extends AbstractAuditingEntity implements Serializable {
     private Set<Child> childs = new HashSet<>();
 
     @OneToMany(mappedBy = "family")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<FamilyNote> familyNotes = new HashSet<>();
 

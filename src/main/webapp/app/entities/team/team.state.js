@@ -28,7 +28,7 @@
         })
         .state('team-detail', {
             parent: 'entity',
-            url: '/team/{id}',
+            url: '/event/{year}/team/{id}',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'Team'
@@ -42,7 +42,7 @@
             },
             resolve: {
                 entity: ['$stateParams', 'Team', function($stateParams, Team) {
-                    return Team.get({id : $stateParams.id});
+                    return Team.get({year : 2016, id : 2});
                 }]
             }
         })

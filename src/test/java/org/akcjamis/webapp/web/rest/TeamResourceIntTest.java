@@ -1,7 +1,9 @@
 package org.akcjamis.webapp.web.rest;
 
 import org.akcjamis.webapp.AkcjamisApp;
+import org.akcjamis.webapp.domain.Event;
 import org.akcjamis.webapp.domain.Team;
+import org.akcjamis.webapp.repository.EventRepository;
 import org.akcjamis.webapp.repository.TeamRepository;
 import org.akcjamis.webapp.repository.search.TeamSearchRepository;
 
@@ -48,11 +50,16 @@ public class TeamResourceIntTest {
     private static final String DEFAULT_NOTE = "AAAAA";
     private static final String UPDATED_NOTE = "BBBBB";
 
+    private static final Short DEFAULT_YEAR = 2016;
+
     @Inject
     private TeamRepository teamRepository;
 
     @Inject
     private TeamSearchRepository teamSearchRepository;
+
+    @Inject
+    private EventRepository eventRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -63,6 +70,8 @@ public class TeamResourceIntTest {
     private MockMvc restTeamMockMvc;
 
     private Team team;
+
+    private Event event;
 
     @PostConstruct
     public void setup() {
@@ -77,10 +86,16 @@ public class TeamResourceIntTest {
 
     @Before
     public void initTest() {
+        eventRepository.deleteAll();
+        event = new Event();
+        event.setYear(DEFAULT_YEAR);
+        event = eventRepository.save(event);
+
         teamSearchRepository.deleteAll();
         team = new Team();
         team.setTeamNumber(DEFAULT_TEAM_NUMBER);
         team.setNote(DEFAULT_NOTE);
+        team.setEvent(event);
     }
 
     @Test
@@ -148,6 +163,21 @@ public class TeamResourceIntTest {
 
         // Get the team
         restTeamMockMvc.perform(get("/api/teams/{id}", team.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id").value(team.getId().intValue()))
+            .andExpect(jsonPath("$.teamNumber").value(DEFAULT_TEAM_NUMBER))
+            .andExpect(jsonPath("$.note").value(DEFAULT_NOTE.toString()));
+    }
+
+    @Test
+    @Transactional
+    public void getTeamDetail() throws Exception {
+        // Initialize the database
+        teamRepository.saveAndFlush(team);
+
+        // Get the team
+        restTeamMockMvc.perform(get("/api/events/{year}/teams/{id}", event.getYear(), team.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(team.getId().intValue()))

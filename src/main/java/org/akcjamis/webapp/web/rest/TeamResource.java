@@ -32,13 +32,13 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class TeamResource {
 
     private final Logger log = LoggerFactory.getLogger(TeamResource.class);
-        
+
     @Inject
     private TeamRepository teamRepository;
-    
+
     @Inject
     private TeamSearchRepository teamSearchRepository;
-    
+
     /**
      * POST  /teams : Create a new team.
      *
@@ -115,6 +115,27 @@ public class TeamResource {
     public ResponseEntity<Team> getTeam(@PathVariable Long id) {
         log.debug("REST request to get Team : {}", id);
         Team team = teamRepository.findOneWithEagerRelationships(id);
+        return Optional.ofNullable(team)
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
+     * GET  events/:year/teams/:id : get the "id" team.
+     *
+     * @param year the year of the event
+     * @param id the id of the team to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the team, or with status 404 (Not Found)
+     */
+    @RequestMapping(value = "/events/{year}/teams/{id}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Team> getTeamDetail(@PathVariable Short year, @PathVariable Long id) {
+        log.debug("REST request to get Team {} by Event year : {}", id, year);
+        Team team = teamRepository.findOneByEvent_Year(year, id);
         return Optional.ofNullable(team)
             .map(result -> new ResponseEntity<>(
                 result,

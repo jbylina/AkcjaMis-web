@@ -36,6 +36,7 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     private Boolean delivered = Boolean.FALSE;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "event_year")
     private Event event;
 

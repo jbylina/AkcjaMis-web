@@ -276,12 +276,12 @@ table.dataTable thead .sorting:after {
     height: 70px;
     padding: 10px 16px;
     border-radius: 35px;
-    font-size: 24px;
+    fona-size: 24px;
     line-height: 1.33;
 }
 
 .show-grid [class^=col-] {
-    padding-top: 10px;
+    padding-top: 10px
     padding-bottom: 10px;
     border: 1px solid #ddd;
     background-color: #eee!important;

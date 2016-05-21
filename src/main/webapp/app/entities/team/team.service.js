@@ -7,7 +7,7 @@
     Team.$inject = ['$resource'];
 
     function Team ($resource) {
-        var resourceUrl =  'api/teams/:id';
+        var resourceUrl =  'api/events/:year/teams/:id';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
@@ -15,6 +15,7 @@
                 method: 'GET',
                 transformResponse: function (data) {
                     data = angular.fromJson(data);
+                    console.log(data);
                     return data;
                 }
             },
