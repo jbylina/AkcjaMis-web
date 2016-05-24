@@ -30,10 +30,6 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="package_number" type="integer">
-                <constraints nullable="false"/>
-            </column>
-
             <column name="event_year" type="smallint">
                 <constraints nullable="false"/>
             </column>

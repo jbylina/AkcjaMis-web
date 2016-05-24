@@ -35,11 +35,6 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     @Column(name = "delivered", nullable = false)
     private Boolean delivered = Boolean.FALSE;
 
-    @NotNull
-    @Min(value = 1)
-    @Column(name = "package_number", nullable = false)
-    private Integer packageNumber;
-
     @ManyToOne
     @JoinColumn(name = "event_year")
     private Event event;
@@ -87,14 +82,6 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
 
     public void setDelivered(Boolean delivered) {
         this.delivered = delivered;
-    }
-
-    public Integer getPackageNumber() {
-        return packageNumber;
-    }
-
-    public void setPackageNumber(Integer packageNumber) {
-        this.packageNumber = packageNumber;
     }
 
     public Event getEvent() {
@@ -171,7 +158,6 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
             "id=" + id +
             ", mark='" + mark + "'" +
             ", delivered='" + delivered + "'" +
-            ", packageNumber='" + packageNumber + "'" +
             '}';
     }
 }

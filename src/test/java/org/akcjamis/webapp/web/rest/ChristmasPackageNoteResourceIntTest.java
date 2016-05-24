@@ -51,7 +51,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ChristmasPackageNoteResourceIntTest {
 
     private static final Integer DEFAULT_NUMBER = 1;
-    private static final Integer UPDATED_NUMBER = 2;
     private static final String DEFAULT_CONTENT = "AAAAAAAA";
     private static final String DEFAULT_CONTENT_SECOND = "AAAAANNMM";
     private static final String UPDATED_CONTENT = "BBBBBBBB";
@@ -137,7 +136,6 @@ public class ChristmasPackageNoteResourceIntTest {
 
         christmasPackageRepository.deleteAll();
         christmasPackage = new ChristmasPackage();
-        christmasPackage.setPackageNumber(DEFAULT_NUMBER);
         christmasPackage.setDelivered(false);
         christmasPackage.setMark(DEFAULT_NUMBER);
         christmasPackage.setCreatedDate(ZonedDateTime.now());
@@ -147,7 +145,6 @@ public class ChristmasPackageNoteResourceIntTest {
         christmasPackage = christmasPackageRepository.save(christmasPackage);
 
         christmasPackageSecond = new ChristmasPackage();
-        christmasPackageSecond.setPackageNumber(DEFAULT_NUMBER);
         christmasPackageSecond.setDelivered(false);
         christmasPackageSecond.setMark(DEFAULT_NUMBER);
         christmasPackageSecond.setCreatedDate(ZonedDateTime.now());
@@ -207,7 +204,7 @@ public class ChristmasPackageNoteResourceIntTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageNote.getId().intValue())))
-                .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
+                .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
     }
 
     @Test
@@ -224,14 +221,14 @@ public class ChristmasPackageNoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(christmasPackageNote.getId().intValue()))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()));
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT));
 
         // Get the second christmasPackageNote
         restChristmasPackageNoteMockMvc.perform(get("/api/christmas-packages/{packageId}/notes/{id}", christmasPackageSecond.getId(), christmasPackageNoteSecond.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(christmasPackageNoteSecond.getId().intValue()))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT_SECOND.toString()));
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT_SECOND));
     }
 
     @Test
@@ -308,6 +305,6 @@ public class ChristmasPackageNoteResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageNote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
     }
 }

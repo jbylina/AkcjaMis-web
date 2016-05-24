@@ -32,24 +32,20 @@ public class Child extends AbstractAuditingEntity implements Serializable {
     @Column(name = "number", nullable = false)
     private Integer number;
 
-    @NotNull
     @Size(max = 255)
     @Column(name = "first_name", length = 255, nullable = false)
     private String firstName;
 
-    @NotNull
     @Size(max = 255)
     @Column(name = "last_name", length = 255, nullable = false)
     private String lastName;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "sex", nullable = false)
     private Sex sex;
 
-    @NotNull
     @Column(name = "birth_year", nullable = false)
-    private LocalDate birthYear;
+    private Short birthYear;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
@@ -95,11 +91,11 @@ public class Child extends AbstractAuditingEntity implements Serializable {
         this.sex = sex;
     }
 
-    public LocalDate getBirthYear() {
+    public Short getBirthYear() {
         return birthYear;
     }
 
-    public void setBirthYear(LocalDate birthYear) {
+    public void setBirthYear(Short birthYear) {
         this.birthYear = birthYear;
     }
 

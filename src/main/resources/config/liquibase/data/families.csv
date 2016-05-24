@@ -1,0 +1,31 @@
+id;street;house_no;flat_no;postalcode;district;city;region;source;created_by
+1;Ostródzka;175;1;03-289;NULL;Warszawa;NULL;lorem ipsum;system
+3;Kajakowa;10;6;02-838;NULL;Warszawa;NULL;lorem ipsum;system
+4;Szczęśliwicka;56;3A;02-353;NULL;Warszawa;NULL;lorem ipsum;system
+5;Kobiałka;49;9;03-044;NULL;Warszawa;NULL;lorem ipsum;system
+6;Władysława Umińskiego;11;6;03-984;NULL;Warszawa;NULL;lorem ipsum;system
+7;Karmelicka;26;4;00-181;NULL;Warszawa;NULL;lorem ipsum;system
+8;Astronautów;11;2;02-154;NULL;Warszawa;NULL;lorem ipsum;system
+9;Dzierzby;26/28;6;02-836;NULL;Warszawa;NULL;lorem ipsum;system
+10;Olgierda;35/41;53;03-536;NULL;Warszawa;NULL;lorem ipsum;system
+11;Zuga;16;312;01-806;NULL;Warszawa;NULL;lorem ipsum;system
+12;Wiertnicza;140;41;02-952;NULL;Warszawa;NULL;lorem ipsum;system
+13;Grochowska;284;543;03-841;NULL;Warszawa;NULL;lorem ipsum;system
+14;Boremlowska;6/12;64;04-309;NULL;Warszawa;NULL;lorem ipsum;system
+15;Niepołomicka;26;85;04-256;NULL;Warszawa;NULL;lorem ipsum;system
+16;Twarda;8/12;78;00-105;NULL;Warszawa;NULL;lorem ipsum;system
+17;Aleja Wojska Polskiego;1A;55;01-524;NULL;Warszawa;NULL;lorem ipsum;system
+18;Jana Olbrachta;48/56;34;01-111;NULL;Warszawa;NULL;lorem ipsum;system
+19;Bogusławskiego;6a;266;01-923;NULL;Warszawa;NULL;lorem ipsum;system
+20;Stokłosy;3;77;02-787;NULL;Warszawa;NULL;lorem ipsum;system
+21;Iwicka;47b;464;00-735;NULL;Warszawa;NULL;lorem ipsum;system
+22;Mińska;1/5;41;03-806;NULL;Warszawa;NULL;lorem ipsum;system
+23;Drzymały;1;652;02-495;NULL;Warszawa;NULL;lorem ipsum;system
+24;Ks. J. Popiełuszki;5;521;01-756;NULL;Warszawa;NULL;lorem ipsum;system
+25;Obrzeźna;12a;45;02-691;NULL;Warszawa;NULL;lorem ipsum;system
+26;Szegedyńska;11;6;01-957;NULL;Warszawa;NULL;lorem ipsum;system
+27;Polna;7;1;00-625;NULL;Warszawa;NULL;lorem ipsum;system
+28;Nowowiejska;5;52;00-643;NULL;Warszawa;NULL;lorem ipsum;system
+29;Tarnowiecka;4;621;04-174;NULL;Warszawa;NULL;lorem ipsum;system
+30;Przy Bażantarni;3;91;02-793;NULL;Warszawa;NULL;lorem ipsum;system
+31;Bachmacka;3;10;02-647;NULL;Warszawa;NULL;lorem ipsum;system

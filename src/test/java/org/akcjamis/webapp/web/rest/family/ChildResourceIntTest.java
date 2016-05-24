@@ -63,8 +63,8 @@ public class ChildResourceIntTest {
     private static final Sex DEFAULT_SEX = Sex.MALE;
     private static final Sex UPDATED_SEX = Sex.FEMALE;
 
-    private static final LocalDate DEFAULT_BIRTH_YEAR = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_BIRTH_YEAR = LocalDate.now(ZoneId.systemDefault());
+    private static final Short DEFAULT_BIRTH_YEAR = 1998;
+    private static final Short UPDATED_BIRTH_YEAR = 1999;
 
     private static final String DEFAULT_STREET = "AAAAA";
     private static final String DEFAULT_HOUSE_NO = "AAAAAAAAAA";

@@ -21,5 +21,8 @@
     <include file="classpath:config/liquibase/changelog/20160417192228_added_entity_ChristmasPackageNote.xml" relativeToChangelogFile="false"/>
 
     <include file="classpath:config/liquibase/changelog/20160417220630_added_entity_EntityAuditEvent.xml" relativeToChangelogFile="false"/>
+
+    <include file="classpath:config/liquibase/changelog/20160524154015_load_data.xml" relativeToChangelogFile="false"/>
+
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 </databaseChangeLog>

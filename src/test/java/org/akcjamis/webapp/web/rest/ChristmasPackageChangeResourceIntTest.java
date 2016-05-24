@@ -57,8 +57,6 @@ public class ChristmasPackageChangeResourceIntTest {
 
     private static final Boolean DEFAULT_DELIVERED = false;
 
-    private static final Integer DEFAULT_PACKAGE_NUMBER = 1;
-
     private static final Short DEFAULT_YEAR = 2016;
 
     private static final String DEFAULT_STREET = "AAAAA";
@@ -143,7 +141,6 @@ public class ChristmasPackageChangeResourceIntTest {
         christmasPackage = new ChristmasPackage();
         christmasPackage.setMark(DEFAULT_MARK);
         christmasPackage.setDelivered(DEFAULT_DELIVERED);
-        christmasPackage.setPackageNumber(DEFAULT_PACKAGE_NUMBER);
         christmasPackage.setEvent(event);
         christmasPackage.setFamily(family);
         christmasPackage = christmasPackageRepository.save(christmasPackage);

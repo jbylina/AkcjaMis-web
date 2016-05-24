@@ -20,10 +20,6 @@ public class ChristmasPackageDTO extends AbstractAuditingDTO {
 
     private Boolean delivered;
 
-    @NotNull
-    @Min(value = 1)
-    private Integer packageNumber;
-
     private Short eventYear;
 
     private Set<ChristmasPackageNote> christmasPackageNotes;
@@ -60,14 +56,6 @@ public class ChristmasPackageDTO extends AbstractAuditingDTO {
 
     public void setDelivered(Boolean delivered) {
         this.delivered = delivered;
-    }
-
-    public Integer getPackageNumber() {
-        return packageNumber;
-    }
-
-    public void setPackageNumber(Integer packageNumber) {
-        this.packageNumber = packageNumber;
     }
 
     public Short getEventYear() {

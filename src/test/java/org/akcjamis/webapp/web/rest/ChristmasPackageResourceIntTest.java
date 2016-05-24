@@ -53,9 +53,6 @@ public class ChristmasPackageResourceIntTest {
     private static final Boolean DEFAULT_DELIVERED = false;
     private static final Boolean UPDATED_DELIVERED = true;
 
-    private static final Integer DEFAULT_PACKAGE_NUMBER = 1;
-    private static final Integer UPDATED_PACKAGE_NUMBER = 2;
-
     private static final Short DEFAULT_YEAR = 2016;
 
     private static final String DEFAULT_STREET = "AAAAA";
@@ -128,11 +125,9 @@ public class ChristmasPackageResourceIntTest {
         christmasPackage = new ChristmasPackage();
         christmasPackage.setMark(DEFAULT_MARK);
         christmasPackage.setDelivered(DEFAULT_DELIVERED);
-        christmasPackage.setPackageNumber(DEFAULT_PACKAGE_NUMBER);
 
         christmasPackageDTO = new ChristmasPackageDTO();
         christmasPackageDTO.setMark(DEFAULT_MARK);
-        christmasPackageDTO.setPackageNumber(DEFAULT_PACKAGE_NUMBER);
         christmasPackageDTO.setFamilyId(family.getId());
     }
 
@@ -153,7 +148,6 @@ public class ChristmasPackageResourceIntTest {
         ChristmasPackage testChristmasPackage = christmasPackages.get(christmasPackages.size() - 1);
         assertThat(testChristmasPackage.getMark()).isEqualTo(DEFAULT_MARK);
         assertThat(testChristmasPackage.isDelivered()).isEqualTo(DEFAULT_DELIVERED);
-        assertThat(testChristmasPackage.getPackageNumber()).isEqualTo(DEFAULT_PACKAGE_NUMBER);
         assertThat(testChristmasPackage.getEvent().getYear()).isEqualTo(DEFAULT_YEAR);
     }
 
@@ -178,23 +172,6 @@ public class ChristmasPackageResourceIntTest {
 
     @Test
     @Transactional
-    public void checkPackageNumberIsRequired() throws Exception {
-        int databaseSizeBeforeTest = christmasPackageRepository.findAll().size();
-        // set the field null
-        christmasPackageDTO.setPackageNumber(null);
-
-        // Create the ChristmasPackage, which fails.
-        restChristmasPackageMockMvc.perform(post("/api/events/{year}/christmas-packages", DEFAULT_YEAR)
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(christmasPackageDTO)))
-                .andExpect(status().isBadRequest());
-
-        List<ChristmasPackage> christmasPackages = christmasPackageRepository.findAll();
-        assertThat(christmasPackages).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllChristmasPackages() throws Exception {
         christmasPackage.setFamily(family);
         christmasPackage.setEvent(event);
@@ -206,8 +183,7 @@ public class ChristmasPackageResourceIntTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackage.getId().intValue())))
                 .andExpect(jsonPath("$.[*].mark").value(hasItem(DEFAULT_MARK)))
-                .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED)))
-                .andExpect(jsonPath("$.[*].packageNumber").value(hasItem(DEFAULT_PACKAGE_NUMBER)));
+                .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED)));
     }
 
     @Test
@@ -223,8 +199,7 @@ public class ChristmasPackageResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id").value(christmasPackage.getId().intValue()))
             .andExpect(jsonPath("$.mark").value(DEFAULT_MARK))
-            .andExpect(jsonPath("$.delivered").value(DEFAULT_DELIVERED))
-            .andExpect(jsonPath("$.packageNumber").value(DEFAULT_PACKAGE_NUMBER));
+            .andExpect(jsonPath("$.delivered").value(DEFAULT_DELIVERED));
     }
 
     @Test
@@ -249,7 +224,6 @@ public class ChristmasPackageResourceIntTest {
         updatedChristmasPackageDTO.setId(christmasPackage.getId());
         updatedChristmasPackageDTO.setMark(UPDATED_MARK);
         updatedChristmasPackageDTO.setDelivered(UPDATED_DELIVERED);
-        updatedChristmasPackageDTO.setPackageNumber(UPDATED_PACKAGE_NUMBER);
         updatedChristmasPackageDTO.setFamilyId(family.getId());
 
         restChristmasPackageMockMvc.perform(put("/api/events/{year}/christmas-packages", DEFAULT_YEAR)
@@ -263,7 +237,6 @@ public class ChristmasPackageResourceIntTest {
         ChristmasPackage testChristmasPackage = christmasPackages.get(christmasPackages.size() - 1);
         assertThat(testChristmasPackage.getMark()).isEqualTo(UPDATED_MARK);
         assertThat(testChristmasPackage.isDelivered()).isEqualTo(Boolean.FALSE);
-        assertThat(testChristmasPackage.getPackageNumber()).isEqualTo(UPDATED_PACKAGE_NUMBER);
 
     }
 

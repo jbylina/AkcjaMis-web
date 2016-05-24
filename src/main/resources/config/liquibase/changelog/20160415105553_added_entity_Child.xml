@@ -27,19 +27,19 @@
             </column>
 
             <column name="first_name" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
 
             <column name="last_name" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
 
             <column name="sex" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
 
-            <column name="birth_year" type="date">
-                <constraints nullable="false"/>
+            <column name="birth_year" type="smallint">
+                <constraints nullable="true"/>
             </column>
 
             <column name="family_id" type="bigint">
