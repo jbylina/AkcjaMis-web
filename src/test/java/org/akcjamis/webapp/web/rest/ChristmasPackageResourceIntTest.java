@@ -272,7 +272,6 @@ public class ChristmasPackageResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackage.getId().intValue())))
             .andExpect(jsonPath("$.[*].mark").value(hasItem(DEFAULT_MARK)))
-            .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED)))
-            .andExpect(jsonPath("$.[*].packageNumber").value(hasItem(DEFAULT_PACKAGE_NUMBER)));
+            .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED)));
     }
 }

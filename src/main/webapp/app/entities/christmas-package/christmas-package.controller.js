@@ -33,7 +33,7 @@
         vm.searchQuery = pagingParams.search;
         vm.currentSearch = pagingParams.search;
         vm.loadAll(vm.year);
-        vm.date = new Date();
+        vm.date = new Date().getFullYear();
         vm.allExpanded = dataService.getProperty();
 
         function loadAll (year) {
@@ -62,7 +62,6 @@
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
-                vm.totalItems = data.length;
                 vm.queryCount = vm.totalItems;
                 vm.christmasPackages = data;
                 vm.page = pagingParams.page;
