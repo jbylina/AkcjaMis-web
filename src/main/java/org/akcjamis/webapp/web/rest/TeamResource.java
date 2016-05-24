@@ -123,19 +123,19 @@ public class TeamResource {
     }
 
     /**
-     * GET  events/:year/teams/:id : get the "id" team.
+     * GET  events/:year/teams/:teamNumber : get the "teamNumber" team.
      *
      * @param year the year of the event
-     * @param id the id of the team to retrieve
+     * @param teamNumber the id of the team to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the team, or with status 404 (Not Found)
      */
-    @RequestMapping(value = "/events/{year}/teams/{id}",
+    @RequestMapping(value = "/events/{year}/teams/{teamNumber}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Team> getTeamDetail(@PathVariable Short year, @PathVariable Long id) {
-        log.debug("REST request to get Team {} by Event year : {}", id, year);
-        Team team = teamRepository.findOneByEvent_Year(year, id);
+    public ResponseEntity<Team> getTeamDetail(@PathVariable Short year, @PathVariable Integer teamNumber) {
+        log.debug("REST request to get Team {} by Event year : {}", teamNumber, year);
+        Team team = teamRepository.findOneByEvent_Year(year, teamNumber);
         return Optional.ofNullable(team)
             .map(result -> new ResponseEntity<>(
                 result,

@@ -69,7 +69,7 @@
                     <table>
                         <tbody>
                         <tr ng-repeat="subpackage in package.subpackages">
-                            <td>{{package.id}}.{{subpackage.id}}</td>
+                            <td>{{package.id}}.{{subpackage.subpackageNumber}}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -96,7 +96,7 @@
                     <table>
                         <tbody>
                         <tr ng-repeat="subpackage in package.subpackages">
-                            <td>{{(vm.date | date:'yyyy') - subpackage.child.birth_year}}</td>
+                            <td>{{ vm.date - subpackage.child.birthYear}}</td>
                         </tr>
                         </tbody>
                     </table>

@@ -10,6 +10,7 @@
     function TeamDetailController($scope, $rootScope, $stateParams, entity, Team, User, Event, ChristmasPackage) {
         var vm = this;
         vm.team = entity;
+        vm.date = new Date().getFullYear();
         vm.load = function (id) {
             Team.get({id: id}, function(result) {
                 vm.team = result;

@@ -26,7 +26,7 @@ public interface TeamRepository extends JpaRepository<Team,Long> {
         "left join fetch family.familyNotes familyNotes " +
         "left join fetch christmasPackages.subpackages subpackages " +
         "left join fetch subpackages.child child " +
-        "where team.id =:id and event.year =:year")
-    Team findOneByEvent_Year(@Param("year") Short year, @Param("id") Long id);
+        "where team.teamNumber =:teamNumber and event.year =:year")
+    Team findOneByEvent_Year(@Param("year") Short year, @Param("teamNumber") Integer teamNumber);
 
 }

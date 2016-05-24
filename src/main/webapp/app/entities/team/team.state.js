@@ -42,7 +42,7 @@
             },
             resolve: {
                 entity: ['$stateParams', 'Team', function($stateParams, Team) {
-                    return Team.get({year : 2016, id : 2});
+                    return Team.get({year : $stateParams.year, id : $stateParams.id});
                 }]
             }
         })

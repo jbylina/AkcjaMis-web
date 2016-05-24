@@ -41,6 +41,7 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     private Event event;
 
     @ManyToOne
+    @JsonIgnore
     private Team team;
 
     @OneToMany(fetch=FetchType.LAZY, mappedBy = "christmasPackage")
