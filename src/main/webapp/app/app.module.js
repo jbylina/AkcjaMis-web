@@ -17,7 +17,8 @@
             // jhipster-needle-angularjs-add-module JHipster will add new module here
             'angular-loading-bar',
             'ngAnimate',
-            'xeditable'
+            'xeditable',
+            'uiGmapgoogle-maps'
         ])
         .run(run);
 
