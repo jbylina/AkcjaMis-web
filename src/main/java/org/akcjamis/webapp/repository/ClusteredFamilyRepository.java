@@ -40,7 +40,7 @@ public class ClusteredFamilyRepository
     {
         try
         {
-            return adapt((String) o);
+            return adapt(o);
         }
         catch(ParseException e)
         {
@@ -48,9 +48,9 @@ public class ClusteredFamilyRepository
         }
     }
 
-    private List<Geometry> adapt(String o) throws ParseException
+    private List<Geometry> adapt(Object o) throws ParseException
     {
-        String wellKnownText = o;
+        String wellKnownText = (String) o;
         Geometry geometry = wktReader.read(wellKnownText);
         GeometryCollection geometryCollection = (GeometryCollection) geometry;
 
