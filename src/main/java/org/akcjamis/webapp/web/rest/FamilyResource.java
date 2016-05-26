@@ -192,7 +192,7 @@ public class FamilyResource {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     //    @Valid @RequestBody double distance
-    public ResponseEntity<List<List<Geometry>>> clusterFamiliesWithin() throws URISyntaxException {
+    public ResponseEntity<List<List<Family>>> clusterFamiliesWithin() throws URISyntaxException {
         log.debug("REST request to clusterFamiliesWithin : {}", 0.01);
         return new ResponseEntity<>(familyService.clusterFamiliesWithin(0.01), HttpStatus.OK);
     }

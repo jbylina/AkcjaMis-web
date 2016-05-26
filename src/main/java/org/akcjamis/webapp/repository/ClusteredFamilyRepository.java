@@ -4,6 +4,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
+import org.akcjamis.webapp.domain.Family;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -19,28 +20,30 @@ public class ClusteredFamilyRepository
 
     private final WKTReader wktReader = new WKTReader();
     private final EntityManager entityManager;
+    private final FamilyRepository familyRepository;
 
     @Inject
-    ClusteredFamilyRepository(EntityManager entityManager)
+    ClusteredFamilyRepository(EntityManager entityManager, FamilyRepository familyRepository)
     {
         this.entityManager = entityManager;
+        this.familyRepository = familyRepository;
     }
 
-    public List<List<Geometry>> clusterFamiliesWithin(double distance)
+    public List<List<Family>> clusterFamiliesWithin(double distance)
     {
-        return (List<List<Geometry>>) entityManager
+        return (List<List<Family>>) entityManager
             .createNativeQuery(String.format(QUERY_PATTERN, distance))
             .getResultList()
             .stream()
-            .map(o -> tryAdapt(o))
+            .map(o -> tryRecognizeFamily(o))
             .collect(Collectors.<List<Geometry>>toList());
     }
 
-    private List<Geometry> tryAdapt(Object o)
+    private List<Family> tryRecognizeFamily(Object o)
     {
         try
         {
-            return adapt(o);
+            return recognizeFamily(o);
         }
         catch(ParseException e)
         {
@@ -48,20 +51,25 @@ public class ClusteredFamilyRepository
         }
     }
 
-    private List<Geometry> adapt(Object o) throws ParseException
+    private List<Family> recognizeFamily(Object o) throws ParseException
     {
         String wellKnownText = (String) o;
         Geometry geometry = wktReader.read(wellKnownText);
         GeometryCollection geometryCollection = (GeometryCollection) geometry;
 
         int numGeometries = geometryCollection.getNumGeometries();
-        List<Geometry> geometries = new ArrayList<>(numGeometries);
+        List<Family> families = new ArrayList<>(numGeometries);
 
         for(int i = 0; i < numGeometries; i++)
         {
-            geometries.add(geometryCollection.getGeometryN(i));
+            Geometry geometryN = geometryCollection.getGeometryN(i);
+            geometryN.setSRID(4326);
+
+            Family family = familyRepository.findByLocationGeom(geometryN);
+
+            families.add(family);
         }
 
-        return geometries;
+        return families;
     }
 }

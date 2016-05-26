@@ -1,6 +1,5 @@
 package org.akcjamis.webapp.service;
 
-import com.vividsolutions.jts.geom.Geometry;
 import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Contact;
@@ -195,7 +194,7 @@ public class FamilyService {
     }
 
     @Transactional(readOnly = true)
-    public List<List<Geometry>> clusterFamiliesWithin(double distance) {
+    public List<List<Family>> clusterFamiliesWithin(double distance) {
         log.debug("Request to get clusterFamiliesWithin : {}", distance);
         return clusteredFamilyRepository.clusterFamiliesWithin(distance);
     }
