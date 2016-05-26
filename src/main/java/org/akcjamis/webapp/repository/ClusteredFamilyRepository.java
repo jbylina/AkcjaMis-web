@@ -63,7 +63,7 @@ public class ClusteredFamilyRepository
         for(int i = 0; i < numGeometries; i++)
         {
             Geometry geometryN = geometryCollection.getGeometryN(i);
-            geometryN.setSRID(4326);
+            geometryN.setSRID(Family.SRID);
 
             Family family = familyRepository.findByLocationGeom(geometryN);
 
