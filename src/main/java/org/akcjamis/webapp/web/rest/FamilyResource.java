@@ -1,6 +1,7 @@
 package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.vividsolutions.jts.geom.Geometry;
 import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.service.FamilyService;
@@ -24,10 +25,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Family.
@@ -187,4 +184,16 @@ public class FamilyResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    @Timed
+    @RequestMapping
+    (
+        value = "/clustered",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    //    @Valid @RequestBody double distance
+    public ResponseEntity<List<List<Geometry>>> clusterFamiliesWithin() throws URISyntaxException {
+        log.debug("REST request to clusterFamiliesWithin : {}", 0.01);
+        return new ResponseEntity<>(familyService.clusterFamiliesWithin(0.01), HttpStatus.OK);
+    }
 }

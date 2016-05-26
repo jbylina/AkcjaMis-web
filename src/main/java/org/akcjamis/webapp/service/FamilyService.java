@@ -1,10 +1,12 @@
 package org.akcjamis.webapp.service;
 
+import com.vividsolutions.jts.geom.Geometry;
 import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ChildRepository;
+import org.akcjamis.webapp.repository.ClusteredFamilyRepository;
 import org.akcjamis.webapp.repository.ChristmasPackageRepository;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
@@ -15,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -44,6 +46,8 @@ public class FamilyService {
 
     private ChildSearchRepository childSearchRepository;
 
+    private final ClusteredFamilyRepository clusteredFamilyRepository;
+
     private ChristmasPackageRepository christmasPackageRepository;
 
     @Inject
@@ -53,7 +57,8 @@ public class FamilyService {
                          ContactSearchRepository contactSearchRepository,
                          ChildRepository childRepository,
                          ChildSearchRepository childSearchRepository,
-                         ChristmasPackageRepository christmasPackageRepository) {
+                         ChristmasPackageRepository christmasPackageRepository,
+                         ClusteredFamilyRepository clusteredFamilyRepository) {
         this.familyRepository = familyRepository;
         this.familySearchRepository = familySearchRepository;
         this.contactRepository = contactRepository;
@@ -61,6 +66,7 @@ public class FamilyService {
         this.childRepository = childRepository;
         this.childSearchRepository = childSearchRepository;
         this.christmasPackageRepository = christmasPackageRepository;
+        this.clusteredFamilyRepository = clusteredFamilyRepository;
     }
 
     /**
@@ -186,5 +192,11 @@ public class FamilyService {
     public Page<Family> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Families for query {}", query);
         return familySearchRepository.search(queryStringQuery(query), pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<List<Geometry>> clusterFamiliesWithin(double distance) {
+        log.debug("Request to get clusterFamiliesWithin : {}", distance);
+        return clusteredFamilyRepository.clusterFamiliesWithin(distance);
     }
 }
