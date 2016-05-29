@@ -21,6 +21,19 @@
             markers : []
         };
 
+        // https://sites.google.com/site/gmapsdevelopment/
+        vm.colors =
+        [
+            'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+            'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+            'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+            'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+            'http://maps.google.com/mapfiles/ms/icons/lightblue-dot.png',
+            'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
+            'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
+            'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
+        ];
+
         // Do stuff with your $scope.
         // Note: Some of the directives require at least something to be defined originally!
         // e.g. $scope.markers = []
@@ -47,7 +60,7 @@
                             longitude: data[i].locationGeom.coordinates[0],
                             latitude: data[i].locationGeom.coordinates[1],
                             title: 'test',
-                            icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                            icon: vm.colors[1]
                         });
                     }
                 }
