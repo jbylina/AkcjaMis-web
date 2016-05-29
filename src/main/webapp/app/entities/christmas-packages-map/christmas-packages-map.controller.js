@@ -20,7 +20,7 @@
             zoom: 11,
             markers : []
         };
-        
+
         // Do stuff with your $scope.
         // Note: Some of the directives require at least something to be defined originally!
         // e.g. $scope.markers = []
@@ -30,7 +30,6 @@
         uiGmapGoogleMapApi.then(function(maps) {
 
         });
-
 
         vm.loadAll = function() {
             Family.query({
@@ -47,7 +46,8 @@
                             id : data[i].id,
                             longitude: data[i].locationGeom.coordinates[0],
                             latitude: data[i].locationGeom.coordinates[1],
-                            title: 'test'
+                            title: 'test',
+                            icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
                         });
                     }
                 }
@@ -56,6 +56,16 @@
                 AlertService.error(error.data.message);
             }
         };
+
+        //(function(marker, i) {
+        //    // add click event
+        //    google.maps.event.addListener(marker, 'click', function() {
+        //        infowindow = new google.maps.InfoWindow({
+        //            content: 'Hello, World!!'
+        //        });
+        //        infowindow.open(map, marker);
+        //    });
+        //})(marker, i);
 
         vm.loadAll();
     }
