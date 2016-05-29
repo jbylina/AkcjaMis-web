@@ -194,7 +194,7 @@ public class FamilyService {
     }
 
     @Transactional(readOnly = true)
-    public List<List<Family>> clusterFamiliesWithin(double distance) {
+    public List<List<Family>> clusterFamiliesWithin(Long distance) {
         log.debug("Request to get clusterFamiliesWithin : {}", distance);
         return clusteredFamilyRepository.clusterFamiliesWithin(distance);
     }

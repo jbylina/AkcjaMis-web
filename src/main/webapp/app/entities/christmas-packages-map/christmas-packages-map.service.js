@@ -13,12 +13,12 @@
         {
             return $resource
             (
-                'api/clustered',
+                'api/clustered/1',
                 {},
                 {
                     'query':
                     {
-                        method: 'POST',
+                        method: 'GET',
                         isArray: true
                     }
                 }

@@ -11,10 +11,7 @@
         var vm = this;
         vm.packages = [];
         vm.page = 0;
-        //vm.result = ChristmasPackagesMap.query
-        //({
-        //    distance: 0.01
-        //});
+        vm.result = [];
 
         vm.map = {
             center: {
@@ -72,6 +69,15 @@
             function onError(error) {
                 AlertService.error(error.data.message);
             }
+
+            ChristmasPackagesMap.query
+            (
+                {},
+                function(data)
+                {
+                    vm.result = data;
+                }
+            );
         };
 
         //(function(marker, i) {

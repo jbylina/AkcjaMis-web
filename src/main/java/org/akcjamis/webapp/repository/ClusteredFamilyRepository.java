@@ -29,10 +29,10 @@ public class ClusteredFamilyRepository
         this.familyRepository = familyRepository;
     }
 
-    public List<List<Family>> clusterFamiliesWithin(double distance)
+    public List<List<Family>> clusterFamiliesWithin(Long distance)
     {
         return (List<List<Family>>) entityManager
-            .createNativeQuery(String.format(QUERY_PATTERN, distance))
+            .createNativeQuery(String.format(QUERY_PATTERN, distance * 0.001))
             .getResultList()
             .stream()
             .map(o -> tryRecognizeFamily(o))

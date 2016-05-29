@@ -187,11 +187,11 @@ public class FamilyResource {
     @Timed
     @RequestMapping
     (
-        value = "/clustered",
-        method = RequestMethod.POST,
+        value = "/clustered/{distance}",
+        method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<List<Family>>> clusterFamiliesWithin(@RequestBody Double distance) throws URISyntaxException {
+    public ResponseEntity<List<List<Family>>> clusterFamiliesWithin(@PathVariable Long distance) throws URISyntaxException {
         log.debug("REST request to clusterFamiliesWithin : {}", distance);
         return new ResponseEntity<>(familyService.clusterFamiliesWithin(distance), HttpStatus.OK);
     }
