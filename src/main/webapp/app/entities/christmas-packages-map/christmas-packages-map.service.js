@@ -13,13 +13,23 @@
         {
             return $resource
             (
-                'api/clustered/1',
+                'api/clustered/1000',
                 {},
                 {
                     'query':
                     {
                         method: 'GET',
-                        isArray: true
+                        isArray: true,
+                        transformResponse: function(response) {
+                            var newData = JSON.parse(response);
+
+                            newData.map(function(data) {
+                                data._length = data.length;
+                                return data;
+                            });
+
+                            return newData;
+                        }
                     }
                 }
             );

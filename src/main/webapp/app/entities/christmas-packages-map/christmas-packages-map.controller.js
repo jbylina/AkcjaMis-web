@@ -11,7 +11,6 @@
         var vm = this;
         vm.packages = [];
         vm.page = 0;
-        vm.result = [];
 
         vm.map = {
             center: {
@@ -54,17 +53,17 @@
             function onSuccess(data, headers) {
                 vm.packages = data;
 
-                for (var i = 0; i < data.length; i++) {
-                    if(data[i].locationGeom != null){
-                        vm.map.markers.push({
-                            id : data[i].id,
-                            longitude: data[i].locationGeom.coordinates[0],
-                            latitude: data[i].locationGeom.coordinates[1],
-                            title: 'test',
-                            icon: vm.colors[1]
-                        });
-                    }
-                }
+                //for (var i = 0; i < data.length; i++) {
+                //    if(data[i].locationGeom != null){
+                //        vm.map.markers.push({
+                //            id : data[i].id,
+                //            longitude: data[i].locationGeom.coordinates[0],
+                //            latitude: data[i].locationGeom.coordinates[1],
+                //            title: 'test',
+                //            icon: vm.colors[1]
+                //        });
+                //    }
+                //}
             }
             function onError(error) {
                 AlertService.error(error.data.message);
@@ -75,7 +74,17 @@
                 {},
                 function(data)
                 {
-                    vm.result = data;
+                    for(var i = 0; i < data.length; i++) for(var j = 0; j < data[i]._length; j++) if(data[i][j].locationGeom != null)
+                    {
+                        vm.map.markers.push
+                        ({
+                            id : data[i][j].id,
+                            longitude: data[i][j].locationGeom.coordinates[0],
+                            latitude: data[i][j].locationGeom.coordinates[1],
+                            title: 'test',
+                            icon: vm.colors[i]
+                        });
+                    }
                 }
             );
         };
