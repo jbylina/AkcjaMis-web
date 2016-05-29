@@ -1,16 +1,13 @@
 <style>
     .angular-google-map,
-    .angular-google-map-container {
-        width: 100%;
-        height: 700px;
+    .angular-google-map-container
+    {
+        width: 1000px;
+        height: 800px
     }
 </style>
 <div class="container-fluid">
-
-
     <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom' draggable="true" options="{scrollwheel: true }" bounds="map.bounds">
-        <ui-gmap-markers models="vm.map.markers" coords="'self'" icon="'icon'">
-        </ui-gmap-markers>
+        <ui-gmap-markers models="vm.map.markers" coords="'self'" icon="'icon'"></ui-gmap-markers>
     </ui-gmap-google-map>
-
 </div>
