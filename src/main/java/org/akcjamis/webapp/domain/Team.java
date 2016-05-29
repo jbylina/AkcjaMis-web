@@ -48,7 +48,6 @@ public class Team extends AbstractAuditingEntity implements Serializable {
     private Event event;
 
     @OneToMany(mappedBy = "team")
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ChristmasPackage> christmasPackages = new HashSet<>();
 
