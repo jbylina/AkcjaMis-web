@@ -5,12 +5,13 @@
         .module('akcjamisApp')
         .controller('ChristmasPackagesMapController', ChristmasPackagesMapController);
 
-    ChristmasPackagesMapController.$inject = ['$scope', '$state', 'Family', 'uiGmapGoogleMapApi', 'ParseLinks', 'AlertService'];
+    ChristmasPackagesMapController.$inject = ['$scope', '$state', 'Family', 'uiGmapGoogleMapApi', 'ParseLinks', 'AlertService', 'ChristmasPackagesMap'];
 
-    function ChristmasPackagesMapController ($scope, $state, Family, uiGmapGoogleMapApi, ParseLinks, AlertService) {
+    function ChristmasPackagesMapController ($scope, $state, Family, uiGmapGoogleMapApi, ParseLinks, AlertService, ChristmasPackagesMap) {
         var vm = this;
         vm.packages = [];
         vm.page = 0;
+        vm.result = ChristmasPackagesMap.query({});
 
         vm.map = {
             center: {
