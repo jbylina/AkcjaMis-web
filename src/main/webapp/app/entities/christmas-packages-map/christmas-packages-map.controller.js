@@ -11,7 +11,10 @@
         var vm = this;
         vm.packages = [];
         vm.page = 0;
-        vm.result = ChristmasPackagesMap.query({});
+        //vm.result = ChristmasPackagesMap.query
+        //({
+        //    distance: 0.01
+        //});
 
         vm.map = {
             center: {

@@ -14,14 +14,12 @@
             return $resource
             (
                 'api/clustered',
-                {
-                    distance: 0.01
-                },
+                {},
                 {
                     'query':
                     {
                         method: 'POST',
-                        //isArray: true
+                        isArray: true
                     }
                 }
             );
