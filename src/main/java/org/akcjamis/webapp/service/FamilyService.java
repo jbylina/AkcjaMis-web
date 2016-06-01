@@ -5,13 +5,13 @@ import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ChildRepository;
-import org.akcjamis.webapp.repository.ClusteredFamilyRepository;
 import org.akcjamis.webapp.repository.ChristmasPackageRepository;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 import org.akcjamis.webapp.repository.search.FamilySearchRepository;
+import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.math.BigInteger;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -45,8 +47,6 @@ public class FamilyService {
 
     private ChildSearchRepository childSearchRepository;
 
-    private final ClusteredFamilyRepository clusteredFamilyRepository;
-
     private ChristmasPackageRepository christmasPackageRepository;
 
     @Inject
@@ -56,8 +56,7 @@ public class FamilyService {
                          ContactSearchRepository contactSearchRepository,
                          ChildRepository childRepository,
                          ChildSearchRepository childSearchRepository,
-                         ChristmasPackageRepository christmasPackageRepository,
-                         ClusteredFamilyRepository clusteredFamilyRepository) {
+                         ChristmasPackageRepository christmasPackageRepository) {
         this.familyRepository = familyRepository;
         this.familySearchRepository = familySearchRepository;
         this.contactRepository = contactRepository;
@@ -65,7 +64,6 @@ public class FamilyService {
         this.childRepository = childRepository;
         this.childSearchRepository = childSearchRepository;
         this.christmasPackageRepository = christmasPackageRepository;
-        this.clusteredFamilyRepository = clusteredFamilyRepository;
     }
 
     /**
@@ -194,8 +192,18 @@ public class FamilyService {
     }
 
     @Transactional(readOnly = true)
-    public List<List<Family>> clusterFamiliesWithin(Long distance) {
+    public List<ClusteringResultDTO> clusterFamiliesWithin(Double distance) {
         log.debug("Request to get clusterFamiliesWithin : {}", distance);
-        return clusteredFamilyRepository.clusterFamiliesWithin(distance);
+        List<Object[]> result = familyRepository.clusterFamiliesWithin(distance);
+
+        return result.stream()
+            .map(o -> new ClusteringResultDTO(((BigInteger)o[0]).intValue(),
+                ((BigInteger)o[1]).longValue(),
+                (String)o[2],
+                (String)o[3],
+                (String)o[4],
+                (String)o[5],
+                (String)o[6],
+                (String)o[7])).collect(Collectors.toList());
     }
 }

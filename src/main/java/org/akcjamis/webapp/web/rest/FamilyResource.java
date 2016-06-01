@@ -7,6 +7,7 @@ import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
 import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
+import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -184,14 +185,18 @@ public class FamilyResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
-    @Timed
-    @RequestMapping
-    (
-        value = "/clustered/{distance}",
+    /**
+     * GET  /families/cluster?distance=:distance : cluster families with provided parameters
+     *
+     * @param distance distance within
+     * @return the result of the clustering
+     */
+    @RequestMapping(
+        value = "/families/cluster",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public ResponseEntity<List<List<Family>>> clusterFamiliesWithin(@PathVariable Long distance) throws URISyntaxException {
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<ClusteringResultDTO>> clusterFamiliesWithin(@RequestParam(defaultValue = "0.06") Double distance){
         log.debug("REST request to clusterFamiliesWithin : {}", distance);
         return new ResponseEntity<>(familyService.clusterFamiliesWithin(distance), HttpStatus.OK);
     }

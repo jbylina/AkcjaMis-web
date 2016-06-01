@@ -28,7 +28,6 @@
             'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
             'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
             'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-            'http://maps.google.com/mapfiles/ms/icons/lightblue-dot.png',
             'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
             'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
             'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
@@ -45,59 +44,31 @@
         });
 
         vm.loadAll = function() {
-            Family.query({
-                page: vm.page,
-                size: 100
-            }, onSuccess, onError);
-
-            function onSuccess(data, headers) {
-                vm.packages = data;
-
-                //for (var i = 0; i < data.length; i++) {
-                //    if(data[i].locationGeom != null){
-                //        vm.map.markers.push({
-                //            id : data[i].id,
-                //            longitude: data[i].locationGeom.coordinates[0],
-                //            latitude: data[i].locationGeom.coordinates[1],
-                //            title: 'test',
-                //            icon: vm.colors[1]
-                //        });
-                //    }
-                //}
-            }
-            function onError(error) {
-                AlertService.error(error.data.message);
-            }
 
             ChristmasPackagesMap.query
             (
-                {},
+                {userId:'0.06'},
                 function(data)
                 {
-                    for(var i = 0; i < data.length; i++) for(var j = 0; j < data[i]._length; j++) if(data[i][j].locationGeom != null)
-                    {
+                    for(var i = 0; i < data.length; i++)
                         vm.map.markers.push
                         ({
-                            id : data[i][j].id,
-                            longitude: data[i][j].locationGeom.coordinates[0],
-                            latitude: data[i][j].locationGeom.coordinates[1],
-                            title: 'test',
-                            icon: vm.colors[i]
+                            id : data[i].id,
+                            street : data[i].street,
+                            houseNo : data[i].houseNo,
+                            flatNo : data[i].flatNo,
+                            postalcode : data[i].postalcode,
+                            city : data[i].city,
+
+                            longitude: data[i].locationGeom.coordinates[0],
+                            latitude: data[i].locationGeom.coordinates[1],
+                            showWindow: false,
+                            icon: vm.colors[data[i].clusterNum]
                         });
-                    }
+
                 }
             );
         };
-
-        //(function(marker, i) {
-        //    // add click event
-        //    google.maps.event.addListener(marker, 'click', function() {
-        //        infowindow = new google.maps.InfoWindow({
-        //            content: 'Hello, World!!'
-        //        });
-        //        infowindow.open(map, marker);
-        //    });
-        //})(marker, i);
 
         vm.loadAll();
     }

@@ -13,8 +13,7 @@
         {
             return $resource
             (
-                'api/clustered/1000',
-                {},
+                'api/families/cluster?distance=:distance', {},
                 {
                     'query':
                     {

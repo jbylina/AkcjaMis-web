@@ -8,6 +8,16 @@
 </style>
 <div class="container-fluid">
     <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom' draggable="true" options="{scrollwheel: true }" bounds="map.bounds">
-        <ui-gmap-markers models="vm.map.markers" coords="'self'" icon="'icon'"></ui-gmap-markers>
+        <ui-gmap-markers models="vm.map.markers" coords="'self'" icon="'icon'">
+            <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
+                <div>
+                    <p ng-non-bindable>Rodzina nr {{ id }}<br>
+                        {{street}} {{houseNo}}/{{flatNo}}<br>
+                        {{postalcode}} {{city}}
+                    </p>
+                </div>
+            </ui-gmap-windows>
+        </ui-gmap-markers>
     </ui-gmap-google-map>
 </div>
+
