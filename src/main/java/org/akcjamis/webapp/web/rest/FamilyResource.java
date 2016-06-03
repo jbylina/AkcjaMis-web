@@ -8,8 +8,10 @@ import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
 import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
 import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
+import org.akcjamis.webapp.web.rest.dto.RouteDTO;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
+import org.hibernate.validator.constraints.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,10 +24,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing Family.
@@ -199,5 +203,22 @@ public class FamilyResource {
     public ResponseEntity<List<ClusteringResultDTO>> clusterFamiliesWithin(@RequestParam(defaultValue = "0.06") Double distance){
         log.debug("REST request to clusterFamiliesWithin : {}", distance);
         return new ResponseEntity<>(familyService.clusterFamiliesWithin(distance), HttpStatus.OK);
+    }
+
+    /**
+     * GET  /families/calculateOptimalRoute?families=:families  : calculate optimal route thru all families
+     *
+     * @param families array of families ID's
+     * @return the result of the clustering
+     */
+    @RequestMapping(
+        value = "/families/calculateOptimalRoute",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<RouteDTO> calculateOptimalRoute(@RequestParam @Valid @Size(min = 4) Set<Long> families){
+        log.debug("REST request to clusterFamiliesWithin : {}", families);
+
+        return new ResponseEntity<>(familyService.calculateOptimalRoute(families), HttpStatus.OK);
     }
 }

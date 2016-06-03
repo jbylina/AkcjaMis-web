@@ -11,13 +11,19 @@
         <ui-gmap-markers models="vm.map.markers" coords="'self'" icon="'icon'">
             <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
                 <div>
-                    <p ng-non-bindable>Rodzina nr {{ id }}<br>
+                    <p ng-non-bindable>Rodzina nr {{id}}<br>
                         {{street}} {{houseNo}}/{{flatNo}}<br>
                         {{postalcode}} {{city}}
                     </p>
                 </div>
             </ui-gmap-windows>
         </ui-gmap-markers>
+
+        <ui-gmap-polylines models="vm.map.routes" path="'geometry'" ></ui-gmap-polylines>
+
     </ui-gmap-google-map>
 </div>
+
+<!-- path="p.path" stroke="p.stroke" visible='p.visible'
+                          geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" -->
 

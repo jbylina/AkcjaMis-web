@@ -1,5 +1,7 @@
 package org.akcjamis.webapp.service;
 
+import com.google.common.collect.*;
+import com.google.common.primitives.Longs;
 import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Contact;
@@ -12,16 +14,24 @@ import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 import org.akcjamis.webapp.repository.search.FamilySearchRepository;
 import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
+import org.akcjamis.webapp.web.rest.dto.RouteDTO;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.type.ArrayType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -205,5 +215,39 @@ public class FamilyService {
                 (String)o[5],
                 (String)o[6],
                 (String)o[7])).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public RouteDTO calculateOptimalRoute(Set<Long> families) {
+
+        List<Object[]> list = familyRepository.calculateOptimalRoute(families);
+
+        //add start point - warehouse facility
+        families.add(0L);
+        long[] fam = families.stream().sorted().mapToLong(Long::longValue).toArray();
+        double[][] distMatrix = new double[fam.length][fam.length];
+        Table<Integer, Integer, String> routes = HashBasedTable.create();
+
+        for (Object[] o : list) {
+            int from = Longs.indexOf(fam, ((BigInteger)o[0]).longValue());
+            int to = Longs.indexOf(fam, ((BigInteger)o[1]).longValue());
+            distMatrix[from][to] = distMatrix[to][from] = (Double)o[2];
+            routes.put(from, to, (String)o[3]);
+            routes.put(to, from, (String)o[3]);
+        }
+
+        List<Object[]> optOrder = familyRepository.calculateOptimalOrder(ArrayUtils.toString(distMatrix));
+
+        // starting point is also a last point
+        optOrder.add(optOrder.get(0));
+
+        List<Long> orderedFamIds  = optOrder.stream().map(o -> fam[(int)o[1]]).collect(Collectors.toList());
+
+        List<String> routePaths = Lists.newLinkedList();
+        for (int i = 0; i < optOrder.size() - 1; i++) {
+            routePaths.add(routes.get(optOrder.get(i)[1], optOrder.get(i + 1)[1]));
+        }
+
+        return new RouteDTO(orderedFamIds, routePaths);
     }
 }

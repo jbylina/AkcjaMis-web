@@ -1,6 +1,4 @@
-(
-    function()
-    {
+(function () {
         'use strict';
 
         angular
@@ -9,30 +7,17 @@
 
         ChristmasPackagesMap.$inject = ['$resource'];
 
-        function ChristmasPackagesMap($resource)
-        {
-            return $resource
-            (
-                'api/families/cluster?distance=:distance', {},
-                {
-                    'query':
-                    {
+        function ChristmasPackagesMap($resource) {
+            return $resource( 'api/families/cluster?distance=:distance', {},{
+                    'clusters': {
                         method: 'GET',
-                        isArray: true,
-                        transformResponse: function(response) {
-                            var newData = JSON.parse(response);
-
-                            newData.map(function(data) {
-                                data._length = data.length;
-                                return data;
-                            });
-
-                            return newData;
-                        }
+                        isArray: true
+                    },
+                    'optimalRoute': {
+                        method: 'GET',
+                        url : 'api/families/calculateOptimalRoute?families=:families'
                     }
-                }
-            );
+            });
         }
-    }
-)
+    })
 ();
