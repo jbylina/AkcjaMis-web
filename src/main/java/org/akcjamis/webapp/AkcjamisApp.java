@@ -76,6 +76,8 @@ public class AkcjamisApp {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"));
 
+
+
     }
 
     /**
