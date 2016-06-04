@@ -3,12 +3,15 @@ package org.akcjamis.webapp.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.ZonedDateTime;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Store;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 
@@ -18,7 +21,7 @@ import java.util.Objects;
 public class EntityAuditEvent implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -30,11 +33,13 @@ public class EntityAuditEvent implements Serializable{
     @NotNull
     @Size(max = 255)
     @Column(name = "entity_type", length = 255, nullable = false)
+    @Field(index= org.hibernate.search.annotations.Index.YES, analyze= Analyze.YES, store= Store.NO)
     private String entityType;
 
     @NotNull
     @Size(max=20)
     @Column(name = "action", length = 20, nullable = false)
+    @Field(index= org.hibernate.search.annotations.Index.YES, analyze= Analyze.YES, store= Store.NO)
     private String action;
 
     @Lob
@@ -51,9 +56,9 @@ public class EntityAuditEvent implements Serializable{
     @NotNull
     @Column(name = "modified_date", nullable = false)
     private ZonedDateTime modifiedDate;
-    
 
-    
+
+
     public Long getId() {
         return id;
     }
@@ -149,6 +154,6 @@ public class EntityAuditEvent implements Serializable{
             '}';
     }
 
-    
+
 
 }

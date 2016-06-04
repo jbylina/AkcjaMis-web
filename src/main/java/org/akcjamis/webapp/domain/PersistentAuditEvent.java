@@ -1,8 +1,10 @@
 package org.akcjamis.webapp.domain;
 
-import java.time.LocalDateTime;
+import org.hibernate.search.annotations.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,11 +23,13 @@ public class PersistentAuditEvent {
 
     @NotNull
     @Column(nullable = false)
+    @Field(index= org.hibernate.search.annotations.Index.YES, analyze= Analyze.YES, store= Store.NO)
     private String principal;
 
     @Column(name = "event_date")
     private LocalDateTime auditEventDate;
     @Column(name = "event_type")
+    @Field(index= org.hibernate.search.annotations.Index.YES, analyze= Analyze.YES, store= Store.NO)
     private String auditEventType;
 
     @ElementCollection

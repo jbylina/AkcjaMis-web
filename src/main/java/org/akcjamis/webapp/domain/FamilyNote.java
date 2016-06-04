@@ -3,12 +3,12 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.*;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -31,6 +31,7 @@ public class FamilyNote extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @Size(max = 65535)
     @Column(name = "content", length = 65535, nullable = false)
+    @Field(index= org.hibernate.search.annotations.Index.YES, analyze= Analyze.YES, store= Store.NO)
     private String content;
 
     @Column(name = "archived", nullable = false)

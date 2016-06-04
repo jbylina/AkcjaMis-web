@@ -3,6 +3,7 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.*;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -34,6 +35,7 @@ public class Family extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @Size(max = 10)
     @Column(name = "house_no", length = 10, nullable = false)
+    @Field(index= org.hibernate.search.annotations.Index.YES, analyze= Analyze.YES, store= Store.NO)
     private String houseNo;
 
     @Size(max = 10)

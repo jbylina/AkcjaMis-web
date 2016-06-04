@@ -3,6 +3,9 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Store;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -30,6 +33,7 @@ public class Subpackage extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @Min(value = 1)
     @Column(name = "subpackage_number", nullable = false)
+    @Field(index= org.hibernate.search.annotations.Index.YES, analyze= Analyze.YES, store= Store.NO)
     private Integer subpackageNumber;
 
     @OneToMany(mappedBy = "subpackage")
