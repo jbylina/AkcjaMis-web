@@ -70,27 +70,36 @@
                         });
                     }
 
+                    function decimalToHexString(number)
+                    {
+                        return "#" + Math.round(number + 0xFFFF00).toString(16).toUpperCase();
+                    }
+
                     for(var cluster in clusterFam){
                         if(clusterFam[cluster].length > 3)
                             ChristmasPackagesMap.optimalRoute(
                                 {families: clusterFam[cluster]},
                                 function(data)
                                 {
+                                    var step = Math.abs(0x0000FF / data.routePaths.length);
+
                                     for(var i = 0; i < data.routePaths.length; i++) {
 
                                         if(data.routePaths[i].type == "MultiLineString"){
                                             for(var j = 0; j < data.routePaths[i].coordinates.length; j++){
                                                 var obj = {
                                                     id : data.optimalOrder[i] + "_" + j,
-                                                    "geometry": convertGeoJSONToGoogleMaps(data.routePaths[i].coordinates[j])
+                                                    "geometry": convertGeoJSONToGoogleMaps(data.routePaths[i].coordinates[j]),
+                                                    "stroke": { "color": decimalToHexString(step*i), weight: 5 }
                                                 };
                                                 vm.map.routes.push(obj);
                                             }
                                         }
-                                        else{
+                                        else {
                                             var obj = {
                                                 id : data.optimalOrder[i],
-                                                "geometry": convertGeoJSONToGoogleMaps(data.routePaths[i].coordinates)
+                                                "geometry": convertGeoJSONToGoogleMaps(data.routePaths[i].coordinates),
+                                                "stroke": { "color": decimalToHexString(step*i), weight: 5 }
                                             };
                                             vm.map.routes.push(obj);
                                         }
