@@ -50,7 +50,7 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
                    "  SELECT 0 id, " +
                    "    (SELECT w.source " +
                    "     FROM osm_ways w " +
-                   "     ORDER BY w.the_geom  <-> st_pointfromtext('POINT(21.011703 52.217949)') " +
+                   "     ORDER BY w.the_geom  <-> st_pointfromtext('POINT(21.011703 52.217949)', 4326) " +
                    "     LIMIT 1) node_num " +
                    ") " +
                    "SELECT " +
