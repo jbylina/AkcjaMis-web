@@ -2,28 +2,56 @@
     .angular-google-map,
     .angular-google-map-container
     {
-        width: 1000px;
-        height: 800px
+        width: 750px;
+        height: 700px
     }
 </style>
 <div class="container-fluid">
-    <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom' draggable="true" options="{scrollwheel: true }" bounds="map.bounds">
-        <ui-gmap-markers models="vm.map.markers" coords="'self'" icon="'icon'">
-            <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
-                <div>
-                    <p ng-non-bindable>Rodzina nr {{id}}<br>
-                        {{street}} {{houseNo}}/{{flatNo}}<br>
-                        {{postalcode}} {{city}}
-                    </p>
-                </div>
-            </ui-gmap-windows>
-        </ui-gmap-markers>
+    <div class="row">
 
-        <ui-gmap-polylines models="vm.map.routes" path="'geometry'" stroke="'stroke'"></ui-gmap-polylines>
+        <div class="col-md-8">
+            <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom' draggable="true" options="{scrollwheel: true }" bounds="map.bounds">
+                <ui-gmap-markers models="vm.map.markers" coords="'self'" icon="'icon'">
+                    <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
+                        <div>
+                            <p ng-non-bindable>Rodzina nr {{id}}<br>
+                                {{street}} {{houseNo}}/{{flatNo}}<br>
+                                {{postalcode}} {{city}}
+                            </p>
+                        </div>
+                    </ui-gmap-windows>
+                </ui-gmap-markers>
 
-    </ui-gmap-google-map>
+                <ui-gmap-polylines models="vm.map.routes" path="'geometry'" stroke="'stroke'"></ui-gmap-polylines>
+
+            </ui-gmap-google-map>
+
+        </div>
+        <div class="col-md-4">
+            <div class="span12">
+                <p>ST_ClusterWithin distance parameter</p>
+                <rzslider
+                    rz-slider-model="vm.slider.value"
+                    rz-slider-options="vm.slider.options"></rzslider>
+            </div>
+            <br>
+            <br>
+
+            <table class="table table-hover" >
+
+                <tbody ng-repeat="c in vm.map.clusters">
+                    <tr>
+                        <td class="col-md-2"><img ng-src="{{c.icon}}"></td>
+                        <td class="col-md-4">{{ c.ids.sort().join(", ") }}</td>
+                        <td><button ng-disabled="c.ids.length < 4" type="button" class="btn btn-primary" ng-click="vm.showRoutes(c.ids)">Wylicz trasę</button></td>
+                    </tr>
+                </tbody>
+
+
+
+            </table>
+        </div>
+
+
+    </div>
 </div>
-
-<!-- path="p.path" stroke="p.stroke" visible='p.visible'
-                          geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" -->
-

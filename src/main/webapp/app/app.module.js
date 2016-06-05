@@ -14,6 +14,7 @@
             'ui.router',
             'infinite-scroll',
             'ds.objectDiff',
+            'rzModule',
             // jhipster-needle-angularjs-add-module JHipster will add new module here
             'angular-loading-bar',
             'ngAnimate',
