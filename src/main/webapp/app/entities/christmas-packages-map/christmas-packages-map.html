@@ -11,6 +11,9 @@
 
         <div class="col-md-8">
             <ui-gmap-google-map center='vm.map.center' zoom='vm.map.zoom' draggable="true" options="{scrollwheel: true }" bounds="map.bounds">
+
+                <ui-gmap-marker coords="vm.startMarker.coords" options="vm.startMarker.options" idkey="vm.startMarker.id" events="vm.startMarker.events"></ui-gmap-marker>
+
                 <ui-gmap-markers models="vm.map.markers" coords="'self'" icon="'icon'">
                     <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>
                         <div>
@@ -43,7 +46,10 @@
                     <tr>
                         <td class="col-md-2"><img ng-src="{{c.icon}}"></td>
                         <td class="col-md-4">{{ c.ids.sort().join(", ") }}</td>
-                        <td><button ng-disabled="c.ids.length < 4" type="button" class="btn btn-primary" ng-click="vm.showRoutes(c.ids)">Wylicz trasę</button></td>
+                        <td ng-if="c.order.length == 0">
+                            <button ng-disabled="c.ids.length < 4" type="button" class="btn btn-primary" ng-click="vm.showRoutes(c)">Wylicz trasę</button>
+                        </td>
+                        <td ng-if="c.order.length != 0">{{ c.order.join(", ") }}</td>
                     </tr>
                 </tbody>
 

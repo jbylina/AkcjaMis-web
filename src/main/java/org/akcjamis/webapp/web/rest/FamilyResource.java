@@ -216,9 +216,9 @@ public class FamilyResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<RouteDTO> calculateOptimalRoute(@RequestParam @Valid @Size(min = 4) Set<Long> families){
+    public ResponseEntity<RouteDTO> calculateOptimalRoute(@RequestParam Set<Long> families, @RequestParam Double latitude, @RequestParam Double longitude){
         log.debug("REST request to clusterFamiliesWithin : {}", families);
 
-        return new ResponseEntity<>(familyService.calculateOptimalRoute(families), HttpStatus.OK);
+        return new ResponseEntity<>(familyService.calculateOptimalRoute(families, latitude, longitude), HttpStatus.OK);
     }
 }

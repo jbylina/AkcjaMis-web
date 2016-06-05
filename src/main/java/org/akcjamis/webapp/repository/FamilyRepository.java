@@ -50,7 +50,7 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
                    "  SELECT 0 id, " +
                    "    (SELECT w.source " +
                    "     FROM osm_ways w " +
-                   "     ORDER BY w.the_geom  <-> st_pointfromtext('POINT(21.011703 52.217949)', 4326) " +
+                   "     ORDER BY w.the_geom  <-> st_pointfromtext('POINT(' || :longitude || ' ' || :latitude || ')', 4326) " +
                    "     LIMIT 1) node_num " +
                    ") " +
                    "SELECT " +
@@ -72,5 +72,5 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
                    "      comb.start_node \\:\\: INT4, comb.end_node \\:\\: INT4, TRUE, TRUE) r " +
                    "  LEFT JOIN osm_ways w ON w.gid = r.id2 " +
                    " GROUP BY comb.start_n_f_id, comb.end_n_f_id ", nativeQuery = true)
-    List<Object[]> calculateOptimalRoute(@Param("families") Set<Long> families);
+    List<Object[]> calculateOptimalRoute(@Param("families") Set<Long> families, @Param("latitude") Double latitude, @Param("longitude") Double longitude);
 }

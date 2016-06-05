@@ -218,9 +218,9 @@ public class FamilyService {
     }
 
     @Transactional(readOnly = true)
-    public RouteDTO calculateOptimalRoute(Set<Long> families) {
+    public RouteDTO calculateOptimalRoute(Set<Long> families, Double latitude, Double longitude) {
 
-        List<Object[]> list = familyRepository.calculateOptimalRoute(families);
+        List<Object[]> list = familyRepository.calculateOptimalRoute(families, latitude, longitude);
 
         //add start point - warehouse facility
         families.add(0L);

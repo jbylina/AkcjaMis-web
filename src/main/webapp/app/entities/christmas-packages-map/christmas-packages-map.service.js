@@ -15,7 +15,7 @@
                     },
                     'optimalRoute': {
                         method: 'GET',
-                        url : 'api/families/calculateOptimalRoute?families=:families'
+                        url : 'api/families/calculateOptimalRoute?families=:families&latitude=:latitude&longitude=:longitude'
                     }
             });
         }

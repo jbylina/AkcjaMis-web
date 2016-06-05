@@ -22,6 +22,24 @@
                 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
                 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png'
             ];
+
+        vm.startMarker = {
+            id: 0,
+            coords: {
+                latitude: 52.217949,
+                longitude: 21.011703
+            },
+            options: { draggable: true },
+            events: {
+                dragend: function (marker, eventName, args) {
+                    vm.map.routes = [];
+                    vm.map.clusters.forEach(function(c){
+                        c.order = [];
+                    });
+                }
+            }
+        };
+
         vm.map = {
             center: {
                 latitude: 52.251947,
@@ -45,6 +63,7 @@
         vm.showFamiliesClusters = function () {
             vm.map.markers = [];
             vm.map.clusters = [];
+            vm.map.routes = [];
             ChristmasPackagesMap.clusters
             (
                 {distance: vm.slider.value / 10000},
@@ -55,7 +74,9 @@
                         if (!(data[i].clusterNum in vm.map.clusters))
                             vm.map.clusters[data[i].clusterNum] = {
                                 icon: vm.colors[data[i].clusterNum],
-                                ids : []
+                                clusterId: data[i].clusterNum,
+                                ids : [],
+                                order: []
                             };
 
                         vm.map.clusters[data[i].clusterNum].ids.push(data[i].id);
@@ -91,26 +112,29 @@
             });
         }
 
-        vm.showRoutes = function(families){
-
-
-            function decimalToHexString(number) {
-                return "#" + Math.round(number + 0xFFFF00).toString(16).toUpperCase();
-            }
+        vm.showRoutes = function(cluster){
+            var families = cluster.ids;
 
             ChristmasPackagesMap.optimalRoute(
-                {families: families},
+                {
+                    families: families,
+                    latitude: vm.startMarker.coords.latitude,
+                    longitude: vm.startMarker.coords.longitude
+                },
                 function (data) {
-                    var step = Math.abs(0x0000FF / data.routePaths.length);
+                    cluster.order = data.optimalOrder;
 
                     for (var i = 0; i < data.routePaths.length; i++) {
-
                         if (data.routePaths[i].type == "MultiLineString") {
+                            var color = randomColor();
                             for (var j = 0; j < data.routePaths[i].coordinates.length; j++) {
                                 var obj = {
                                     id: data.optimalOrder[i] + "_" + j,
                                     "geometry": convertGeoJSONToGoogleMaps(data.routePaths[i].coordinates[j]),
-                                    "stroke": {"color": decimalToHexString(step * i), weight: 5}
+                                    "stroke": {
+                                        "color": color,
+                                        weight: 5
+                                    }
                                 };
                                 vm.map.routes.push(obj);
                             }
@@ -119,7 +143,10 @@
                             var obj = {
                                 id: data.optimalOrder[i],
                                 "geometry": convertGeoJSONToGoogleMaps(data.routePaths[i].coordinates),
-                                "stroke": {"color": decimalToHexString(step * i), weight: 5}
+                                "stroke": {
+                                    "color": randomColor(),
+                                    weight: 5
+                                }
                             };
                             vm.map.routes.push(obj);
                         }
