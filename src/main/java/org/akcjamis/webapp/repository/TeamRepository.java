@@ -30,4 +30,17 @@ public interface TeamRepository extends JpaRepository<Team,Long> {
     Team findOneByEvent_Year(@Param("year") Short year, @Param("teamNumber") Integer teamNumber);
 
     List<Team> findByEvent_year(Short year);
+
+    @Query("select team from Team team " +
+        "left join fetch team.christmasPackages christmasPackages " +
+        "left join fetch team.users users " +
+        "left join fetch team.event event " +
+        "left join fetch christmasPackages.family family " +
+        "left join fetch family.familyNotes familyNotes " +
+        "left join fetch christmasPackages.subpackages subpackages " +
+        "left join fetch christmasPackages.christmasPackageNotes christmasPackageNotes " +
+        "left join fetch subpackages.child child " +
+        "where users.login = :userLogin")
+    Team findOneByUserLogin(@Param("userLogin") String userLogin);
+
 }

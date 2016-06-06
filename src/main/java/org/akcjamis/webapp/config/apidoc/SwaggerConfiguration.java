@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.StopWatch;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
@@ -65,6 +66,7 @@ public class SwaggerConfiguration {
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
             .ignoredParameterTypes(Pageable.class)
+            .ignoredParameterTypes(AuthenticationPrincipal.class)
             .ignoredParameterTypes(java.sql.Date.class)
             .directModelSubstitute(java.time.LocalDate.class, java.sql.Date.class)
             .directModelSubstitute(java.time.ZonedDateTime.class, Date.class)

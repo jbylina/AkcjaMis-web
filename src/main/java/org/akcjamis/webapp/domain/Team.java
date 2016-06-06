@@ -41,6 +41,7 @@ public class Team extends AbstractAuditingEntity implements Serializable {
     @JoinTable(name = "teams_user",
                joinColumns = @JoinColumn(name="teams_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="users_id", referencedColumnName="ID"))
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     @ManyToOne

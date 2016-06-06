@@ -11,6 +11,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -136,6 +138,25 @@ public class TeamResource {
     public ResponseEntity<Team> getTeamDetail(@PathVariable Short year, @PathVariable Integer teamNumber) {
         log.debug("REST request to get Team {} by Event year : {}", teamNumber, year);
         Team team = teamRepository.findOneByEvent_Year(year, teamNumber);
+        return Optional.ofNullable(team)
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
+     * GET  user/team : get team details of user.
+     *
+     * @return the ResponseEntity with status 200 (OK) and with body the team, or with status 404 (Not Found)
+     */
+    @RequestMapping(value = "/user/team",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Team> getUserTeamDetails(@AuthenticationPrincipal UserDetails user) {
+        log.debug("REST request to get Team");
+        Team team = teamRepository.findOneByUserLogin(user.getUsername());
         return Optional.ofNullable(team)
             .map(result -> new ResponseEntity<>(
                 result,
