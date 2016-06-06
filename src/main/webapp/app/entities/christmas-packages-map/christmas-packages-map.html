@@ -44,7 +44,7 @@
 
                 <tbody ng-repeat="c in vm.map.clusters">
                     <tr>
-                        <td class="col-md-2"><img ng-src="{{c.icon}}"></td>
+                        <td class="col-md-2"><img ng-src="{{c.icon}}" height="40" width="40"></td>
                         <td class="col-md-4">{{ c.ids.sort().join(", ") }}</td>
                         <td ng-if="c.order.length == 0">
                             <button ng-disabled="c.ids.length < 4" type="button" class="btn btn-primary" ng-click="vm.showRoutes(c)">Wylicz trasę</button>

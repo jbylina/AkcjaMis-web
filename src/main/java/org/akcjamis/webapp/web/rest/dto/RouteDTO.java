@@ -18,6 +18,7 @@ public class RouteDTO {
         WKTReader reader = new WKTReader();
 
         this.routePaths = routePaths.stream()
+            .filter(p -> p != null)
             .map(s -> { try {
                 return reader.read(s);
             } catch (ParseException e) {

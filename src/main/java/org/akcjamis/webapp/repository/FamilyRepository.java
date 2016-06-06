@@ -16,7 +16,7 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
 
     Family findByLocationGeom(Geometry geometry);
 
-    @Query(value = "SELECT clst.clst_num as cluster_num, " +
+    @Query(value = "SELECT DISTINCT clst.clst_num as cluster_num, " +
                    "f.id," +
                    "f.street," +
                    "f.house_no," +

@@ -20,7 +20,33 @@
                 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
                 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png',
                 'http://maps.google.com/mapfiles/ms/icons/pink-dot.png',
-                'http://maps.google.com/mapfiles/ms/icons/purple-dot.png'
+                'http://maps.google.com/mapfiles/ms/icons/purple-dot.png',
+                'http://maps.google.com/mapfiles/kml/paddle/A.png',
+                'http://maps.google.com/mapfiles/kml/paddle/B.png',
+                'http://maps.google.com/mapfiles/kml/paddle/C.png',
+                'http://maps.google.com/mapfiles/kml/paddle/D.png',
+                'http://maps.google.com/mapfiles/kml/paddle/E.png',
+                'http://maps.google.com/mapfiles/kml/paddle/F.png',
+                'http://maps.google.com/mapfiles/kml/paddle/G.png',
+                'http://maps.google.com/mapfiles/kml/paddle/H.png',
+                'http://maps.google.com/mapfiles/kml/paddle/I.png',
+                'http://maps.google.com/mapfiles/kml/paddle/J.png',
+                'http://maps.google.com/mapfiles/kml/paddle/K.png',
+                'http://maps.google.com/mapfiles/kml/paddle/L.png',
+                'http://maps.google.com/mapfiles/kml/paddle/M.png',
+                'http://maps.google.com/mapfiles/kml/paddle/N.png',
+                'http://maps.google.com/mapfiles/kml/paddle/O.png',
+                'http://maps.google.com/mapfiles/kml/paddle/P.png',
+                'http://maps.google.com/mapfiles/kml/paddle/Q.png',
+                'http://maps.google.com/mapfiles/kml/paddle/R.png',
+                'http://maps.google.com/mapfiles/kml/paddle/S.png',
+                'http://maps.google.com/mapfiles/kml/paddle/T.png',
+                'http://maps.google.com/mapfiles/kml/paddle/U.png',
+                'http://maps.google.com/mapfiles/kml/paddle/V.png',
+                'http://maps.google.com/mapfiles/kml/paddle/W.png',
+                'http://maps.google.com/mapfiles/kml/paddle/X.png',
+                'http://maps.google.com/mapfiles/kml/paddle/Y.png',
+                'http://maps.google.com/mapfiles/kml/paddle/Z.png'
             ];
 
         vm.startMarker = {
@@ -93,7 +119,10 @@
                             longitude: data[i].locationGeom.coordinates[0],
                             latitude: data[i].locationGeom.coordinates[1],
                             showWindow: false,
-                            icon: vm.colors[data[i].clusterNum]
+                            icon: {
+                                url: vm.colors[data[i].clusterNum],
+                                scaledSize: new google.maps.Size(30, 30)
+                        }
                         });
                     }
                 }
@@ -155,6 +184,9 @@
             );
         };
 
-        vm.showFamiliesClusters();
+        uiGmapGoogleMapApi.then(function(maps) {
+            vm.showFamiliesClusters();
+        });
+
     }
 })();
