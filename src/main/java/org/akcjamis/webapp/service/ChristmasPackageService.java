@@ -102,6 +102,18 @@ public class ChristmasPackageService {
      *  @return the entity
      */
     @Transactional(readOnly = true)
+    public ChristmasPackage findOne(Long id) {
+        log.debug("Request to get ChristmasPackage : {}", id);
+        return christmasPackageRepository.findOne(id);
+    }
+
+    /**
+     *  Get one christmasPackage by id.
+     *
+     *  @param id the id of the entity
+     *  @return the entity
+     */
+    @Transactional(readOnly = true)
     public ChristmasPackage findOneById(Long id) {
         log.debug("Request to get ChristmasPackage : {}", id);
         return christmasPackageRepository.findById(id);

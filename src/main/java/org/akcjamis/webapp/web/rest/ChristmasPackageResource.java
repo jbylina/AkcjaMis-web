@@ -2,8 +2,10 @@ package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.ChristmasPackage;
+import org.akcjamis.webapp.domain.ChristmasPackageNote;
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
+import org.akcjamis.webapp.web.rest.dto.ChristmasPackageMarkDTO;
 import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
@@ -22,6 +24,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -170,6 +173,30 @@ public class ChristmasPackageResource {
         log.debug("REST request to delete ChristmasPackage : {}", id);
         christmasPackageService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("christmasPackage", id.toString())).build();
+    }
+
+
+    /**
+     * POST  /events/:year/christmas-packages/:id :
+     */
+    @RequestMapping(value = "/events/christmas-packages/{id}",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<ChristmasPackage> updateChristmasPackage(@PathVariable Long id, @RequestBody ChristmasPackageMarkDTO packageMark) throws URISyntaxException {
+        log.debug("REST request to update mark of ChristmasPackage  : {}", id);
+
+        ChristmasPackage christmasPackage = christmasPackageService.findOne(id);
+        christmasPackage.setMark(packageMark.getMark());
+        christmasPackage = christmasPackageService.savePackage(christmasPackage.getEvent().getYear(), christmasPackage);
+        ChristmasPackageNote note = new ChristmasPackageNote();
+        note.setContent(packageMark.getNoteText());
+        christmasPackageService.saveNote(id, note);
+
+
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert("christmasPackage", christmasPackage.getId().toString()))
+            .body(christmasPackage);
     }
 
 }
