@@ -1,6 +1,5 @@
 <div>
     <br>
-    <jhi-alert></jhi-alert>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
@@ -29,8 +28,7 @@
             <tbody>
                 <tr ng-repeat="family in vm.families track by family.id">
                     <td><a ui-sref="family-detail({id:family.id})" style="color:blue">{{family.id}}</a></td>
-                    <!-- todo: narazie /(slash) jest dodany na sztywno, pozniej sie pomartwie co zrobic, jak ktos ma tylko nr. budynku -->
-                    <td>{{family.street}} {{family.houseNo}}/{{family.flatNo}}</td>
+                    <td>{{family.street}} {{family.houseNo}}<span ng-if="family.flatNo">/</span>{{family.flatNo}}</td>
                     <td>{{family.city}} {{family.region}}</td>
                     <td></td>
                 </tr>

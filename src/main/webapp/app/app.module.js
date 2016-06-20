@@ -16,13 +16,15 @@
             'ds.objectDiff',
             // jhipster-needle-angularjs-add-module JHipster will add new module here
             'angular-loading-bar',
-            'ngAnimate'
+            'ngAnimate',
+            'xeditable'
         ])
         .run(run);
 
-    run.$inject = ['stateHandler'];
+    run.$inject = ['stateHandler','editableOptions'];
 
-    function run(stateHandler) {
+    function run(stateHandler,editableOptions) {
         stateHandler.initialize();
+        editableOptions.theme = 'bs3';
     }
 })();

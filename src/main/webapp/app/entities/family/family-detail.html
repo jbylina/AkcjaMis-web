@@ -1,134 +1,217 @@
-
-<div>
-    <div class="col-lg-12">
-        <div class="col-lg-6">
-    <h2><span>Rodzina</span> {{vm.family.id}}</h2>
-        </div>
-
-        <div class="col-lg-6"><!--  ui-sref="address-edit" -->
-            <div ng-hide="editmode">
-    <button type="submit"
-            class="btn btn-info pull-right" style="margin-top: 1%"
-            ng-click="editmode=true">
-        <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Edytuj</span>
-    </button>
+<form editable-form name="editableForm" onaftersave="vm.save()">
+    <div>
+        <div class="container-fluid">
+            <jhi-alert-error></jhi-alert-error>
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <h2 style="color: #0d3349"><span>Rodzina</span> {{vm.family.id}}</h2>
+                </div>
+                <div class="col-lg-15">
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-info pull-right" style="margin-left: 1%"
+                                ng-click="editableForm.$show()" ng-show="!editableForm.$visible">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Edytuj</span>
+                        </button>
+                    <span ng-show="editableForm.$visible">
+                        <button type="submit"
+                                class="btn btn-info pull-right" style="margin-left: 1%"
+                                ng-disabled="editableForm.$waiting">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span> Zapisz</span>
+                        </button>
+                        <button type="button"
+                                class="btn btn-info pull-right"
+                                ng-disabled="editableForm.$waiting" ng-click="editableForm.$cancel()">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Anuluj</span>
+                        </button>
+                    </span>
+                    </div>
+                </div>
             </div>
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" style="color: #0d3349">
+                            <h3 style="text-align: center">Podstawowe informacje</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h5>
+                                <span><b>Adres:</b></span>
+                            </h5>
+                            <span editable-text="vm.family.street" e-style="width: 150px; margin-bottom: 5%">{{ vm.family.street }}</span>
+                            <span editable-text="vm.family.houseNo" e-style="width: 70px">{{ vm.family.houseNo }}</span>
+                            <span ng-if="vm.family.flatNo || editableForm.$visible">/</span>
+                            <span editable-text="vm.family.flatNo" e-style="width: 70px">{{vm.family.flatNo}} </span>
+                            <br>
+                            <span editable-text="vm.family.postalcode" e-style="width: 80px"  e-pattern="\d{2}\-\d{3}" e-title="xx-xxx">{{ vm.family.postalcode }}</span>
+                            <span editable-text="vm.family.city" e-style="width: 150px">{{ vm.family.city }}</span>
+                            <span editable-text="vm.family.region" e-style="width: 150px">{{ vm.family.region }}</span>
+                            <hr>
+                            <h5>
+                                <span><b>Kontakt:</b></span>
+                            </h5>
+                            <table style="border-collapse: separate;border-spacing: 0px 0px;">
+                                <tr ng-repeat="contact in vm.contacts">
+                                    <td>
+                                        <span style="margin-right: 5px" ng-show="contact.type!=null">{{vm.contactsMap[contact.type]}}</span>
+                                        <span ng-show="contact.type==null">
+                                            <span editable-select="contact.type" e-style="width: 110px" e-form="rowform" e-ng-options="s.value as s.text for s in vm.contactsVal">{{vm.contactsMap[contact.type]}}</span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span editable-text="contact.value" e-style="width: 200px">{{contact.value}}</span>
+                                    </td>
+                                    <td>
+                                        <span ng-show="editableForm.$visible">
+                                            <button type="button" ng-click="vm.deleteContact(contact.id)" ng-disabled="editableForm.$waiting" class="btn btn-danger pull-right" style="margin: 2%"><span class="glyphicon glyphicon-minus"></span>&nbsp;<span>Usuń</span></button>
+                                            <div class="clearfix"></div>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr ng-show="editableForm.$visible">
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                    <span>
+                                        <button type="button" ng-click="vm.addContact()" ng-disabled="editableForm.$waiting" class="btn btn-info pull-right"><span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Dodaj kontakt</span></button>
+                                    </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr>
+                            <h5>
+                                <span><b>Dane analityczne:</b></span>
+                            </h5>
+                            <span>
+                                Utworzona przez: {{vm.family.createdBy}}<br>
+                                Data utworzenia: {{vm.family.createdDate | date:'dd.MM.yyyy HH:mm'}}<br>
+                                Ostatnio modyfikował: {{vm.family.lastModifiedBy}}<br>
+                                Data ostatniej modyfikacji: {{vm.family.lastModifiedDate | date:'dd.MM.yyyy HH:mm'}}<br>
+                            </span>
+                            </dd>
+                        </div>
+                    </div>
+                </div>
 
-            <div ng-show="editmode">
-                <button type="submit"
-                        class="btn btn-info pull-right" style="margin-top: 1%"
-                        ng-click="editmode=false">
-                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span> Zakończ edycję</span>
-                </button>
+                <div class="col-lg-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" style="color: #0d3349">
+                            <h3 style="text-align: center">Dzieci</h3>
+                        </div>
+                        <div class="panel-body">
+                            <span ng-repeat="child in vm.childrens">
+                                <hr ng-show="!$first">
+                                <table style="border-collapse: separate;border-spacing: 30px 0px;">
+                                    <tr>
+                                        <td>
+                                            <b>Imię:</b>
+                                        </td>
+                                        <td>
+                                            <span editable-tel="child.firstName" e-style="width: 150px">{{child.firstName}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Nazwisko:</b>
+                                        </td>
+                                        <td>
+                                            <span editable-tel="child.lastName" e-style="width: 150px">{{child.lastName}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b>Płeć:</b>
+                                        </td>
+                                        <td>
+                                            <span editable-select="child.sex" e-style="width: 150px" e-form="rowform" e-ng-options="s.value as s.text for s in vm.sexes">{{vm.sexesMap[child.sex]}}</span>
+                                        </td>
+                                        <td style="width:100%">
+                                            <button type="button" ng-show="editableForm.$visible" ng-disabled="editableForm.$waiting" ng-click="vm.deleteChild(child.id)" class="btn btn-danger pull-right" style="margin-right: 2%">Usuń</button>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <b>Urodziny:</b>
+                                        </td>
+                                        <td>
+                                            <span editable-number="child.birthYear" e-style="width: 150px">{{child.birthYear}}</span>
+                                        </td>
+                                    </tr>
+
+                                    <tr ng-show="editableForm.$visible">
+                                        <td>
+                                            <b>Numer:</b>
+                                        </td>
+                                        <td>
+                                            <span editable-number="child.number" e-style="width: 150px">{{child.number}}</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </span>
+                            <br>
+                            <span ng-show="editableForm.$visible">
+                                <hr>
+                                <button type="button" ng-click="vm.addChild()" ng-disabled="editableForm.$waiting" class="btn btn-info pull-right" style="margin: 2%"><span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Dodaj dziecko</span></button>
+                                <div class="clearfix"></div>
+                                <br>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="col-lg-12">
+                <div class="col-lg-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" style="color: #0d3349">
+                            <h3 style="text-align: center">Notatki</h3>
+                        </div>
+                        <div class="panel-body">
+                            <span ng-repeat="note in vm.familyNotes">
+                                <span ng-if="note.createdBy!=null">
+                                    <hr ng-show="!$first">
+                                    <b>Autor:</b> {{note.createdBy}}
+                                    <br>
+                                </span>
+                                <span ng-if="note.createdDate!=null">
+                                    <b>Data dodania:</b> {{note.createdDate | date:'dd.MM.yyyy HH:mm'}}
+                                    <br>
+                                </span>
+                                <b>Treść:</b> <span editable-textarea="note.content" e-rows="4" e-cols="50">{{note.content}}</span><br>
+                                <button type="button" ng-show="editableForm.$visible" ng-disabled="editableForm.$waiting" ng-click="vm.deleteNote(note.id)" class="btn btn-danger pull-right" style="margin-right: 2%">Usuń</button>
+                                <div class="clearfix"></div>
+                            </span>
+                            <br>
+                            <span ng-show="editableForm.$visible">
+                                <hr>
+                                <button type="button" ng-click="vm.addNote()" ng-disabled="editableForm.$waiting" class="btn btn-info pull-right" style="margin: 2%"><span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Dodaj notatkę</span></button>
+                                <div class="clearfix"></div>
+                                <br>
+                            </span>
+                        </div>
+                    </div>
+                </div>
 
-
-        </div>
-    </div>
-<div class="col-lg-12">
-    <div class="col-lg-6">
-        <div class="panel panel-info">
-
-        <dt>
-            <span>Adres</span>
-
-            <div ng-show="editmode">
-                <button type="submit"
-                        ui-sref="address-edit"
-                        class="btn btn-warning pull-right" style="margin-top: 1%">
-                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>Edytuj</span>
-                </button>
+                <div class="col-lg-6">
+                    <div class="panel panel-info">
+                        <div class="panel-heading" style="color: #0d3349">
+                            <h3 style="text-align: center">Paczki</h3>
+                        </div>
+                        <div class="panel-body">
+                            <span ng-repeat="package in vm.packages">
+                                <hr ng-show="!$first"><b>Rok dostarczenia</b> {{package.year}}<br>
+                                <b>Ocena:</b> {{package.mark}}<br>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </dt>
-        <dd>
-            <span>
-                {{vm.family.street}} {{vm.family.houseNo}}/{{vm.family.flatNo}}
-        <br>
-        {{vm.family.postalcode}} {{vm.family.city}}
-            </span>
-        </dd>
-
-        <hr>
-        <dt><span>Kontakt</span>
-
-            <div ng-show="editmode">
+            <hr>
             <button type="submit"
-                    ui-sref="contact-edit"
-                    class="btn btn-warning pull-right" style="margin-top: 1%">
-                <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>Edytuj</span>
+                    onclick="window.history.back()"
+                    class="btn btn-info" style="margin-bottom: 1%">
+                <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Powrót</span>
             </button>
         </div>
-
-            </dt>
-        <dd><span ng-repeat="contact in vm.contacts">{{contact.type}}: {{contact.value}} <br></span></dd>
-
-
-        <hr>
-        <dt><span>Dane analityczne</span></dt>
-            <dd>
-                <span>
-                    <b>Utworzona przez:</b> {{vm.family.createdBy}}<br>
-                    <b>Data utworzenia:</b> {{vm.family.createdDate}}<br>
-                    <b>Ostatnio modyfikował:</b> {{vm.family.lastModifiedBy}}<br>
-                    <b>Data ostatniej modyfikacji:</b> {{vm.family.lastModifiedDate}}<br>
-                </span>
-            </dd>
-        </div>
     </div>
-
-
-    <div class="col-lg-6">
-        <div class="panel panel-info">
-            <h3>Dzieci</h3>
-
-            <div ng-show="editmode">
-                <button type="submit"
-                        ui-sref="children-edit"
-                        class="btn btn-warning pull-right">
-                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span>Edytuj</span>
-                </button>
-            </div>
-
-            <dd><span ng-repeat="children in vm.childrens"><hr><b>Imię:</b> {{children.firstName}}<br>
-            <b>Nazwisko:</b> {{children.lastName}}<br>
-            <b>Płeć:</b> {{children.sex}}<br>
-            <b>Urodziny:</b> {{children.birthYear}}
-            </span></dd>
-        </div>
-    </div>
-</div>
-    <div class="col-lg-12">
-
-
-    <div class="col-lg-6">
-        <div class="panel panel-info">
-            <h3>Notatki</h3>
-
-            <dd><span ng-repeat="note in vm.familyNotes"><hr><b>Autor:</b> {{note.createdBy}}<br>
-            <b>Data dodania:</b> {{note.createdDate}}<br>
-            <b>Treść:</b> {{note.content}}<br>
-            </span></dd>
-        </div>
-    </div>
-
-        <div class="col-lg-6">
-            <div class="panel panel-info">
-                <h3>Paczki</h3>
-
-                <dd><span ng-repeat="package in vm.packages"><hr><b>Rok dostarczenia</b> {{package.year}}<br>
-            <b>Ocena:</b> {{package.mark}}<br>
-            </span></dd>
-            </div>
-        </div>
-
-</div>
-
-
-    <hr>
-    <button type="submit"
-            onclick="window.history.back()"
-            class="btn btn-info" style="margin-bottom: 1%">
-        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Powrót</span>
-    </button>
-
-</div>
+</form>

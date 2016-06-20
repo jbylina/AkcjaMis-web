@@ -7,7 +7,7 @@
     ChristmasPackageNote.$inject = ['$resource'];
 
     function ChristmasPackageNote ($resource) {
-        var resourceUrl =  'api/christmas-package-notes/:id';
+        var resourceUrl =  'api/christmas-packages/:id/notes';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},

@@ -21,9 +21,8 @@
         };
 
         var onSaveSuccess = function (result) {
-            $scope.$emit('akcjamisApp:familyUpdate', result);
             vm.isSaving = false;
-            $state.go('family');
+            $state.go('family-detail',{id : result.id});
         };
 
         var onSaveError = function () {
