@@ -126,7 +126,7 @@
                                             <span editable-select="child.sex" e-style="width: 150px" e-form="rowform" e-ng-options="s.value as s.text for s in vm.sexes">{{vm.sexesMap[child.sex]}}</span>
                                         </td>
                                         <td style="width:100%">
-                                            <button type="button" ng-show="editableForm.$visible" ng-disabled="editableForm.$waiting" ng-click="vm.deleteChild(child.id)" class="btn btn-danger pull-right" style="margin-right: 2%">Usuń</button>
+                                            <button type="button" ng-show="editableForm.$visible" ng-disabled="editableForm.$waiting" ng-click="vm.deleteChild(child.id)" class="btn btn-danger pull-right" style="margin-right: 2%"><span class="glyphicon glyphicon-minus"></span>&nbsp;<span>Usuń</span></button>
                                         </td>
                                     </tr>
 
@@ -178,7 +178,7 @@
                                     <br>
                                 </span>
                                 <b>Treść:</b> <span editable-textarea="note.content" e-rows="4" e-cols="50">{{note.content}}</span><br>
-                                <button type="button" ng-show="editableForm.$visible" ng-disabled="editableForm.$waiting" ng-click="vm.deleteNote(note.id)" class="btn btn-danger pull-right" style="margin-right: 2%">Usuń</button>
+                                <button type="button" ng-show="editableForm.$visible" ng-disabled="editableForm.$waiting" ng-click="vm.deleteNote(note.id)" class="btn btn-danger pull-right" style="margin-right: 2%"><span class="glyphicon glyphicon-minus"></span>&nbsp;<span>Usuń</span></button>
                                 <div class="clearfix"></div>
                             </span>
                             <br>

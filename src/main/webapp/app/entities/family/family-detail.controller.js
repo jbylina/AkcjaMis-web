@@ -89,7 +89,6 @@
             });
 
             vm.childrens.forEach(function(child) {
-                console.log(child);
                 Child.update({id : vm.family.id}, child, onSaveSuccess, onSaveError);
             });
 
@@ -138,7 +137,7 @@
         }
 
         vm.addNote = function () {
-            vm.familyNotes.push(FamilyNote);
+            vm.familyNotes.push(new FamilyNote);
         }
 
         vm.addContact = function () {
