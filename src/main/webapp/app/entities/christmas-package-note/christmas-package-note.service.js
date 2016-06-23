@@ -18,7 +18,17 @@
                     return data;
                 }
             },
-            'update': { method:'PUT' }
+            'update': { method:'PUT',
+                transformRequest: function (data) {
+                    data.lastModifiedDate = data.createdDate;
+                    data.lastModifiedBy = 'admin';
+                    console.log(data);
+                    return angular.toJson(data);
+                }
+             },
+            'delete': { method:'DELETE',
+                url: '/api/christmas-packages/:packageId/notes/:id'
+            }
         });
     }
 })();

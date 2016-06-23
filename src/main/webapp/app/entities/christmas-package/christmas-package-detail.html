@@ -1,43 +1,137 @@
 
+
 <div>
-    <h2><span>ChristmasPackage</span> {{vm.christmasPackage.id}}</h2>
+    <br>
+    <h2><span>Szczegóły paczki o ID </span> {{vm.christmasPackage.id}}</h2>
     <hr>
-    <dl class="dl-horizontal">
-        <dt><span>Mark</dt></dt>
-        <dd>
-            <span>{{vm.christmasPackage.mark}}<span>
-        </dd>
-        <hr>
-        <dt><span>Delivered</dt></dt>
-        <dd>
-            <span>{{vm.christmasPackage.delivered}}<span>
-        </dd>
-        <hr>
-        <dt><span>PackageNumber</dt></dt>
-        <dd>
-            <span>{{vm.christmasPackage.packageNumber}}<span>
-        </dd>
-        <hr>
-        <dt><span>event</span></dt>
-        <dd>
-            <a ui-sref="event-detail({id:vm.christmasPackage.event.id})">{{vm.christmasPackage.event.year}}</a>
-        </dd>
-        <hr>
-        <dt><span>team</span></dt>
-        <dd>
-            <a ui-sref="team-detail({id:vm.christmasPackage.team.id})">{{vm.christmasPackage.team.teamNumber}}</a>
-        </dd>
-        <hr>
-        <dt><span>family</span></dt>
-        <dd>
-            <a ui-sref="family-detail({id:vm.christmasPackage.family.id})">{{vm.christmasPackage.family.id}}</a>
-        </dd>
-        <hr>
-    </dl>
+    <div class="container-fluid">
+        <div class="col-xs-4 no-padding-left">
+            <dl class="dl-horizontal">
+                <dt><span>Ocena</dt></dt>
+                <dd>
+                    <span>{{vm.christmasPackage.mark}}<span>
+                </dd>
+                <hr>
+                <dt><span>Status</dt></dt>
+                <dd>
+                    <span ng-bind="package.delivered ? 'Dostarczona' : 'Oczekująca'"></span>
+                </dd>
+                <hr>
+                <dt><span>Rok</span></dt>
+                <dd>
+                    <a ui-sref="event-detail({id:vm.christmasPackage.eventId})" style="color:blue">{{vm.christmasPackage.eventId}}</a>
+                </dd>
+                <hr>
+                <dt><span>Rodzina</span></dt>
+                <dd>
+                    <a ui-sref="family-detail({id:vm.christmasPackage.familyId})" style="color:blue">{{vm.christmasPackage.familyId}}</a>
+                </dd>
+                <hr>
+                <dt><span>Zespól</span></dt>
+                <dd>
+                    <a ui-sref="team-detail({id:vm.christmasPackage.teamId})" style="color:blue">{{vm.christmasPackage.teamId}}</a>
+                </dd>
+                <hr>
+            </dl>
+        </div>
+        <div class="col no-padding-right">
+            <br>
+            <div class="table-responsive">
+                <table class="jh-table table table-striped">
+                    <thead>
+                    <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                        <th style="width:80%"><span>Notatki</span></th>
+                        <th style="width:10%"></th>
+                        <th style="width:10%"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="note in vm.christmasPackage.christmasPackageNotes">
+                            <td>
+                                <span editable-textarea="note.content" e-form="editNote" e-required onaftersave="vm.updateNote(note)" >{{note.content}}</span>
+                            </td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-info pull-left"
+                                        ng-click="editNote.$show()">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <button type="submit"
+                                        class="btn btn-danger pull-left"
+                                        ng-click="vm.deleteNote(note.id)">
+                                    <span class="glyphicon glyphicon-minus-sign"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" name="content" id="field_content"
+                                   ng-model="vm.christmasPackageNote.content"
+                                   ng-style="width: 100%"
+                                   required ng-maxlength="65535" />
+                        </td>
+                        <td></td>
+                        <td>
+                            <button type="submit" ng-disabled="!vm.christmasPackageNote.content" ng-click="vm.saveNote(vm.christmasPackageNote.content)" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-plus-sign"></span>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+    <h3><span>Szczegóły podpaczek</h3>
+    <hr>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+            <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
+                <th style="width:10%"><span>ID podpaczki</span></th>
+                <th style="width:15%"><span>Nazwisko dziecka</span></th>
+                <th style="width:15%"><span>Imię dziecka</span></th>
+                <th style="width:10%"><span>Wiek dziecka</span></th>
+                <th style="width:50%"><span>Notatki</span></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="subpackage in vm.christmasPackage.subpackages">
+                <td>
+                    {{vm.christmasPackage.id}}.{{subpackage.subpackageNumber}}
+                </td>
+                <td>
+                    {{subpackage.child.lastName}}
+                </td>
+                <td>
+                    {{subpackage.child.firstName}}
+                </td>
+                <td>
+                    {{ vm.date - subpackage.child.birthYear}}
+                </td>
+                <td>
+                    <table>
+                        <tbody>
+                        <span ng-if="subpackage.subpackageNotes.length == 0"> - </span>
+                        <span ng-repeat="note in subpackage.subpackageNotes">
+                            {{note.content}},
+                        </span>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <button type="submit"
             onclick="window.history.back()"
             class="btn btn-info">
-        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Powrót</span>
     </button>
+    <br>
+    <br>
 </div>
