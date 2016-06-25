@@ -1,5 +1,3 @@
-
-
 <div>
     <br>
     <h2><span>Szczegóły paczki o ID </span> {{vm.christmasPackage.id}}</h2>
@@ -19,7 +17,7 @@
                 <hr>
                 <dt><span>Rok</span></dt>
                 <dd>
-                    <a ui-sref="event-detail({id:vm.christmasPackage.eventId})" style="color:blue">{{vm.christmasPackage.eventId}}</a>
+                    <a ui-sref="event-detail({id:vm.christmasPackage.eventYear})" style="color:blue">{{vm.christmasPackage.eventYear}}</a>
                 </dd>
                 <hr>
                 <dt><span>Rodzina</span></dt>
@@ -37,7 +35,7 @@
         <div class="col no-padding-right">
             <br>
             <div class="table-responsive">
-                <table class="jh-table table table-striped">
+                <table class="jh-table table table-responsive">
                     <thead>
                     <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
                         <th style="width:80%"><span>Notatki</span></th>
@@ -65,20 +63,19 @@
                                 </button>
                             </td>
                         </tr>
-                    <tr>
-                        <td>
-                            <input type="text" class="form-control" name="content" id="field_content"
-                                   ng-model="vm.christmasPackageNote.content"
-                                   ng-style="width: 100%"
-                                   required ng-maxlength="65535" />
-                        </td>
-                        <td></td>
-                        <td>
-                            <button type="submit" ng-disabled="!vm.christmasPackageNote.content" ng-click="vm.saveNote(vm.christmasPackageNote.content)" class="btn btn-primary">
-                                <span class="glyphicon glyphicon-plus-sign"></span>
-                            </button>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <input type="text" class="form-control" name="content" id="field_content"
+                                       ng-model="contentModel"
+                                       required ng-maxlength="65535" />
+                            </td>
+                            <td></td>
+                            <td>
+                                <button type="submit" ng-disabled="!contentModel" ng-click="vm.saveNote(contentModel)" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-plus-sign"></span>
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -88,41 +85,69 @@
     <h3><span>Szczegóły podpaczek</h3>
     <hr>
     <div class="table-responsive">
-        <table class="jh-table table table-striped">
+        <table class="jh-table table table-responsive">
             <thead>
             <tr jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.transition()">
-                <th style="width:10%"><span>ID podpaczki</span></th>
+                <th style="width:5%"><span>ID</span></th>
                 <th style="width:15%"><span>Nazwisko dziecka</span></th>
-                <th style="width:15%"><span>Imię dziecka</span></th>
-                <th style="width:10%"><span>Wiek dziecka</span></th>
-                <th style="width:50%"><span>Notatki</span></th>
+                <th style="width:15%"><span>Imię      dziecka</span></th>
+                <th style="width:5%"><span>Wiek</span></th>
+                <th style="width:60%"><span>Notatki</span></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="subpackage in vm.christmasPackage.subpackages">
-                <td>
-                    {{vm.christmasPackage.id}}.{{subpackage.subpackageNumber}}
-                </td>
-                <td>
-                    {{subpackage.child.lastName}}
-                </td>
-                <td>
-                    {{subpackage.child.firstName}}
-                </td>
-                <td>
-                    {{ vm.date - subpackage.child.birthYear}}
-                </td>
-                <td>
-                    <table>
-                        <tbody>
-                        <span ng-if="subpackage.subpackageNotes.length == 0"> - </span>
-                        <span ng-repeat="note in subpackage.subpackageNotes">
-                            {{note.content}},
-                        </span>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
+                <tr ng-repeat="subpackage in vm.christmasPackage.subpackages">
+                    <td>
+                        {{vm.christmasPackage.id}}.{{subpackage.subpackageNumber}}
+                    </td>
+                    <td>
+                        {{subpackage.child.lastName}}
+                    </td>
+                    <td>
+                        {{subpackage.child.firstName}}
+                    </td>
+                    <td>
+                        {{ vm.date - subpackage.child.birthYear}}
+                    </td>
+                    <td>
+                        <table class="jh-table table table-responsive">
+                            <tbody>
+                                <tr ng-repeat="note in subpackage.subpackageNotes">
+                                    <td style="width:80%">
+                                        <span editable-textarea="note.content" e-form="editSubNote" e-required onaftersave="vm.updateSubNote(note)" >{{note.content}}</span>
+                                    </td>
+                                    <td style="width:10%">
+                                        <button type="button"
+                                                class="btn btn-info pull-left"
+                                                ng-click="editSubNote.$show()">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </button>
+                                    </td>
+                                    <td style="width:10%">
+                                        <button type="submit"
+                                                class="btn btn-danger pull-left"
+                                                ng-click="vm.deleteSubNote(note.id)">
+                                            <span class="glyphicon glyphicon-minus-sign"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width:80%">
+                                        <input type="text" class="form-control" name="subContent" id="field_sub_content"
+                                               ng-model="subContentModel"
+                                               required ng-maxlength="65535" />
+                                    </td>
+                                    <td style="width:10%"></td>
+                                    <td style="width:10%">
+                                        <button type="submit" ng-disabled="!subContentModel" ng-click="vm.saveNote(subContentModel)" class="btn btn-success">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>

@@ -18,14 +18,8 @@
                     return data;
                 }
             },
-            'update': { method:'PUT',
-                transformRequest: function (data) {
-                    data.lastModifiedDate = data.createdDate;
-                    data.lastModifiedBy = 'admin';
-                    console.log(data);
-                    return angular.toJson(data);
-                }
-             },
+            'update': { method:'PUT'},
+            'save': { method:'POST'},
             'delete': { method:'DELETE',
                 url: '/api/christmas-packages/:packageId/notes/:id'
             }
