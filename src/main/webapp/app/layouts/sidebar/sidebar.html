@@ -18,15 +18,7 @@
                 <a ui-sref="teams({year: 2015})"><i class="fa fa-users fa-fw"></i> Zespoły</a>
             </li>
 
-            <li ng-class="{active: sb.collapseVar==5}">{{sb.dropDown}}
-                <a href="" ng-click="sb.check(5)"><i class="fa fa-wrench fa-fw"></i> Koordynacja<span
-                    class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" uib-collapse="sb.collapseVar!=5">
-                    <li ui-sref-active="active">
-                        <a ui-sref="event">Akcje</a>
-                    </li>
-                </ul>
-            </li>
+
 
             <li ng-class="{active: sb.collapseVar==2}">
                 <a href="" ng-click="sb.check(2)"><i class="fa fa-sitemap fa-fw"></i> Poprzednie akcje<span

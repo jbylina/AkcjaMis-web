@@ -1,4 +1,4 @@
-<div>
+<div class="container-fluid">
     <h2>Users</h2>
     <jhi-alert></jhi-alert>
     <div class="container">
@@ -18,7 +18,7 @@
                 <th>Login</th>
                 <th>Email</th>
                 <th></th>
-                
+
                 <th>Profiles</th>
                 <th>CreatedDate</th>
                 <th>LastModifiedBy</th>
@@ -37,7 +37,7 @@
                     <span class="label label-success" ng-click="vm.setActive(user, false)" ng-show="user.activated"
                           style="cursor: pointer;">Activated</span>
                 </td>
-                
+
                 <td>
                     <div ng-repeat="authority in user.authorities">
                         <span class="label label-info">{{ authority }}</span>
