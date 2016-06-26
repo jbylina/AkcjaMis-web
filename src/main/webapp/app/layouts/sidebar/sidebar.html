@@ -1,6 +1,16 @@
 <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse nav-custom">
         <ul class="nav in" id="side-menu">
+            <li ng-class="{active: sb.collapseVar==5}">{{sb.dropDown}}
+                <a href="" ng-click="sb.check(5)"><i class="fa fa-wrench fa-fw"></i> Koordynacja<span
+                    class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" uib-collapse="sb.collapseVar!=5">
+                    <li ui-sref-active="active">
+                        <a ui-sref="event">Akcje</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
             <li ui-sref-active="active">
                 <a ui-sref="home"><i class="fa fa-users fa-fw"></i> Wolontariusze</a>
             </li>
@@ -18,7 +28,7 @@
             </li>
 
             <li ui-sref-active="active">
-                <a ui-sref="christmas-package-detail({year: 2015, id: 28})"><i class="fa fa fa-users fa-fw"></i> Szczegóły paczki</a>
+                <a ui-sref="christmas-package-detail({year: 2015, id: 24})"><i class="fa fa fa-users fa-fw"></i> Szczegóły paczki</a>
             </li>
 
             <li ui-sref-active="active">
