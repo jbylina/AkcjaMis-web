@@ -202,9 +202,9 @@ public class FamilyService {
     }
 
     @Transactional(readOnly = true)
-    public List<ClusteringResultDTO> clusterFamiliesWithin(Double distance) {
+    public List<ClusteringResultDTO> clusterFamiliesWithin(Short eventYear, Double distance) {
         log.debug("Request to get clusterFamiliesWithin : {}", distance);
-        List<Object[]> result = familyRepository.clusterFamiliesWithin(distance);
+        List<Object[]> result = familyRepository.clusterFamiliesWithin(eventYear, distance);
 
         return result.stream()
             .map(o -> new ClusteringResultDTO(((BigInteger)o[0]).intValue(),

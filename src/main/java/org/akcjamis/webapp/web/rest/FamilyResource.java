@@ -190,19 +190,19 @@ public class FamilyResource {
     }
 
     /**
-     * GET  /families/cluster?distance=:distance : cluster families with provided parameters
+     * GET  /events/:year/families/cluster?distance=:distance : cluster families with provided parameters
      *
      * @param distance distance within
      * @return the result of the clustering
      */
     @RequestMapping(
-        value = "/families/cluster",
+        value = "/events/{year}/families/cluster",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ClusteringResultDTO>> clusterFamiliesWithin(@RequestParam(defaultValue = "0.06") Double distance){
+    public ResponseEntity<List<ClusteringResultDTO>> clusterFamiliesWithin(@PathVariable Short year, @RequestParam(defaultValue = "0.06") Double distance){
         log.debug("REST request to clusterFamiliesWithin : {}", distance);
-        return new ResponseEntity<>(familyService.clusterFamiliesWithin(distance), HttpStatus.OK);
+        return new ResponseEntity<>(familyService.clusterFamiliesWithin(year, distance), HttpStatus.OK);
     }
 
     /**

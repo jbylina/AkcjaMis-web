@@ -27,10 +27,11 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
                    "  FROM (SELECT row_number() OVER () clst_num" +
                    "              ,(st_DumpPoints(clst.geom)).geom fam_geom" +
                    "            FROM (SELECT unnest(ST_ClusterWithin(location_geom, :distance)) geom" +
-                   "                  FROM families" +
-                   "                  WHERE location_geom IS NOT NULL) clst) clst" +
+                   "                  FROM families f" +
+                   "                  JOIN christmas_packages cp ON cp.family_id = f.id" +
+                   "                  WHERE location_geom IS NOT NULL AND cp.event_year = :eventYear ) clst) clst" +
                    " LEFT JOIN families f ON f.location_geom = clst.fam_geom", nativeQuery = true)
-    List<Object[]> clusterFamiliesWithin(@Param("distance") Double distance);
+    List<Object[]> clusterFamiliesWithin(@Param("eventYear") Short eventYear, @Param("distance") Double distance);
 
 
     @Query(value = "SELECT seq, id FROM pgr_tsp(:distanceMatrix \\:\\: float8[],0)", nativeQuery = true)

@@ -5,9 +5,9 @@
         .module('akcjamisApp')
         .controller('ChristmasPackagesMapController', ChristmasPackagesMapController);
 
-    ChristmasPackagesMapController.$inject = ['$scope', '$state', 'Family', 'uiGmapGoogleMapApi', 'ParseLinks', 'AlertService', 'ChristmasPackagesMap'];
+    ChristmasPackagesMapController.$inject = ['$scope', '$state', '$stateParams', 'Family', 'uiGmapGoogleMapApi', 'ParseLinks', 'AlertService', 'ChristmasPackagesMap'];
 
-    function ChristmasPackagesMapController($scope, $state, Family, uiGmapGoogleMapApi, ParseLinks, AlertService, ChristmasPackagesMap) {
+    function ChristmasPackagesMapController($scope, $state, $stateParams, Family, uiGmapGoogleMapApi, ParseLinks, AlertService, ChristmasPackagesMap) {
         var vm = this;
         vm.packages = [];
         vm.page = 0;
@@ -92,7 +92,8 @@
             vm.map.routes = [];
             ChristmasPackagesMap.clusters
             (
-                {distance: vm.slider.value / 10000},
+                {year: $stateParams.year,
+                 distance: vm.slider.value / 10000},
                 function (data) {
                     for (var i = 0; i < data.length; i++) {
                         data[i].clusterNum--;

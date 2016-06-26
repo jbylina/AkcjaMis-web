@@ -8,7 +8,7 @@
         ChristmasPackagesMap.$inject = ['$resource'];
 
         function ChristmasPackagesMap($resource) {
-            return $resource( 'api/families/cluster?distance=:distance', {},{
+            return $resource( 'api/events/:year/families/cluster?distance=:distance', {},{
                     'clusters': {
                         method: 'GET',
                         isArray: true

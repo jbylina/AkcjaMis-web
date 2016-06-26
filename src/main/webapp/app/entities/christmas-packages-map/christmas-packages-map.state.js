@@ -11,7 +11,7 @@
         $stateProvider
             .state('christmas-packages-map', {
                 parent: 'entity',
-                url: '/christmas-packages-map',
+                url: '/event/:year/christmas-packages-map',
                 data: {
                     authorities: ['ROLE_USER'],
                     pageTitle: 'ChristmasPackagesMap'
