@@ -38,6 +38,8 @@
                 method: 'POST',
                 url: '/api/families/:id/family-notes',
                 transformRequest: function (data) {
+                    if (data.tags == null)
+                        data.tags = Array();
                     data.time = DateUtils.convertLocalDateToServer(data.time);
                     return angular.toJson(data);
                 }

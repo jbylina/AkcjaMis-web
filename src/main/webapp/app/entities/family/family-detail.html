@@ -168,8 +168,8 @@
                         </div>
                         <div class="panel-body">
                             <span ng-repeat="note in vm.familyNotes">
+                                <hr ng-show="!$first">
                                 <span ng-if="note.createdBy!=null">
-                                    <hr ng-show="!$first">
                                     <b>Autor:</b> {{note.createdBy}}
                                     <br>
                                 </span>

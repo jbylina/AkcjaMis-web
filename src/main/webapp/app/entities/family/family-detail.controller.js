@@ -74,6 +74,10 @@
         var onSaveSuccess = function (result) {
         };
 
+        var onSaveNoteSuccess = function (result) {
+            vm.familyNotes.push(result);
+        };
+
         var onSaveError = function () {
             $state.go('family-detail', {id: vm.family.id} , { reload: true });
         };
@@ -92,10 +96,14 @@
                 Child.update({id : vm.family.id}, child, onSaveSuccess, onSaveError);
             });
 
-            vm.familyNotes.forEach(function(note) {
-                FamilyNote.update({id : vm.family.id}, note, onSaveSuccess, onSaveError);
+            vm.familyNotes.forEach(function(note, index, object) {
+                if (note.id)
+                    FamilyNote.update({id : vm.family.id}, note, onSaveSuccess, onSaveError);
+                else {
+                    FamilyNote.save({id: vm.family.id}, note, onSaveNoteSuccess, onSaveError);
+                    object.splice(index, 1);
+                }
             });
-
 
             vm.isSaving = false;
         };
