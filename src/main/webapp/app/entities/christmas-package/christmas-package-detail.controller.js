@@ -76,7 +76,7 @@
         var onSubUpdateError = function () {
         };
 
-        vm.upadateSubNote = function (note) {
+        vm.updateSubNote = function (note) {
             // SubpackageNote.update(note, onSubUpdateSuccess, onSubUpdateError);
         }
 
