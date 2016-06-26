@@ -82,7 +82,7 @@
 
             vm.isSaving = true;
 
-            Family.update(vm.family, onSaveSuccess, onSaveError);
+            vm.family = Family.update(vm.family, onSaveSuccess, onSaveError);
 
             vm.contacts.forEach(function(contact) {
                 Contact.update({id : vm.family.id}, contact, onSaveSuccess, onSaveError);
