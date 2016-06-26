@@ -41,7 +41,7 @@
         var onUpdateError = function () {
         };
 
-        vm.upadateNote = function (note) {
+        vm.updateNote = function (note) {
             ChristmasPackageNote.update({id : vm.christmasPackage.id}, note, onUpdateSuccess, onUpdateError);
         }
 
