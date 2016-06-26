@@ -194,9 +194,9 @@
                             <h3 style="text-align: center">Paczki</h3>
                         </div>
                         <div class="panel-body">
-                            <span ng-repeat="package in vm.packages">
-                                <hr ng-show="!$first"><b>Rok dostarczenia</b> {{package.year}}<br>
-                                <b>Ocena:</b> {{package.mark}}<br>
+                            <span ng-repeat="package in vm.packages track by package.id">
+                                <hr ng-show="!$first"><b>Rok dostarczenia</b> {{package.eventYear}}<br>
+                                <b>Ocena:</b> {{package.mark || "Brak"}}<br>
                             </span>
                         </div>
                     </div>

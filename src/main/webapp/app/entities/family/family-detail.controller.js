@@ -31,41 +31,13 @@
             {value: 'TEL', text: 'Tel. kont'}
         ];
 
-        vm.packages = [
-            {
-                id:1,
-                mark: '5',
-                year: '2011'
-            },
-            {
-                id:2,
-                mark:'2',
-                year: '2012'
-            },
-            {
-                id:3,
-                mark:'4',
-                year: '2013'
-            },
-            {
-                id:5,
-                mark:'1',
-                year: '2015'
-            }
-
-        ];
-
+        vm.packages = Family.getPackages({id: $stateParams.id});
         vm.familyNotes = FamilyNote.query({id:$stateParams.id});
         vm.childrens = Child.query({id:$stateParams.id});
         vm.contacts = Contact.query({id:$stateParams.id});
 
 
-        vm.load = function (id) {
-            Family.get({id: id}, function(result) {
-                vm.family = result;
-            });
 
-        };
         var unsubscribe = $rootScope.$on('akcjamisApp:familyUpdate', function(event, result) {
             vm.family = result;
         });

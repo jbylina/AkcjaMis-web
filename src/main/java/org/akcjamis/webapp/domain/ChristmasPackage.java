@@ -3,6 +3,8 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -46,6 +48,7 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
 
     @OneToMany(fetch=FetchType.EAGER, mappedBy = "christmasPackage")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @NotFound(action= NotFoundAction.IGNORE)
     private Set<ChristmasPackageNote> christmasPackageNotes = new HashSet<>();
 
     @OneToMany(fetch=FetchType.EAGER, mappedBy = "christmasPackage")

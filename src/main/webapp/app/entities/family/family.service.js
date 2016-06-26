@@ -22,7 +22,12 @@
                 url: '/api/families',
                 transformRequest: function (data) {
                     return angular.toJson(data);
-                }}
+                }},
+            'getPackages': {
+                method: 'GET',
+                url : 'api/families/:id/christmas-packages',
+                isArray: true
+            }
         });
     }
 })();

@@ -3,6 +3,8 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -34,6 +36,7 @@ public class Subpackage extends AbstractAuditingEntity implements Serializable {
 
     @OneToMany(mappedBy = "subpackage")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @NotFound(action= NotFoundAction.IGNORE)
     private Set<SubpackageNote> subpackageNotes = new HashSet<>();
 
     @ManyToOne

@@ -1,8 +1,11 @@
 package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.service.FamilyService;
+import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
+import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -37,9 +40,11 @@ public class FamilyResource {
 
     private FamilyService familyService;
 
+    private ChristmasPackageMapper christmasPkgMapper;
     @Inject
-    public FamilyResource(FamilyService familyService) {
+    public FamilyResource(FamilyService familyService, ChristmasPackageMapper christmasPackageMapper) {
         this.familyService = familyService;
+        christmasPkgMapper = christmasPackageMapper;
     }
 
     /**
@@ -121,6 +126,26 @@ public class FamilyResource {
         log.debug("REST request to get Family : {}", id);
         Family family = familyService.findOne(id);
         return Optional.ofNullable(family)
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
+     * GET  /families/:id/christmas-packages : get packages of family.
+     *
+     * @param id the id of the family
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @RequestMapping(value = "/families/{id}/christmas-packages",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<ChristmasPackageDTO>> getFamilyChristmasPackages(@PathVariable Long id) {
+        log.debug("REST request to get packages of Family : {}", id);
+        List<ChristmasPackage> christmasPackages = familyService.getChristmasPackages(id);
+        return Optional.ofNullable(christmasPkgMapper.toChristmasPackageDTOs(christmasPackages))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))

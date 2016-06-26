@@ -1,9 +1,11 @@
 package org.akcjamis.webapp.service;
 
 import org.akcjamis.webapp.domain.Child;
+import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ChildRepository;
+import org.akcjamis.webapp.repository.ChristmasPackageRepository;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.repository.search.ChildSearchRepository;
@@ -42,19 +44,23 @@ public class FamilyService {
 
     private ChildSearchRepository childSearchRepository;
 
+    private ChristmasPackageRepository christmasPackageRepository;
+
     @Inject
     public FamilyService(FamilyRepository familyRepository,
                          FamilySearchRepository familySearchRepository,
                          ContactRepository contactRepository,
                          ContactSearchRepository contactSearchRepository,
                          ChildRepository childRepository,
-                         ChildSearchRepository childSearchRepository) {
+                         ChildSearchRepository childSearchRepository,
+                         ChristmasPackageRepository christmasPackageRepository) {
         this.familyRepository = familyRepository;
         this.familySearchRepository = familySearchRepository;
         this.contactRepository = contactRepository;
         this.contactSearchRepository = contactSearchRepository;
         this.childRepository = childRepository;
         this.childSearchRepository = childSearchRepository;
+        this.christmasPackageRepository = christmasPackageRepository;
     }
 
     /**
@@ -157,6 +163,17 @@ public class FamilyService {
     public List<Child> getAllChildren(Long id) {
         log.debug("Request children for Family : {}", id);
         return childRepository.findByFamily_id(id);
+    }
+
+    /**
+     * Get all packages of selected family.
+     *
+     * @param id the id of family
+     * @return the persisted entity
+     */
+    public List<ChristmasPackage> getChristmasPackages(Long id) {
+        log.debug("Request packages for Family : {}", id);
+        return christmasPackageRepository.findByFamily_id(id);
     }
 
     /**

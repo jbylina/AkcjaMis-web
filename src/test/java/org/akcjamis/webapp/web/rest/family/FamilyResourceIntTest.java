@@ -8,6 +8,7 @@ import org.akcjamis.webapp.repository.search.FamilySearchRepository;
 
 import org.akcjamis.webapp.web.rest.FamilyResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
+import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -67,6 +68,10 @@ public class FamilyResourceIntTest {
 
     @Inject
     private FamilyService familyService;
+
+    @Inject
+    private ChristmasPackageMapper mapper;
+
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
@@ -80,7 +85,7 @@ public class FamilyResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        FamilyResource familyResource = new FamilyResource(familyService);
+        FamilyResource familyResource = new FamilyResource(familyService, mapper);
         this.restFamilyMockMvc = MockMvcBuilders.standaloneSetup(familyResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
