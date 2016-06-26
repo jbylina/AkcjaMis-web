@@ -88,17 +88,17 @@ public class TeamResource {
     }
 
     /**
-     * GET  /teams : get all the teams.
+     * GET  /events/{year}/teams : get all the teams.
      *
      * @return the ResponseEntity with status 200 (OK) and the list of teams in body
      */
-    @RequestMapping(value = "/teams",
+    @RequestMapping(value = "/events/{year}/teams",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Team> getAllTeams() {
-        log.debug("REST request to get all Teams");
-        List<Team> teams = teamRepository.findAllWithEagerRelationships();
+    public List<Team> getTeams(@PathVariable Short year) {
+        log.debug("REST request to get Teams from year : {}", year);
+        List<Team> teams = teamRepository.findByEvent_year(year);
         return teams;
     }
 

@@ -9,22 +9,17 @@
 
     function TeamController ($scope, $state, Team, TeamSearch) {
         var vm = this;
+        vm.year = $state.params.year;
         vm.teams = [];
+
+        vm.editable = vm.year < (new Date().getFullYear());
+
         vm.loadAll = function() {
-            Team.query(function(result) {
+            Team.query({year: vm.year}, function(result) {
                 vm.teams = result;
             });
         };
 
-        vm.search = function () {
-            if (!vm.searchQuery) {
-                return vm.loadAll();
-            }
-            TeamSearch.query({query: vm.searchQuery}, function(result) {
-                vm.teams = result;
-            });
-        };
         vm.loadAll();
-        
     }
 })();

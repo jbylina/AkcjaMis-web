@@ -9,9 +9,9 @@
 
     function stateConfig($stateProvider) {
         $stateProvider
-        .state('team', {
+        .state('teams', {
             parent: 'entity',
-            url: '/team',
+            url: '/event/{year}/teams',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'Teams'
@@ -28,7 +28,7 @@
         })
         .state('team-detail', {
             parent: 'entity',
-            url: '/event/{year}/team/{id}',
+            url: '/event/{year}/teams/{id}',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'Team'

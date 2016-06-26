@@ -1,6 +1,24 @@
 <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse nav-custom">
         <ul class="nav in" id="side-menu">
+            <li ui-sref-active="active">
+                <a ui-sref="home"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+            </li>
+
+
+            <li ui-sref-active="active">
+                <a ui-sref="family"><i class="fa fa-users fa-fw"></i> Rodziny</a>
+            </li>
+
+
+            <li ui-sref-active="active">
+                <a ui-sref="christmas-package({year: 2015})"><i class="fa fa-suitcase fa-fw"></i> Lista paczek</a>
+            </li>
+
+            <li>
+                <a ui-sref="teams({year: 2015})"><i class="fa fa-users fa-fw"></i> Zespoły</a>
+            </li>
+
             <li ng-class="{active: sb.collapseVar==5}">{{sb.dropDown}}
                 <a href="" ng-click="sb.check(5)"><i class="fa fa-wrench fa-fw"></i> Koordynacja<span
                     class="fa arrow"></span></a>
@@ -9,116 +27,37 @@
                         <a ui-sref="event">Akcje</a>
                     </li>
                 </ul>
-                <!-- /.nav-second-level -->
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="home"><i class="fa fa-users fa-fw"></i> Wolontariusze</a>
             </li>
 
-            <li ui-sref-active="active">
-                <a ui-sref="event"><i class="fa fa-user-plus fa-fw"></i> Zarządzaj wolontariuszami</a>
-            </li>
-
-            <li ui-sref-active="active">
-                <a ui-sref="family"><i class="fa fa-users fa-fw"></i> Rodziny</a>
-            </li>
-
-            <li ui-sref-active="active">
-                <a ui-sref="team-detail({year: 2015, id: 1})"><i class="fa fa fa-users fa-fw"></i> Szczegóły zespołu</a>
-            </li>
-
-            <li ui-sref-active="active">
-                <a ui-sref="christmas-package-detail({year: 2015, id: 24})"><i class="fa fa fa-users fa-fw"></i> Szczegóły paczki</a>
-            </li>
-
-            <li ui-sref-active="active">
-                <a ui-sref="christmas-package({year: 2015})"><i class="fa fa-suitcase fa-fw"></i> Lista paczek</a>
-            </li>
-
-            <li ui-sref-active="active">
-                <a ui-sref="home"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-            </li>
-            <li ui-sref-active="active">
-
-                <a ui-sref="home"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span></span></a>
-
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="home"><i class="fa fa-table fa-fw"></i> Tables</a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="home"><i class="fa fa-edit fa-fw"></i> Forms</a>
-            </li>
-            <li ng-class="{active: sb.collapseVar==1}">{{sb.dropDown}}
-                <a href="" ng-click="sb.check(1)"><i class="fa fa-wrench fa-fw"></i> UI Elements<span
-                        class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" uib-collapse="sb.collapseVar!=1">
-                    <li ui-sref-active="active">
-                        <a ui-sref="home">Panels and Wells</a>
-                    </li>
-                    <li ui-sref-active="active">
-                        <a ui-sref="home">Buttons</a>
-                    </li>
-                    <li ui-sref-active="active">
-                        <a ui-sref="home">Notifications</a>
-                    </li>
-                    <li ui-sref-active="active">
-                        <a ui-sref="home">Typography</a>
-                    </li>
-                    <li ui-sref-active="active">
-                        <a ui-sref="home"> Icons</a>
-                    </li>
-                    <li ui-sref-active="active">
-                        <a ui-sref="home">Grid</a>
-                    </li>
-                </ul>
-                <!-- /.nav-second-level -->
-            </li>
             <li ng-class="{active: sb.collapseVar==2}">
-                <a href="" ng-click="sb.check(2)"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span
-                        class="fa arrow"></span></a>
+                <a href="" ng-click="sb.check(2)"><i class="fa fa-sitemap fa-fw"></i> Poprzednie akcje<span
+                    class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" uib-collapse="sb.collapseVar!=2">
-                    <li>
-                        <a href="">Second Level Item</a>
-                    </li>
-                    <li>
-                        <a href="">Second Level Item</a>
-                    </li>
                     <li ng-init="sb.third=!sb.third" ng-class="{active: sb.multiCollapseVar==3}">
-                        <a href="" ng-click="sb.multiCheck(3)">Third Level <span class="fa arrow"></span></a>
+                        <a href="" ng-click="sb.multiCheck(3)">2015 <span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level" uib-collapse="sb.multiCollapseVar!=3">
                             <li>
-                                <a href="">Third Level Item</a>
+                                <a ui-sref="christmas-package({year: 2015})"><i class="fa fa-suitcase fa-fw"></i> Lista paczek 2015</a>
                             </li>
                             <li>
-                                <a href="">Third Level Item</a>
-                            </li>
-                            <li>
-                                <a href="">Third Level Item</a>
-                            </li>
-                            <li>
-                                <a href="">Third Level Item</a>
+                                <a ui-sref="teams({year: 2015})"><i class="fa fa-users fa-fw"></i> Zespoły 2015</a>
                             </li>
 
                         </ul>
                     </li>
-                </ul>
-            </li>
-            <li ng-class="{active: sb.collapseVar==4}">
-                <a href="" ng-click="sb.check(4)"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span
-                        class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" uib-collapse="sb.collapseVar!=4">
-                    <li ng-class="{active: sb.selectedMenu=='blank'}">
-                        <a ui-sref="home" ng-click="sb.selectedMenu='blank'">Blank Page</a>
-                    </li>
-                    <li>
-                        <a ui-sref="home">Login Page</a>
+                    <li ng-init="sb.third=!sb.third" ng-class="{active: sb.multiCollapseVar==4}">
+                        <a href="" ng-click="sb.multiCheck(4)">2014 <span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level" uib-collapse="sb.multiCollapseVar!=4">
+                            <li>
+                                <a ui-sref="christmas-package({year: 2014})"><i class="fa fa-suitcase fa-fw"></i> Lista paczek 2014</a>
+                            </li>
+                            <li>
+                                <a ui-sref="teams({year: 2014})"><i class="fa fa-users fa-fw"></i> Zespoły 2014</a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </li>
         </ul>
     </div>
 </div>
-
-
-
