@@ -169,25 +169,21 @@
                         <div class="panel-body">
                             <span ng-repeat="note in vm.familyNotes">
                                 <hr ng-show="!$first">
-                                <span ng-if="note.createdBy!=null">
-                                    <b>Autor:</b> {{note.createdBy}}
-                                    <br>
-                                </span>
-                                <span ng-if="note.createdDate!=null">
-                                    <b>Data dodania:</b> {{note.createdDate | date:'dd.MM.yyyy HH:mm'}}
-                                    <br>
-                                </span>
+                                <b>Autor:</b> {{note.createdBy}}
+                                <br>
+                                <b>Data dodania:</b> {{note.createdDate | date:'dd.MM.yyyy HH:mm'}}
+                                <br>
                                 <b>Treść:</b> <span editable-textarea="note.content" e-rows="4" e-cols="50">{{note.content}}</span><br>
                                 <button type="button" ng-show="editableForm.$visible" ng-disabled="editableForm.$waiting" ng-click="vm.deleteNote(note.id)" class="btn btn-danger pull-right" style="margin-right: 2%"><span class="glyphicon glyphicon-minus"></span>&nbsp;<span>Usuń</span></button>
                                 <div class="clearfix"></div>
                             </span>
+                            <hr>
+                            <div class="form-group">
+                                <label for="comment">Treść:</label>
+                                <textarea class="form-control" rows="4" id="comment" ng-model="contentModel"></textarea>
+                                <button type="button" ng-click="vm.addNote()" ng-disabled="!contentModel" class="btn btn-info pull-right" style="margin: 2%"><span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Dodaj notatkę</span></button>
+                            </div>
                             <br>
-                            <span ng-show="editableForm.$visible">
-                                <hr>
-                                <button type="button" ng-click="vm.addNote()" ng-disabled="editableForm.$waiting" class="btn btn-info pull-right" style="margin: 2%"><span class="glyphicon glyphicon-plus"></span>&nbsp;<span>Dodaj notatkę</span></button>
-                                <div class="clearfix"></div>
-                                <br>
-                            </span>
                         </div>
                     </div>
                 </div>

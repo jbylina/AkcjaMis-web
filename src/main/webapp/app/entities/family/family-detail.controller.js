@@ -75,7 +75,9 @@
         };
 
         var onSaveNoteSuccess = function (result) {
+
             vm.familyNotes.push(result);
+
         };
 
         var onSaveError = function () {
@@ -96,14 +98,16 @@
                 Child.update({id : vm.family.id}, child, onSaveSuccess, onSaveError);
             });
 
-            vm.familyNotes.forEach(function(note, index, object) {
+            vm.familyNotes.forEach(function(note) {
                 if (note.id)
                     FamilyNote.update({id : vm.family.id}, note, onSaveSuccess, onSaveError);
                 else {
                     FamilyNote.save({id: vm.family.id}, note, onSaveNoteSuccess, onSaveError);
-                    object.splice(index, 1);
                 }
             });
+
+            if ($scope.contentModel)
+                vm.addNote();
 
             vm.isSaving = false;
         };
@@ -145,7 +149,10 @@
         }
 
         vm.addNote = function () {
-            vm.familyNotes.push(new FamilyNote);
+            var note = new FamilyNote;
+            note.content = $scope.contentModel;
+            FamilyNote.save({id: vm.family.id}, note, onSaveNoteSuccess, onSaveError);
+            $scope.contentModel = '';
         }
 
         vm.addContact = function () {
