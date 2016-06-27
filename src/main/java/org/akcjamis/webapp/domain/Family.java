@@ -5,7 +5,11 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.*;
 import org.hibernate.search.annotations.Index;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.elasticsearch.annotations.Document;
+import com.vividsolutions.jts.geom.Point;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -26,6 +30,7 @@ import java.util.Set;
 public class Family extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    public static final int SRID = 4326;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -69,6 +74,10 @@ public class Family extends AbstractAuditingEntity implements Serializable {
     @Field(index=Index.YES, analyze=Analyze.YES, store=Store.YES)
     private String source;
 
+    @Column(name = "location_geom")
+    @Type(type = "org.hibernate.spatial.GeometryType")
+    private Point locationGeom;
+
     @OneToMany(mappedBy = "family")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -81,6 +90,7 @@ public class Family extends AbstractAuditingEntity implements Serializable {
 
     @OneToMany(mappedBy = "family")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @NotFound(action= NotFoundAction.IGNORE)
     private Set<FamilyNote> familyNotes = new HashSet<>();
 
     @OneToMany(mappedBy = "family")
@@ -190,6 +200,15 @@ public class Family extends AbstractAuditingEntity implements Serializable {
 
     public void setChristmasPackages(Set<ChristmasPackage> christmasPackages) {
         this.christmasPackages = christmasPackages;
+    }
+
+    public Point getLocationGeom() {
+        return locationGeom;
+    }
+
+    public void setLocationGeom(Point locationGeom) {
+        locationGeom.setSRID(SRID);
+        this.locationGeom = locationGeom;
     }
 
     @Override

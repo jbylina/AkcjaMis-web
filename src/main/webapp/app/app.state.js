@@ -5,9 +5,9 @@
         .module('akcjamisApp')
         .config(stateConfig);
 
-    stateConfig.$inject = ['$stateProvider'];
+    stateConfig.$inject = ['$stateProvider', 'uiGmapGoogleMapApiProvider'];
 
-    function stateConfig($stateProvider) {
+    function stateConfig($stateProvider, uiGmapGoogleMapApiProvider) {
         $stateProvider.state('app', {
             abstract: true,
             views: {
@@ -29,6 +29,12 @@
                     }
                 ]
             }
+        });
+
+        uiGmapGoogleMapApiProvider.configure({
+            key: 'AIzaSyA_Z7yxF8_HXhgrU8i-OK1LkfeRfpnZLio',  // TODO parameterize based on env
+            v: '3.23',
+            libraries: 'visualization'
         });
     }
 

@@ -1,23 +1,38 @@
 package org.akcjamis.webapp.service;
 
+import com.google.common.collect.*;
+import com.google.common.primitives.Longs;
 import org.akcjamis.webapp.domain.Child;
+import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ChildRepository;
+import org.akcjamis.webapp.repository.ChristmasPackageRepository;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 import org.akcjamis.webapp.repository.search.FamilySearchRepository;
+import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
+import org.akcjamis.webapp.web.rest.dto.RouteDTO;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.type.ArrayType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.MultiValueMap;
 
 import javax.inject.Inject;
+import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -42,19 +57,23 @@ public class FamilyService {
 
     private ChildSearchRepository childSearchRepository;
 
+    private ChristmasPackageRepository christmasPackageRepository;
+
     @Inject
     public FamilyService(FamilyRepository familyRepository,
                          FamilySearchRepository familySearchRepository,
                          ContactRepository contactRepository,
                          ContactSearchRepository contactSearchRepository,
                          ChildRepository childRepository,
-                         ChildSearchRepository childSearchRepository) {
+                         ChildSearchRepository childSearchRepository,
+                         ChristmasPackageRepository christmasPackageRepository) {
         this.familyRepository = familyRepository;
         this.familySearchRepository = familySearchRepository;
         this.contactRepository = contactRepository;
         this.contactSearchRepository = contactSearchRepository;
         this.childRepository = childRepository;
         this.childSearchRepository = childSearchRepository;
+        this.christmasPackageRepository = christmasPackageRepository;
     }
 
     /**
@@ -160,6 +179,17 @@ public class FamilyService {
     }
 
     /**
+     * Get all packages of selected family.
+     *
+     * @param id the id of family
+     * @return the persisted entity
+     */
+    public List<ChristmasPackage> getChristmasPackages(Long id) {
+        log.debug("Request packages for Family : {}", id);
+        return christmasPackageRepository.findByFamily_id(id);
+    }
+
+    /**
      * Search for the family corresponding to the query.
      *
      *  @param query the query of the search
@@ -169,5 +199,55 @@ public class FamilyService {
     public Page<Family> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Families for query {}", query);
         return familySearchRepository.search(queryStringQuery(query), pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ClusteringResultDTO> clusterFamiliesWithin(Short eventYear, Double distance) {
+        log.debug("Request to get clusterFamiliesWithin : {}", distance);
+        List<Object[]> result = familyRepository.clusterFamiliesWithin(eventYear, distance);
+
+        return result.stream()
+            .map(o -> new ClusteringResultDTO(((BigInteger)o[0]).intValue(),
+                ((BigInteger)o[1]).longValue(),
+                (String)o[2],
+                (String)o[3],
+                (String)o[4],
+                (String)o[5],
+                (String)o[6],
+                (String)o[7])).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public RouteDTO calculateOptimalRoute(Set<Long> families, Double latitude, Double longitude) {
+
+        List<Object[]> list = familyRepository.calculateOptimalRoute(families, latitude, longitude);
+
+        //add start point - warehouse facility
+        families.add(0L);
+        long[] fam = families.stream().sorted().mapToLong(Long::longValue).toArray();
+        double[][] distMatrix = new double[fam.length][fam.length];
+        Table<Integer, Integer, String> routes = HashBasedTable.create();
+
+        for (Object[] o : list) {
+            int from = Longs.indexOf(fam, ((BigInteger)o[0]).longValue());
+            int to = Longs.indexOf(fam, ((BigInteger)o[1]).longValue());
+            distMatrix[from][to] = distMatrix[to][from] = (Double)o[2];
+            routes.put(from, to, (String)o[3]);
+            routes.put(to, from, (String)o[3]);
+        }
+
+        List<Object[]> optOrder = familyRepository.calculateOptimalOrder(ArrayUtils.toString(distMatrix));
+
+        // starting point is also a last point
+        optOrder.add(optOrder.get(0));
+
+        List<Long> orderedFamIds  = optOrder.stream().map(o -> fam[(int)o[1]]).collect(Collectors.toList());
+
+        List<String> routePaths = Lists.newLinkedList();
+        for (int i = 0; i < optOrder.size() - 1; i++) {
+            routePaths.add(routes.get(optOrder.get(i)[1], optOrder.get(i + 1)[1]));
+        }
+
+        return new RouteDTO(orderedFamIds, routePaths);
     }
 }

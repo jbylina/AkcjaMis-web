@@ -20,6 +20,7 @@
         vm.currentSearch = pagingParams.search;
         vm.loadAll();
 
+
         function loadAll () {
             if (pagingParams.search) {
                 FamilySearch.query({

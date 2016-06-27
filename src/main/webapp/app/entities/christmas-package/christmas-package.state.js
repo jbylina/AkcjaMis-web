@@ -48,7 +48,7 @@
         })
         .state('christmas-package-detail', {
             parent: 'entity',
-            url: '/christmas-package/{id}',
+            url: '/event/{year}/christmas-package/{id}',
             data: {
                 authorities: ['ROLE_USER'],
                 pageTitle: 'ChristmasPackage'
@@ -62,7 +62,7 @@
             },
             resolve: {
                 entity: ['$stateParams', 'ChristmasPackage', function($stateParams, ChristmasPackage) {
-                    return ChristmasPackage.get({year : 2016, id : $stateParams.id});
+                    return ChristmasPackage.get({year : $stateParams.year, id : $stateParams.id});
                 }]
             }
         })

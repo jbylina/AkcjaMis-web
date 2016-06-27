@@ -7,10 +7,14 @@
     FamilyNote.$inject = ['$resource', 'DateUtils'];
 
     function FamilyNote ($resource, DateUtils) {
-        var resourceUrl =  'api/family-notes/:id';
+        var resourceUrl =  '/api/families/:familyId/family-notes/:id';
 
         return $resource(resourceUrl, {}, {
-            'query': { method: 'GET', isArray: true},
+            'query': {
+                method: 'GET',
+                url: '/api/families/:id/family-notes',
+                isArray: true
+            },
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {
@@ -21,14 +25,21 @@
             },
             'update': {
                 method: 'PUT',
+                url: '/api/families/:id/family-notes',
                 transformRequest: function (data) {
+                    if (data.tags == null)
+                        data.tags = Array();
                     data.time = DateUtils.convertLocalDateToServer(data.time);
                     return angular.toJson(data);
+
                 }
             },
             'save': {
                 method: 'POST',
+                url: '/api/families/:id/family-notes',
                 transformRequest: function (data) {
+                    if (data.tags == null)
+                        data.tags = Array();
                     data.time = DateUtils.convertLocalDateToServer(data.time);
                     return angular.toJson(data);
                 }

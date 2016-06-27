@@ -1,0 +1,76 @@
+<div class="col-lg-12">
+<h2 style="color: #0d3349">Dodaj nową rodzinę</h2>
+    </div>
+<div class="col-lg-12">
+<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+<div class="col-lg-16">
+    <div class="row">
+        <div class="col-xs-5 no-padding-left">
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <p class="help-block"><b>Ulica</b></p>
+                        <input type="text" class="form-control" placeholder="Przykładowa" name="street" id="field_street"
+                               ng-model="vm.family.street"
+                               required/>
+                        <div ng-show="editForm.street.$invalid || editForm.street.$error.required">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="help-block"><b>Numer domu</b></p>
+                        <input type="text" class="form-control" placeholder="0" name="houseNo" id="field_houseNo"
+                               ng-model="vm.family.houseNo"
+                                required ng-maxlength="10"/>
+                        <div ng-show="editForm.houseNo.$invalid || editForm.houseNo.$error.required || editForm.houseNo.$error.maxlength"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="help-block"><b>Numer mieszkania</b></p>
+                        <input class="form-control" placeholder="0" name="flatNo" id="field_flatNo"
+                               ng-model="vm.family.flatNo"
+                                ng-maxlength="10"/>
+                        <div ng-show="editForm.flatNo.$invalid || editForm.flatNo.$error.maxlength"></div>
+                    </div>
+                </div>
+
+        </div>
+        <div class="col-xs-5 no-padding-right">
+            <div class="panel-body">
+                <div class="form-group">
+                    <p class="help-block"><b>Kod pocztowy</b></p>
+                    <input class="form-control" placeholder="00-000" name="postalcode" id="field_postalcode"
+                           ng-model="vm.family.postalcode"
+                           ng-maxlength="6"/>
+                    <div ng-show="editForm.flatNo.$invalid || editForm.flatNo.$error.maxlength"></div>
+                </div>
+
+                <div class="form-group">
+                    <p class="help-block"><b>Miasto</b></p>
+                    <input class="form-control" placeholder="Warszawa" name="city" id="field_city"
+                           ng-model="vm.family.city" required />
+                    <div ng-show="editForm.flatNo.$invalid || editForm.flatNo.$error.required"></div>
+                </div>
+
+                <div class="form-group">
+                    <p class="help-block"><b>Dzielnica</b></p>
+                    <input class="form-control" placeholder="Mokotów" name="region" id="field_region"
+                           ng-model="vm.family.region" />
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-10">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ui-sref="family">
+                    <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Powrót</span>
+                </button>
+                <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Zapisz</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+</div>
+

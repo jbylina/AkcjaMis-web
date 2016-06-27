@@ -43,7 +43,7 @@
                         ascending: PaginationUtil.parseAscending($stateParams.sort),
                         search: $stateParams.search
                     };
-                }],
+                }]
             }
         })
         .state('family-detail', {
@@ -66,6 +66,120 @@
                 }]
             }
         })
+            .state('address-edit', {
+                parent: 'family-detail',
+                url: '/edit-address',
+                data: {
+                    authorities: ['ROLE_USER']
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/family/edit-address.html',
+                        controller: 'EditAddressController',
+                        controllerAs: 'vm',
+                        backdrop: 'static',
+                        size: 'lg',
+                        resolve: {
+                            entity: function () {
+                                return {
+                                    street: null,
+                                    houseNo: null,
+                                    flatNo: null,
+                                    postalcode: null,
+                                    city: null
+                                };
+                            }
+                        }
+                    }).result.then(function() {
+                        $state.go('family-detail', null, { reload: true });
+                    }, function() {
+                        $state.go('family-detail');
+                    });
+                }]
+
+        })
+            .state('contact-edit', {
+                parent: 'family-detail',
+                url: '/edit-contact',
+                data: {
+                    authorities: ['ROLE_USER']
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'app/entities/family/edit-contact.html',
+                        controller: 'EditAddressController',
+                        controllerAs: 'vm',
+                        backdrop: 'static',
+                        size: 'lg',
+                        resolve: {
+                            entity: function () {
+                                return {
+                                    street: null,
+                                    houseNo: null,
+                                    flatNo: null,
+                                    postalcode: null,
+                                    city: null
+                                };
+                            }
+                        }
+                    }).result.then(function() {
+                        $state.go('family-detail', null, { reload: true });
+                    }, function() {
+                        $state.go('family-detail');
+                    });
+                }]
+
+            })
+            .state('family-edit', {
+                parent: 'entity',
+                url: '/family/{id}/edit',
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: 'Family'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/entities/family/family-edit.html',
+                        controller: 'FamilyEditController',
+                        controllerAs: 'vm'
+                    }
+                },
+                resolve: {
+                    entity: ['$stateParams', 'Family', function($stateParams, Family) {
+                        return Family.get({id : $stateParams.id});
+                    }]
+                }
+            })
+            .state('family.create',{
+                parent:'entity',
+                url: '/family/create',
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: 'Nowa rodzina'
+                },
+                views:{
+                    'content@': {
+                        templateUrl: 'app/entities/family/new-family.html',
+                        controller: 'FamilyCreateController',
+                        controllerAs: 'vm'
+                    }
+                },
+                resolve: {
+                    entity: function () {
+                        return {
+                            street: null,
+                            houseNo: null,
+                            flatNo: null,
+                            postalcode: null,
+                            district: null,
+                            city: null,
+                            region: null,
+                            source: null,
+                            id: null
+                        };
+                    }
+                }
+            })
         .state('family.new', {
             parent: 'family',
             url: '/new',
@@ -98,31 +212,6 @@
                     $state.go('family', null, { reload: true });
                 }, function() {
                     $state.go('family');
-                });
-            }]
-        })
-        .state('family.edit', {
-            parent: 'family',
-            url: '/{id}/edit',
-            data: {
-                authorities: ['ROLE_USER']
-            },
-            onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
-                $uibModal.open({
-                    templateUrl: 'app/entities/family/family-dialog.html',
-                    controller: 'FamilyDialogController',
-                    controllerAs: 'vm',
-                    backdrop: 'static',
-                    size: 'lg',
-                    resolve: {
-                        entity: ['Family', function(Family) {
-                            return Family.get({id : $stateParams.id});
-                        }]
-                    }
-                }).result.then(function() {
-                    $state.go('family', null, { reload: true });
-                }, function() {
-                    $state.go('^');
                 });
             }]
         })

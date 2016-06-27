@@ -1,5 +1,6 @@
 package org.akcjamis.webapp.config;
 
+import com.bedatadriven.jackson.datatype.jts.JtsModule;
 import org.akcjamis.webapp.domain.util.*;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -23,6 +24,6 @@ public class JacksonConfiguration {
         return new Jackson2ObjectMapperBuilder()
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
                 .findModulesViaServiceLoader(true)
-                .modulesToInstall(module);
+                .modulesToInstall(module, new JtsModule());
     }
 }

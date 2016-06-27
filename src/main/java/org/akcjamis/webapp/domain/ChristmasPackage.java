@@ -5,6 +5,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
@@ -50,16 +52,17 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     @JsonIgnore
     private Team team;
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "christmasPackage")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "christmasPackage")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @NotFound(action= NotFoundAction.IGNORE)
     private Set<ChristmasPackageNote> christmasPackageNotes = new HashSet<>();
 
-    @OneToMany(mappedBy = "christmasPackage")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "christmasPackage")
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ChristmasPackageChange> christmasPackageChanges = new HashSet<>();
 
-    @OneToMany(fetch=FetchType.LAZY, mappedBy = "christmasPackage")
+    @OneToMany(fetch=FetchType.EAGER, mappedBy = "christmasPackage")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Subpackage> subpackages = new HashSet<>();
 

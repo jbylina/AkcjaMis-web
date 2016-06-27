@@ -1,0 +1,95 @@
+
+<div>
+    <div class="col-lg-12">
+        <div class="col-lg-6">
+            <h2><span>Rodzina</span> {{vm.family.id}}</h2>
+        </div>
+
+        <div class="col-lg-6">
+            <button type="submit"
+                    onclick="alert('In progress')"
+                    class="btn btn-info pull-right" style="margin-top: 1%">
+                <span class="glyphicon glyphicon-saved"></span>&nbsp;<span> Zapisz zmiany</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="col-lg-6">
+            <div class="panel panel-info">
+
+                <dt>
+                    <span>Adres</span>
+                </dt>
+                <dd>
+            <span>
+                {{vm.family.street}} {{vm.family.houseNo}}/{{vm.family.flatNo}}
+        <br>
+        {{vm.family.postalcode}} {{vm.family.city}}
+            </span>
+                </dd>
+
+                <hr>
+                <dt><span>Kontakt</span></dt>
+                <dd><span ng-repeat="contact in vm.contacts">{{contact.type}}: {{contact.value}} <br></span></dd>
+
+                <hr>
+                <dt><span>Dane analityczne</span></dt>
+                <dd>
+                <span>
+                    <b>Utworzona przez:</b> {{vm.family.createdBy}}<br>
+                    <b>Data utworzenia:</b> {{vm.family.createdDate}}<br>
+                    <b>Ostatnio modyfikował:</b> {{vm.family.lastModifiedBy}}<br>
+                    <b>Data ostatniej modyfikacji:</b> {{vm.family.lastModifiedDate}}<br>
+                </span>
+                </dd>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6">
+            <div class="panel panel-info">
+                <h3>Dzieci</h3>
+
+                <dd><span ng-repeat="children in vm.childrens"><hr><b>Imię:</b> {{children.firstName}}<br>
+            <b>Nazwisko:</b> {{children.lastName}}<br>
+            <b>Płeć:</b> {{children.sex}}<br>
+            <b>Urodziny:</b> {{children.birthYear}}
+            </span></dd>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12">
+
+
+        <div class="col-lg-6">
+            <div class="panel panel-info">
+                <h3>Notatki</h3>
+
+                <dd><span ng-repeat="note in vm.familyNotes"><hr><b>Autor:</b> {{note.createdBy}}<br>
+            <b>Data dodania:</b> {{note.createdDate}}<br>
+            <b>Treść:</b> {{note.content}}<br>
+            </span></dd>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="panel panel-info">
+                <h3>Paczki</h3>
+
+                <dd><span ng-repeat="package in vm.packages"><hr><b>Rok dostarczenia</b> {{package.year}}<br>
+            <b>Ocena:</b> {{package.mark}}<br>
+            </span></dd>
+            </div>
+        </div>
+
+    </div>
+
+
+    <hr>
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info" style="margin-bottom: 1%">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Powrót</span>
+    </button>
+
+</div>

@@ -4,7 +4,7 @@
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="vm.clear()">&times;</button>
-        <h4 class="modal-title" id="myEventLabel">Create or edit a Event</h4>
+        <h4 class="modal-title" id="myEventLabel">Stwórz akcję</h4>
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
@@ -14,7 +14,7 @@
                     ng-model="vm.event.id" readonly />
         </div>
         <div class="form-group">
-            <label class="control-label" for="field_year">Year</label>
+            <label class="control-label" for="field_year">Rok</label>
                 <div class="input-group">
                     <input id="field_year" type="text" class="form-control" name="year" uib-datepicker-popup="{{dateformat}}" ng-model="vm.event.year" is-open="vm.datePickerOpenStatus.year"
                     required/>
@@ -25,7 +25,7 @@
             <div ng-show="editForm.year.$invalid">
                 <p class="help-block"
                     ng-show="editForm.year.$error.required">
-                    This field is required.
+                    Pole wymagane.
                 </p>
             </div>
         </div>
@@ -33,10 +33,10 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
-            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Cancel</span>
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span>Zamknij</span>
         </button>
         <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
-            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Save</span>
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span>Zapisz</span>
         </button>
     </div>
 </form>

@@ -13,8 +13,6 @@
 <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="vm.navCollapsed" ng-switch="vm.isAuthenticated()">
     <ul class="nav navbar-top-links navbar-right">
 
-
-
         <!--TODO think about vm.$state.includes('account') -->
         <li ng-class="{active: vm.$state.includes('account')}" uib-dropdown class="dropdown pointer">
             <a class="dropdown-toggle" uib-dropdown-toggle href="" id="account-menu">
@@ -25,13 +23,13 @@
             <ul class="dropdown-menu dropdown-user" uib-dropdown-menu>
                 <li ui-sref-active="active" ng-switch-when="true">
                     <a ui-sref="settings" data-toggle="collapse" data-target=".navbar-collapse.in">
-                        <span class="fa fa-gear fa-fw"></span>&#xA0;<span>Ustawienia</span>
+                        <span class="fa fa-gear fa-fw"></span>&#xA0;<span>Settings</span>
                     </a>
                 </li>
 
                 <li ui-sref-active="active" ng-switch-when="true">
                     <a ui-sref="password" data-toggle="collapse" data-target=".navbar-collapse.in">
-                        <span class="fa fa-key fa-fw"></span>&#xA0;<span>Hasło</span>
+                        <span class="fa fa-key fa-fw"></span>&#xA0;<span>Password</span>
                     </a>
                 </li>
 
@@ -39,20 +37,87 @@
 
                 <li ui-sref-active="active" ng-switch-when="true">
                     <a href="" ng-click="vm.logout()" id="logout" data-toggle="collapse" data-target=".navbar-collapse.in">
-                        <span class="fa fa-sign-out fa-fw"></span>&#xA0;<span>Wyloguj się</span>
+                        <span class="fa fa-sign-out fa-fw"></span>&#xA0;<span>Sign out</span>
                     </a>
                 </li>
 
                 <li ui-sref-active="active" ng-switch-when="false">
                     <a href="" ng-click="vm.login()" id="login" data-toggle="collapse" data-target=".navbar-collapse.in">
-                        <span class="fa fa-sign-in fa-fw"></span>&#xA0;<span>Zaloguj się</span>
+                        <span class="fa fa-sign-in fa-fw"></span>&#xA0;<span>Sign in</span>
                     </a>
                 </li>
                 <li ui-sref-active="active" ng-switch-when="false">
                     <a ui-sref="register" data-toggle="collapse" data-target=".navbar-collapse.in">
-                        <span class="fa fa-user-plus fa-fw"></span>&#xA0;<span>Rejestracja</span>
+                        <span class="fa fa-user-plus fa-fw"></span>&#xA0;<span>Register</span>
                     </a>
                 </li>
+            </ul>
+        </li>
+
+
+        <!-- TODO to remove or to modify -->
+        <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+        <li ng-class="{active: vm.$state.includes('entity')}" ng-switch-when="true" uib-dropdown
+            class="dropdown pointer">
+            <a class="dropdown-toggle" uib-dropdown-toggle href="" id="entity-menu">
+                <span>
+                    <span class="glyphicon glyphicon-th-list"></span>
+                    <span class="hidden-sm">
+                        Entities
+                    </span>
+                    <b class="caret"></b>
+                </span>
+            </a>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+                <li ui-sref-active="active"><a ui-sref="family" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Family</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="contact" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Contact</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="child" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Child</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="tag" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Tag</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="family-note" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Family Note</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="subpackage-note" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Subpackage Note</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="christmas-package-change" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Christmas Package Change</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="christmas-package-note" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Christmas Package Note</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="subpackage" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Subpackage</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="team" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Team</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="event" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Event</span></a></li>
+                <li ui-sref-active="active"><a ui-sref="christmas-package" data-toggle="collapse"
+                                               data-target=".navbar-collapse.in"><span
+                        class="glyphicon glyphicon-asterisk"></span>
+                    &#xA0;<span>Christmas Package</span></a></li>
+                <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
             </ul>
         </li>
         <li ng-class="{active: vm.vm.$state.includes('admin')}" ng-switch-when="true" has-authority="ROLE_ADMIN"
@@ -60,51 +125,51 @@
             <a class="dropdown-toggle" uib-dropdown-toggle href="" id="admin-menu">
                 <span>
                     <span class="glyphicon glyphicon-tower"></span>
-                    <span class="hidden-sm">Administracja</span>
+                    <span class="hidden-sm">Administration</span>
                     <b class="caret"></b>
                 </span>
             </a>
             <ul class="dropdown-menu" uib-dropdown-menu>
                 <li ui-sref-active="active"><a ui-sref="user-management" data-toggle="collapse"
                                                data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-user"></span>
-                    &#xA0;<span>Zarządzanie użytkownikami</span></a></li>
+                        class="glyphicon glyphicon-user"></span>
+                    &#xA0;<span>User management</span></a></li>
                 <li ui-sref-active="active"><a ui-sref="jhi-tracker" data-toggle="collapse"
                                                data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-eye-open"></span>
-                    &nbsp;<span>Monitorowanie użytkowników</span></a></li>
+                        class="glyphicon glyphicon-eye-open"></span>
+                    &nbsp;<span>User tracker</span></a></li>
                 <li ui-sref-active="active"><a ui-sref="jhi-metrics" data-toggle="collapse"
                                                data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-dashboard"></span>
-                    &#xA0;<span>Metryki</span></a></li>
+                        class="glyphicon glyphicon-dashboard"></span>
+                    &#xA0;<span>Metrics</span></a></li>
                 <li ui-sref-active="active"><a ui-sref="jhi-health" data-toggle="collapse"
                                                data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-heart"></span>
-                    &#xA0;<span>Status komponentów</span></a></li>
+                        class="glyphicon glyphicon-heart"></span>
+                    &#xA0;<span>Health</span></a></li>
                 <li ui-sref-active="active"><a ui-sref="jhi-configuration" data-toggle="collapse"
                                                data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-list-alt"></span>
-                    &#xA0;<span>Konfiguracja</span></a></li>
+                        class="glyphicon glyphicon-list-alt"></span>
+                    &#xA0;<span>Configuration</span></a></li>
                 <li ui-sref-active="active"><a ui-sref="audits" data-toggle="collapse"
                                                data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-bell"></span>
-                    &#xA0;<span>Audyt</span></a></li>
+                        class="glyphicon glyphicon-bell"></span>
+                    &#xA0;<span>Audits</span></a></li>
                 <li ui-sref-active="active"><a ui-sref="logs" data-toggle="collapse"
                                                data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-tasks"></span>
-                    &#xA0;<span>Logi</span></a></li>
+                        class="glyphicon glyphicon-tasks"></span>
+                    &#xA0;<span>Logs</span></a></li>
                 <li ng-hide="vm.inProduction" ui-sref-active="active"><a ui-sref="docs" data-toggle="collapse"
                                                                          data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-book"></span>
+                        class="glyphicon glyphicon-book"></span>
                     &#xA0;<span>API</span></a></li>
                 <li ui-sref-active="active"><a ui-sref="entity-audit" data-toggle="collapse"
                                                data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-list-alt"></span>
-                    &#xA0;<span>Audyt encji</span></a></li>
+                        class="glyphicon glyphicon-list-alt"></span>
+                    &#xA0;<span>Entity Audit</span></a></li>
                 <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
                 <li ng-hide="vm.inProduction"><a href='/h2-console' target="_tab" data-toggle="collapse"
                                                  data-target=".navbar-collapse.in"><span
-                    class="glyphicon glyphicon-hdd"></span>
+                        class="glyphicon glyphicon-hdd"></span>
                     &#xA0;<span>Database</span></a></li>
             </ul>
         </li>

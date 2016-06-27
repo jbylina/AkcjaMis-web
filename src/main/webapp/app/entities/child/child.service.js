@@ -7,7 +7,7 @@
     Child.$inject = ['$resource', 'DateUtils'];
 
     function Child ($resource, DateUtils) {
-        var resourceUrl =  'api/families/1/children';
+        var resourceUrl =  'api/families/:id/children';
 
         return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true},
@@ -20,11 +20,7 @@
                 }
             },
             'update': {
-                method: 'PUT',
-                transformRequest: function (data) {
-                    data.birthYear = DateUtils.convertLocalDateToServer(data.birthYear);
-                    return angular.toJson(data);
-                }
+                method: 'PUT'
             },
             'save': {
                 method: 'POST',
@@ -32,6 +28,10 @@
                     data.birthYear = DateUtils.convertLocalDateToServer(data.birthYear);
                     return angular.toJson(data);
                 }
+            },
+            'delete': {
+                method: 'DELETE',
+                url: '/api/families/:familyId/children/:id'
             }
         });
     }

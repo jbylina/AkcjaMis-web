@@ -4,14 +4,14 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="christmas-package.new" >
+                <button class="btn btn-primary" ui-sref="christmas-package.new" ng-disabled="vm.editable">
                     <span class="glyphicon glyphicon-plus"></span>
                     <span class="hidden-xs" >
                         Dodaj paczkę
                     </span>
                 </button>
             </div>
-            <div class="col-xs-8 no-padding-right">
+<!--            <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
                     <div class="input-group pull-right" >
                         <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery">
@@ -27,7 +27,7 @@
                         </span>
                     </div>
                 </form>
-            </div>
+            </div>-->
         </div>
     <br/>
         <div class="table-responsive">
@@ -53,11 +53,11 @@
                     <tr ng-repeat="package in vm.christmasPackages">
                         <td>
                         </td>
-                        <td><a ui-sref="christmas-package-detail({id:package.id})" style="color:blue">{{package.id}}</a></td>
+                        <td><a ui-sref="christmas-package-detail({year: package.eventYear, id:package.id})" style="color:blue">{{package.id}}</a></td>
                         <td>{{package.mark}}</td>
                         <td><span ng-bind="package.delivered ? 'Dostarczona' : 'Oczekująca'"></span></td>
                         <td>
-                            <a ui-sref="family-detail({id:package.family.id})" style="color:blue">{{package.familyId}}</a>
+                            <a ui-sref="family-detail({id:package.familyId})" style="color:blue">{{package.familyId}}</a>
                         </td>
                         <td>
                             <table>

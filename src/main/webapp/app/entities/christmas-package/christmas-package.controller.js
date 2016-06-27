@@ -36,6 +36,7 @@
         vm.date = new Date().getFullYear();
         vm.allExpanded = dataService.getProperty();
 
+        vm.editable = vm.year < (new Date().getFullYear());
         function loadAll (year) {
             if (pagingParams.search) {
                 ChristmasPackageSearch.query({

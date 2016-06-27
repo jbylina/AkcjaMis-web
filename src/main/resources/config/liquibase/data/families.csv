@@ -1,31 +1,59 @@
-id;street;house_no;flat_no;postalcode;district;city;region;source;created_by
-1;Ostródzka;175;1;03-289;NULL;Warszawa;NULL;lorem ipsum;system
-3;Kajakowa;10;6;02-838;NULL;Warszawa;NULL;lorem ipsum;system
-4;Szczęśliwicka;56;3A;02-353;NULL;Warszawa;NULL;lorem ipsum;system
-5;Kobiałka;49;9;03-044;NULL;Warszawa;NULL;lorem ipsum;system
-6;Władysława Umińskiego;11;6;03-984;NULL;Warszawa;NULL;lorem ipsum;system
-7;Karmelicka;26;4;00-181;NULL;Warszawa;NULL;lorem ipsum;system
-8;Astronautów;11;2;02-154;NULL;Warszawa;NULL;lorem ipsum;system
-9;Dzierzby;26/28;6;02-836;NULL;Warszawa;NULL;lorem ipsum;system
-10;Olgierda;35/41;53;03-536;NULL;Warszawa;NULL;lorem ipsum;system
-11;Zuga;16;312;01-806;NULL;Warszawa;NULL;lorem ipsum;system
-12;Wiertnicza;140;41;02-952;NULL;Warszawa;NULL;lorem ipsum;system
-13;Grochowska;284;543;03-841;NULL;Warszawa;NULL;lorem ipsum;system
-14;Boremlowska;6/12;64;04-309;NULL;Warszawa;NULL;lorem ipsum;system
-15;Niepołomicka;26;85;04-256;NULL;Warszawa;NULL;lorem ipsum;system
-16;Twarda;8/12;78;00-105;NULL;Warszawa;NULL;lorem ipsum;system
-17;Aleja Wojska Polskiego;1A;55;01-524;NULL;Warszawa;NULL;lorem ipsum;system
-18;Jana Olbrachta;48/56;34;01-111;NULL;Warszawa;NULL;lorem ipsum;system
-19;Bogusławskiego;6a;266;01-923;NULL;Warszawa;NULL;lorem ipsum;system
-20;Stokłosy;3;77;02-787;NULL;Warszawa;NULL;lorem ipsum;system
-21;Iwicka;47b;464;00-735;NULL;Warszawa;NULL;lorem ipsum;system
-22;Mińska;1/5;41;03-806;NULL;Warszawa;NULL;lorem ipsum;system
-23;Drzymały;1;652;02-495;NULL;Warszawa;NULL;lorem ipsum;system
-24;Ks. J. Popiełuszki;5;521;01-756;NULL;Warszawa;NULL;lorem ipsum;system
-25;Obrzeźna;12a;45;02-691;NULL;Warszawa;NULL;lorem ipsum;system
-26;Szegedyńska;11;6;01-957;NULL;Warszawa;NULL;lorem ipsum;system
-27;Polna;7;1;00-625;NULL;Warszawa;NULL;lorem ipsum;system
-28;Nowowiejska;5;52;00-643;NULL;Warszawa;NULL;lorem ipsum;system
-29;Tarnowiecka;4;621;04-174;NULL;Warszawa;NULL;lorem ipsum;system
-30;Przy Bażantarni;3;91;02-793;NULL;Warszawa;NULL;lorem ipsum;system
-31;Bachmacka;3;10;02-647;NULL;Warszawa;NULL;lorem ipsum;system
+id;street;house_no;flat_no;postalcode;district;city;region;source;created_by;location_geom
+1;Ostródzka;175;1;03-289;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.0470221 52.32742090000001)"
+3;Kajakowa;10;6;02-838;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.0209058 52.12973119999999)"
+4;Szczęśliwicka;56;3A;02-353;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.9668189 52.2139559)"
+5;Kobiałka;49;9;03-044;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.0469675 52.3616022)"
+6;Władysława Umińskiego;11;6;03-984;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.0981834 52.2266419)"
+7;Karmelicka;26;4;00-181;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.9900479 52.250665)"
+8;Astronautów;11;2;02-154;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.9742322 52.1829437)"
+9;Dzierzby;26/28;6;02-836;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.019817 52.134722)"
+10;Olgierda;35/41;53;03-536;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.045221 52.271944)"
+11;Zuga;16;312;01-806;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.954292 52.281334)"
+12;Wiertnicza;140;41;02-952;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.075889 52.177404)"
+13;Grochowska;284;543;03-841;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.069989 52.246091)"
+14;Boremlowska;6/12;64;04-309;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.108247 52.246977)"
+15;Niepołomicka;26;85;04-256;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.135746 52.246856)"
+16;Twarda;8/12;78;00-105;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.000395 52.23508)"
+17;Aleja Wojska Polskiego;1A;55;01-524;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.995617 52.264273)"
+18;Jana Olbrachta;48/56;34;01-111;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.936174 52.235693)"
+19;Bogusławskiego;6a;266;01-923;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.9169 52.276622)"
+20;Stokłosy;3;77;02-787;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.033062 52.158576)"
+21;Iwicka;47b;464;00-735;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.04224 52.20817)"
+22;Mińska;1/5;41;03-806;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.055688 52.248022)"
+23;Drzymały;1;652;02-495;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.887721 52.187333)"
+24;Ks. J. Popiełuszki;5;521;01-756;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.97628 52.264522)"
+25;Obrzeźna;12a;45;02-691;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.999272 52.172459)"
+26;Szegedyńska;11;6;01-957;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.943492 52.291646)"
+27;Polna;7;1;00-625;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.017268 52.215524)"
+28;Nowowiejska;5;52;00-643;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.014803 52.219729)"
+29;Tarnowiecka;4;621;04-174;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.105341 52.235969)"
+30;Przy Bażantarni;3;91;02-793;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.065385 52.137013)"
+31;Bachmacka;3;10;02-647;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.0044 52.193926)"
+32;Stalowa;57;1;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.044293 52.261809)"
+33;Bródnowska;13;4;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.041156 52.264835)"
+34;Radzymińska;60;34;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.053972 52.260664)"
+35;Wierna;5;65;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.085903 52.272757)"
+36;Marszałka Józefa Piłsudskiego;56;;;NULL;Ząbki;NULL;lorem ipsum;system;"SRID=4326;POINT(21.108075 52.286666)"
+37;Szwoleżerów;14;;;NULL;Ząbki;NULL;lorem ipsum;system;"SRID=4326;POINT(21.112849 52.284134)"
+38;Kwiatowa;26;4;;NULL;Ząbki;NULL;lorem ipsum;system;"SRID=4326;POINT(21.118465 52.285641)"
+39;Kwiatowa;47;7;;NULL;Ząbki;NULL;lorem ipsum;system;"SRID=4326;POINT(21.119296 52.283051)"
+40;Mała;3;6;;NULL;Ząbki;NULL;lorem ipsum;system;"SRID=4326;POINT(21.112893 52.28368)"
+41;Zimna;3;7;;NULL;Ząbki;NULL;lorem ipsum;system;"SRID=4326;POINT(21.105862 52.285525)"
+42;Jeziorna;4;8;;NULL;Ząbki;NULL;lorem ipsum;system;"SRID=4326;POINT(21.104195 52.285293)"
+43;Wiślana;74;43;;NULL;Łomianki;NULL;lorem ipsum;system;"SRID=4326;POINT(20.884283 52.331896)"
+44;Warszawska;103;5;;NULL;Łomianki;NULL;lorem ipsum;system;"SRID=4326;POINT(20.889272 52.339993)"
+45;Rolnicza;53;2;;NULL;Łomianki;NULL;lorem ipsum;system;"SRID=4326;POINT(20.889218 52.344165)"
+46;Kościelna Droga;13;5;;NULL;Łomianki Dolne;NULL;lorem ipsum;system;"SRID=4326;POINT(20.89646 52.347603)"
+47;Polna;27;;;NULL;Łomianki;NULL;lorem ipsum;system;"SRID=4326;POINT(20.901379 52.33402)"
+48;Filipiny Płaskowickiej;22;4;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.048332 52.143896)"
+49;Belgradzka;18;6;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.059793 52.141298)"
+50;Witolda Małcużyńskiego;276;8;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.055056 52.137886)"
+51;Stryjeńskich;19;9;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.050043 52.13591)"
+52;Stanisława Kazury;2E;90;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.046932 52.139134)"
+53;Dereniowa;2D;4;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.044362 52.14421)"
+54;Meander;5;5;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.05329 52.140705)"
+55;Rozłogi;15;52;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.899171 52.227159)"
+56;Karabeli;5;75;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.900736 52.230542)"
+57;Legendy;4;64;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.913933 52.231625)"
+58;Powstańców Śląskich;72;41;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.914025 52.240065)"
+59;Uniejowska;1;42;;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.914146 52.248309)"

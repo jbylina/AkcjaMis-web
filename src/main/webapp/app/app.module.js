@@ -3,7 +3,7 @@
 
     angular
         .module('akcjamisApp', [
-            'ngStorage', 
+            'ngStorage',
             'ngResource',
             'ngCookies',
             'ngAria',
@@ -14,14 +14,19 @@
             'ui.router',
             'infinite-scroll',
             'ds.objectDiff',
+            'rzModule',
             // jhipster-needle-angularjs-add-module JHipster will add new module here
-            'angular-loading-bar'
+            'angular-loading-bar',
+            'ngAnimate',
+            'xeditable',
+            'uiGmapgoogle-maps'
         ])
         .run(run);
 
-    run.$inject = ['stateHandler'];
+    run.$inject = ['stateHandler','editableOptions'];
 
-    function run(stateHandler) {
+    function run(stateHandler,editableOptions) {
         stateHandler.initialize();
+        editableOptions.theme = 'bs3';
     }
 })();

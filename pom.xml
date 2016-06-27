@@ -17,6 +17,10 @@
 
     <repositories>
         <repository>
+            <id>Hibernate Spatial repo</id>
+            <url>http://www.hibernatespatial.org/repository</url>
+        </repository>
+        <repository>
             <id>spring-milestones</id>
             <url>http://repo.spring.io/milestone</url>
         </repository>
@@ -39,11 +43,14 @@
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <hibernate.version>4.3.11.Final</hibernate.version>
+        <hibernate-spatial.version>4.3</hibernate-spatial.version>
+        <jackson-jts.version>2.2</jackson-jts.version>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <javax.inject.version>1</javax.inject.version>
         <liquibase.version>3.4.2</liquibase.version>
+        <liquibase-spatial.version>1.2.1</liquibase-spatial.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
         <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>
         <mapstruct.version>1.0.0.Final</mapstruct.version>
@@ -149,6 +156,11 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.bedatadriven</groupId>
+            <artifactId>jackson-datatype-jts</artifactId>
+            <version>${jackson-jts.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
@@ -251,6 +263,17 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>${hibernate-spatial.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>postgresql</artifactId>
+                    <groupId>postgresql</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
         </dependency>
         <dependency>
@@ -266,6 +289,11 @@
                     <groupId>org.eclipse.jetty</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.lonnyj</groupId>
+            <artifactId>liquibase-spatial</artifactId>
+            <version>${liquibase-spatial.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

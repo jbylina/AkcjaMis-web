@@ -1,11 +1,18 @@
 package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import com.vividsolutions.jts.geom.Geometry;
+import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.search.hibernate.FamilySearch;
 import org.akcjamis.webapp.service.FamilyService;
+import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
+import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
+import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
+import org.akcjamis.webapp.web.rest.dto.RouteDTO;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
+import org.hibernate.validator.constraints.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +26,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * REST controller for managing Family.
@@ -38,9 +47,11 @@ public class FamilyResource {
     @Autowired
     private FamilySearch hibernateSearch;
 
+    private ChristmasPackageMapper christmasPkgMapper;
     @Inject
-    public FamilyResource(FamilyService familyService) {
+    public FamilyResource(FamilyService familyService, ChristmasPackageMapper christmasPackageMapper) {
         this.familyService = familyService;
+        christmasPkgMapper = christmasPackageMapper;
     }
 
     /**
@@ -129,6 +140,26 @@ public class FamilyResource {
     }
 
     /**
+     * GET  /families/:id/christmas-packages : get packages of family.
+     *
+     * @param id the id of the family
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @RequestMapping(value = "/families/{id}/christmas-packages",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<ChristmasPackageDTO>> getFamilyChristmasPackages(@PathVariable Long id) {
+        log.debug("REST request to get packages of Family : {}", id);
+        List<ChristmasPackage> christmasPackages = familyService.getChristmasPackages(id);
+        return Optional.ofNullable(christmasPkgMapper.toChristmasPackageDTOs(christmasPackages))
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    /**
      * DELETE  /families/:id : delete the "id" family.
      *
      * @param id the id of the family to delete
@@ -180,4 +211,36 @@ public class FamilyResource {
         return searchResults;
     }
 
+    /**
+     * GET  /events/:year/families/cluster?distance=:distance : cluster families with provided parameters
+     *
+     * @param distance distance within
+     * @return the result of the clustering
+     */
+    @RequestMapping(
+        value = "/events/{year}/families/cluster",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<ClusteringResultDTO>> clusterFamiliesWithin(@PathVariable Short year, @RequestParam(defaultValue = "0.06") Double distance){
+        log.debug("REST request to clusterFamiliesWithin : {}", distance);
+        return new ResponseEntity<>(familyService.clusterFamiliesWithin(year, distance), HttpStatus.OK);
+    }
+
+    /**
+     * GET  /families/calculateOptimalRoute?families=:families  : calculate optimal route thru all families
+     *
+     * @param families array of families ID's
+     * @return the result of the clustering
+     */
+    @RequestMapping(
+        value = "/families/calculateOptimalRoute",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<RouteDTO> calculateOptimalRoute(@RequestParam Set<Long> families, @RequestParam Double latitude, @RequestParam Double longitude){
+        log.debug("REST request to clusterFamiliesWithin : {}", families);
+
+        return new ResponseEntity<>(familyService.calculateOptimalRoute(families, latitude, longitude), HttpStatus.OK);
+    }
 }

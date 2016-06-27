@@ -29,4 +29,5 @@ public interface TeamRepository extends JpaRepository<Team,Long> {
         "where team.teamNumber =:teamNumber and event.year =:year")
     Team findOneByEvent_Year(@Param("year") Short year, @Param("teamNumber") Integer teamNumber);
 
+    List<Team> findByEvent_year(Short year);
 }

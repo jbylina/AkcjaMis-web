@@ -40,6 +40,7 @@ public class Subpackage extends AbstractAuditingEntity implements Serializable {
 
     @OneToMany(mappedBy = "subpackage")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @NotFound(action= NotFoundAction.IGNORE)
     private Set<SubpackageNote> subpackageNotes = new HashSet<>();
 
     @ManyToOne

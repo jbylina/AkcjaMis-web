@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 /**
  * Spring Data JPA repository for the ChristmasPackage entity.
  */
@@ -16,7 +18,12 @@ public interface ChristmasPackageRepository extends JpaRepository<ChristmasPacka
 
     Page<ChristmasPackage> findByEvent_year(Short year, Pageable var1);
 
-    ChristmasPackage findByEvent_yearAndId(Short eventYear, Long id);
+    @Query(value = "select christmasPackage from ChristmasPackage christmasPackage " +
+        "left join fetch christmasPackage.subpackages subpackages " +
+        "left join fetch subpackages.subpackageNotes subpackageNotes " +
+        "left join fetch christmasPackage.christmasPackageNotes christmasPackageNotes " +
+        "where christmasPackage.event.year =:eventYear and christmasPackage.id =:id")
+    ChristmasPackage findByEvent_yearAndId(@Param("eventYear") Short eventYear, @Param("id") Long id);
 
     ChristmasPackage findById(Long id);
 
@@ -28,4 +35,6 @@ public interface ChristmasPackageRepository extends JpaRepository<ChristmasPacka
         countQuery = "select count(christmasPackage) from ChristmasPackage christmasPackage " +
             "where christmasPackage.event.year =:eventYear")
     Page<ChristmasPackage> getList(@Param("eventYear") Short eventYear, Pageable page);
+
+    List<ChristmasPackage> findByFamily_id(Long id);
 }

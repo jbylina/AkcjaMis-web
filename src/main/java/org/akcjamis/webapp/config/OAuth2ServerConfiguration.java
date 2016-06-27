@@ -57,7 +57,7 @@ public class OAuth2ServerConfiguration {
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/logs/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api/**").authenticated()
+                .antMatchers("/api/**").hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()
                 .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -73,7 +73,7 @@ public class OAuth2ServerConfiguration {
                 .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/liquibase/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/protected/**").authenticated();
+                .antMatchers("/protected/**").hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER);
 
         }
     }
