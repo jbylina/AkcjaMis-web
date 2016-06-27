@@ -20,6 +20,8 @@ spring:
         hibernate:
             ddl-auto: none
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+
+
     messages:
         basename: i18n/messages
     mvc:

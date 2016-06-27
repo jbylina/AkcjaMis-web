@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
-    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <property name="now" value="now()" dbms="mysql,h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
     <property name="now" value="sysdate" dbms="oracle"/>
 
     <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle"/>
-
-    <property name="hibernate.search.default.directory_provider"
-              value="filesystem"/>
-
-    <property name="hibernate.search.default.indexBase"
-              value="/var/lucene/indexes"/>
 
     <changeSet id="00000000000000" author="jhipster" dbms="postgresql,oracle">
         <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="1"/>
@@ -59,14 +53,14 @@
         </createTable>
 
         <createIndex indexName="idx_user_login"
-            tableName="jhi_user"
-            unique="true">
+                     tableName="jhi_user"
+                     unique="true">
             <column name="login" type="varchar(50)"/>
         </createIndex>
 
         <createIndex indexName="idx_user_email"
-            tableName="jhi_user"
-            unique="true">
+                     tableName="jhi_user"
+                     unique="true">
             <column name="email" type="varchar(100)"/>
         </createIndex>
 
@@ -187,16 +181,16 @@
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_name"
-            baseTableName="oauth_client_token"
-            constraintName="fk_oauth_client_tokn_user_name"
-            referencedColumnNames="login"
-            referencedTableName="jhi_user"/>
+                                 baseTableName="oauth_client_token"
+                                 constraintName="fk_oauth_client_tokn_user_name"
+                                 referencedColumnNames="login"
+                                 referencedTableName="jhi_user"/>
 
         <createTable tableName="oauth_access_token">
             <column name="token_id" type="varchar(255)"/>
             <column name="token" type="BLOB"/>
             <column name="authentication_id" type="varchar(255)">
-                 <constraints nullable="false" primaryKey="true"/>
+                <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="user_name" type="varchar(50)"/>
             <column name="client_id" type="varchar(255)"/>
@@ -205,10 +199,10 @@
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_name"
-            baseTableName="oauth_access_token"
-            constraintName="fk_oauth_access_tokn_user_name"
-            referencedColumnNames="login"
-            referencedTableName="jhi_user"/>
+                                 baseTableName="oauth_access_token"
+                                 constraintName="fk_oauth_access_tokn_user_name"
+                                 referencedColumnNames="login"
+                                 referencedTableName="jhi_user"/>
 
         <createTable tableName="oauth_refresh_token">
             <column name="token_id" type="varchar(255)"/>

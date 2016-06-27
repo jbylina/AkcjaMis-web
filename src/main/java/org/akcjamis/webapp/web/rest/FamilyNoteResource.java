@@ -22,12 +22,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing FamilyNote.
@@ -41,6 +36,7 @@ public class FamilyNoteResource {
     private FamilyNoteService familyNoteService;
 
     private FamilyNoteMapper mapper;
+
 
     @Inject
     public FamilyNoteResource(FamilyNoteService familyNoteService, FamilyNoteMapper familyNoteMapper) {
@@ -171,5 +167,7 @@ public class FamilyNoteResource {
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/family-notes");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
+
+
 
 }

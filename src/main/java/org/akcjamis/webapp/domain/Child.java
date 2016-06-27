@@ -1,17 +1,18 @@
 package org.akcjamis.webapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.akcjamis.webapp.domain.enumeration.Sex;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
-
-import org.akcjamis.webapp.domain.enumeration.Sex;
 
 /**
  * A Child.
@@ -20,6 +21,7 @@ import org.akcjamis.webapp.domain.enumeration.Sex;
 @Table(name = "children")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "child")
+@Indexed
 public class Child extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,14 +32,17 @@ public class Child extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Column(name = "number", nullable = false)
+    @Field
     private Integer number;
 
     @Size(max = 255)
     @Column(name = "first_name", length = 255, nullable = false)
+    @Field
     private String firstName;
 
     @Size(max = 255)
     @Column(name = "last_name", length = 255, nullable = false)
+    @Field
     private String lastName;
 
     @Enumerated(EnumType.STRING)
@@ -45,6 +50,7 @@ public class Child extends AbstractAuditingEntity implements Serializable {
     private Sex sex;
 
     @Column(name = "birth_year", nullable = false)
+    @Field
     private Short birthYear;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -4,14 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Index;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Family.
@@ -20,6 +22,7 @@ import java.util.Objects;
 @Table(name = "families")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "family")
+@Indexed
 public class Family extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,33 +33,40 @@ public class Family extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Column(name = "street", nullable = false)
+    @Field(index= Index.YES, analyze=Analyze.YES, store=Store.YES)
     private String street;
 
     @NotNull
     @Size(max = 10)
     @Column(name = "house_no", length = 10, nullable = false)
-    @Field(index= org.hibernate.search.annotations.Index.YES, analyze= Analyze.YES, store= Store.NO)
+    @Field
     private String houseNo;
 
     @Size(max = 10)
     @Column(name = "flat_no", length = 10)
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.YES)
     private String flatNo;
 
     @Size(max = 6)
     @Column(name = "postalcode", length = 6)
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.YES)
     private String postalcode;
 
     @Column(name = "district")
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.YES)
     private String district;
 
     @NotNull
     @Column(name = "city", nullable = false)
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.YES)
     private String city;
 
     @Column(name = "region")
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.YES)
     private String region;
 
     @Column(name = "source")
+    @Field(index=Index.YES, analyze=Analyze.YES, store=Store.YES)
     private String source;
 
     @OneToMany(mappedBy = "family")

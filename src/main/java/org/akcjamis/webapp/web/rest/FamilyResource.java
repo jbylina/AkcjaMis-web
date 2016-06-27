@@ -2,11 +2,13 @@ package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Family;
+import org.akcjamis.webapp.repository.search.hibernate.FamilySearch;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -21,10 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Family.
@@ -36,6 +34,9 @@ public class FamilyResource {
     private final Logger log = LoggerFactory.getLogger(FamilyResource.class);
 
     private FamilyService familyService;
+
+    @Autowired
+    private FamilySearch hibernateSearch;
 
     @Inject
     public FamilyResource(FamilyService familyService) {
@@ -143,6 +144,8 @@ public class FamilyResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("family", id.toString())).build();
     }
 
+
+
     /**
      * SEARCH  /_search/families?query=:query : search for the family corresponding
      * to the query.
@@ -160,6 +163,21 @@ public class FamilyResource {
         Page<Family> page = familyService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/families");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/hibernate-search/families",
+    method = RequestMethod.GET,
+    produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Family> hibernateSearchFamilies(@RequestParam String query) {
+        List searchResults = null;
+        try {
+            searchResults = hibernateSearch.search(query);
+        }
+        catch (Exception ex) {
+
+        }
+        return searchResults;
     }
 
 }

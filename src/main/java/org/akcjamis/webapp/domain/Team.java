@@ -1,16 +1,19 @@
 package org.akcjamis.webapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A Team.
@@ -19,6 +22,7 @@ import java.util.Objects;
 @Table(name = "teams")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "team")
+@Indexed
 public class Team extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,9 +35,11 @@ public class Team extends AbstractAuditingEntity implements Serializable {
     @Min(value = 1)
     @Max(value = 100)
     @Column(name = "team_number", nullable = false)
+    @Field
     private Integer teamNumber;
 
     @Column(name = "note")
+    @Field
     private String note;
 
     @ManyToMany

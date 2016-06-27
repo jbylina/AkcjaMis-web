@@ -8,7 +8,6 @@ import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * REST controller for managing Child.
@@ -40,6 +39,8 @@ public class ChildResource {
     private ChildSearchRepository childSearchRepository;
 
     private FamilyService familyService;
+
+
 
     @Inject
     public ChildResource(ChildRepository childRepository,
@@ -167,5 +168,7 @@ public class ChildResource {
             .stream(childSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+
 
 }

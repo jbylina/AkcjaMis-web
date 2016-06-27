@@ -3,14 +3,17 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A ChristmasPackage.
@@ -19,6 +22,7 @@ import java.util.Objects;
 @Table(name = "christmas_packages")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "christmaspackage")
+@Indexed
 public class ChristmasPackage extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,9 +34,11 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     @Min(value = 1)
     @Max(value = 6)
     @Column(name = "mark")
+    @Field
     private Integer mark;
 
     @Column(name = "delivered", nullable = false)
+    @Field
     private Boolean delivered = Boolean.FALSE;
 
     @ManyToOne
@@ -160,4 +166,5 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
             ", delivered='" + delivered + "'" +
             '}';
     }
+
 }

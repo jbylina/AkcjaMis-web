@@ -31,4 +31,18 @@
             }
         });
     }
+
+    $scope.loadOtherEntities = function(searchQuery) {
+        if (searchQuery){
+            OtherEntitySearch.query({query: '*' + searchQuery + '*'}, function(result) {
+                $scope.otherEntities = result;
+            }, function(response) {
+                if(response.status === 404) {
+                    $scope.otherEntities = Family.query({isActive: true});
+                }
+            });
+        } else {
+            $scope.otherEntities = Family.query({isActive: true});
+        }
+    };
 })();

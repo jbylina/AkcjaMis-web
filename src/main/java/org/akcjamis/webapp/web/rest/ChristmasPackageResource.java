@@ -37,6 +37,7 @@ public class ChristmasPackageResource {
 
     private ChristmasPackageMapper mapper;
 
+
     @Inject
     public ChristmasPackageResource(ChristmasPackageService christmasPackageService,
                                     ChristmasPackageMapper christmasPackageMapper) {
@@ -171,5 +172,7 @@ public class ChristmasPackageResource {
         christmasPackageService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("christmasPackage", id.toString())).build();
     }
+
+
 
 }

@@ -109,4 +109,5 @@ public class EventResource {
         eventService.deleteEvent(year);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("event", year.toString())).build();
     }
+
 }

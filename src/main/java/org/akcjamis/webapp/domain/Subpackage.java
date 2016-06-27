@@ -5,6 +5,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.search.annotations.Analyze;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -22,6 +23,7 @@ import java.util.Objects;
 @Table(name = "subpackages")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "subpackage")
+@Indexed
 public class Subpackage extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
