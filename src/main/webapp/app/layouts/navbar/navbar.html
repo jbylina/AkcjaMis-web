@@ -13,20 +13,7 @@
 <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="vm.navCollapsed" ng-switch="vm.isAuthenticated()">
     <ul class="nav navbar-top-links navbar-right">
 
-        <div ng-controller="autoCompleteCTRL">
-            <div class="list-wrapper">
 
-                <h1>Pure Angular JS Autocomplete Text Field</h1>
-                <div class="label">Search For A Programming Language</div>
-
-                <div><input type="text" placeholder="Search for items" class="input" ng-keydown="checkKeyDown($event)" ng-keyup="checkKeyUp($event)"  ng-model="searchText" ng-change="search()" /></div>
-
-                <ul class="suggestions-list">
-                    <li ng-repeat="suggestion in suggestions track by $index" ng-class="{active : selectedIndex === $index}" ng-click="AssignValueAndHide($index)">{{suggestion}}</li>
-                </ul>
-
-            </div>
-        </div>
 
         <!--TODO think about vm.$state.includes('account') -->
         <li ng-class="{active: vm.$state.includes('account')}" uib-dropdown class="dropdown pointer">
@@ -122,4 +109,16 @@
             </ul>
         </li>
     </ul>
+    <div ng-controller="autoCompleteCTRL">
+        <div class="list-wrapper">
+
+
+            <div><input type="text" placeholder="Wyszukaj rodzinę" class="input" ng-keydown="checkKeyDown($event)" ng-keyup="checkKeyUp($event)"  ng-model="searchText" ng-change="search()" /></div>
+
+            <ul class="suggestions-list">
+                <li ng-repeat="suggestion in suggestions track by $index" ng-class="{active : selectedIndex === $index}" ng-click="AssignValueAndHide($index)">{{suggestion}}</li>
+            </ul>
+
+        </div>
+    </div>
 </div>

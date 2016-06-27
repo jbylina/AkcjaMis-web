@@ -43,7 +43,7 @@
             console.log('data size ' + data.length);
             for(i = 0; i < data.length; i++) {
                 console.log('data is ' + angular.fromJson(data)[i].id);
-                $rootScope.suggestions.push(angular.fromJson(data)[i].city + " " + angular.fromJson(data)[i].street + angular.fromJson(data)[i].houseNo);
+                $rootScope.suggestions.push(angular.fromJson(data)[i].city + ", " + angular.fromJson(data)[i].street + angular.fromJson(data)[i].houseNo);
             }
 
 
