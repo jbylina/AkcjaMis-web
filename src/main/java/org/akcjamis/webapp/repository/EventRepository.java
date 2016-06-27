@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface EventRepository extends JpaRepository<Event,Short> {
 
+    Event findTop1ByOrderByYearDesc();
 }

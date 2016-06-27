@@ -26,18 +26,6 @@
                 <a href="" ng-click="sb.check(2)"><i class="fa fa-sitemap fa-fw"></i> Poprzednie akcje<span
                     class="fa arrow"></span></a>
                 <ul class="nav nav-second-level" uib-collapse="sb.collapseVar!=2">
-                    <li ng-init="sb.third=!sb.third" ng-class="{active: sb.multiCollapseVar==3}">
-                        <a href="" ng-click="sb.multiCheck(3)">2015 <span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level" uib-collapse="sb.multiCollapseVar!=3">
-                            <li>
-                                <a ui-sref="christmas-package({year: 2015})"><i class="fa fa-suitcase fa-fw"></i> Lista paczek 2015</a>
-                            </li>
-                            <li>
-                                <a ui-sref="teams({year: 2015})"><i class="fa fa-users fa-fw"></i> Zespoły 2015</a>
-                            </li>
-
-                        </ul>
-                    </li>
                     <li ng-init="sb.third=!sb.third" ng-class="{active: sb.multiCollapseVar==4}">
                         <a href="" ng-click="sb.multiCheck(4)">2014 <span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level" uib-collapse="sb.multiCollapseVar!=4">

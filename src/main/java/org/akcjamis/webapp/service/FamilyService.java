@@ -2,35 +2,24 @@ package org.akcjamis.webapp.service;
 
 import com.google.common.collect.*;
 import com.google.common.primitives.Longs;
-import org.akcjamis.webapp.domain.Child;
-import org.akcjamis.webapp.domain.ChristmasPackage;
-import org.akcjamis.webapp.domain.Contact;
-import org.akcjamis.webapp.domain.Family;
-import org.akcjamis.webapp.repository.ChildRepository;
-import org.akcjamis.webapp.repository.ChristmasPackageRepository;
-import org.akcjamis.webapp.repository.ContactRepository;
-import org.akcjamis.webapp.repository.FamilyRepository;
+import org.akcjamis.webapp.domain.*;
+import org.akcjamis.webapp.repository.*;
 import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 import org.akcjamis.webapp.repository.search.FamilySearchRepository;
 import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
 import org.akcjamis.webapp.web.rest.dto.RouteDTO;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.type.ArrayType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.MultiValueMap;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,6 +48,10 @@ public class FamilyService {
 
     private ChristmasPackageRepository christmasPackageRepository;
 
+    private EventRepository eventRepository;
+
+    private SubpackageRepository subpackageRepository;
+
     @Inject
     public FamilyService(FamilyRepository familyRepository,
                          FamilySearchRepository familySearchRepository,
@@ -66,7 +59,9 @@ public class FamilyService {
                          ContactSearchRepository contactSearchRepository,
                          ChildRepository childRepository,
                          ChildSearchRepository childSearchRepository,
-                         ChristmasPackageRepository christmasPackageRepository) {
+                         ChristmasPackageRepository christmasPackageRepository,
+                         EventRepository eventRepository,
+                         SubpackageRepository subpackageRepository) {
         this.familyRepository = familyRepository;
         this.familySearchRepository = familySearchRepository;
         this.contactRepository = contactRepository;
@@ -74,6 +69,8 @@ public class FamilyService {
         this.childRepository = childRepository;
         this.childSearchRepository = childSearchRepository;
         this.christmasPackageRepository = christmasPackageRepository;
+        this.eventRepository = eventRepository;
+        this.subpackageRepository = subpackageRepository;
     }
 
     /**
@@ -249,5 +246,40 @@ public class FamilyService {
         }
 
         return new RouteDTO(orderedFamIds, routePaths);
+    }
+
+    /**
+     * Add family to event
+     *
+     * @param familyId the id of family
+     * @return the persisted entity
+     */
+    public ChristmasPackage addFamilyToEvent(Long familyId) {
+        log.debug("Request add Family to event : {}", familyId);
+        // TODO reorganize
+
+        Family family = familyRepository.findOne(familyId);
+        Event latestEvent = eventRepository.findTop1ByOrderByYearDesc();
+        ChristmasPackage pkg = christmasPackageRepository.findByFamily_idAndEvent_year(familyId, latestEvent.getYear());
+        if(pkg == null){
+            ChristmasPackage christmasPackage = new ChristmasPackage();
+            christmasPackage.setEvent(latestEvent);
+            christmasPackage.setFamily(family);
+            christmasPackage = christmasPackageRepository.save(christmasPackage);
+
+            int number = 1;
+            for (Child c : family.getChilds()) {
+                Subpackage subpackage = new Subpackage();
+                subpackage.setChild(c);
+                subpackage.setChristmasPackage(christmasPackage);
+                subpackage.setSubpackageNumber(number);
+                subpackage = subpackageRepository.save(subpackage);
+                number++;
+            }
+
+            pkg = christmasPackageRepository.findByFamily_idAndEvent_year(familyId, latestEvent.getYear());
+        }
+
+        return pkg;
     }
 }

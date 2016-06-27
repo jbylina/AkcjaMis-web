@@ -43,6 +43,13 @@
         });
         $scope.$on('$destroy', unsubscribe);
 
+
+        vm.addToEvent = function(){
+            Family.addToEvent({id:$stateParams.id}, {}, function () {
+                vm.packages = Family.getPackages({id: $stateParams.id});
+            }, onSaveError);
+        };
+
         var onSaveSuccess = function (result) {
         };
 

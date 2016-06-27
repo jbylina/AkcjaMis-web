@@ -27,6 +27,10 @@
                 method: 'GET',
                 url : 'api/families/:id/christmas-packages',
                 isArray: true
+            },
+            'addToEvent': {
+                method: 'PUT',
+                url : 'api/families/:id/add-to-event'
             }
         });
     }

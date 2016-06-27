@@ -37,4 +37,6 @@ public interface ChristmasPackageRepository extends JpaRepository<ChristmasPacka
     Page<ChristmasPackage> getList(@Param("eventYear") Short eventYear, Pageable page);
 
     List<ChristmasPackage> findByFamily_id(Long id);
+
+    ChristmasPackage findByFamily_idAndEvent_year(Long id, Short year);
 }

@@ -43,6 +43,7 @@ public class FamilyResource {
     private FamilyService familyService;
 
     private ChristmasPackageMapper christmasPkgMapper;
+
     @Inject
     public FamilyResource(FamilyService familyService, ChristmasPackageMapper christmasPackageMapper) {
         this.familyService = familyService;
@@ -221,4 +222,27 @@ public class FamilyResource {
 
         return new ResponseEntity<>(familyService.calculateOptimalRoute(families, latitude, longitude), HttpStatus.OK);
     }
+
+
+    /**
+     * PUT  /families/:id/add-to-event  : Updates an existing family.
+     *
+     * @param id "id" of family to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated family,
+     * or with status 400 (Bad Request) if the family is not valid,
+     * or with status 500 (Internal Server Error) if the family couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @RequestMapping(value = "/families/{id}/add-to-event",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<ChristmasPackageDTO> addFamilyToEvent(@PathVariable Long id) {
+        log.debug("REST request to add Family to event : {}", id);
+        ChristmasPackage result = familyService.addFamilyToEvent(id);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert("christmasPackage", result.getId().toString()))
+            .body(christmasPkgMapper.toChristmasPackageDTO(result));
+    }
+
 }
