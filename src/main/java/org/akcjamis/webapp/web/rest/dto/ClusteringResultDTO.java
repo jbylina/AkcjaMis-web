@@ -8,7 +8,7 @@ public class ClusteringResultDTO {
 
     private Integer clusterNum;
 
-    private Long id;
+    private Integer id;
 
     private String street;
 
@@ -26,7 +26,7 @@ public class ClusteringResultDTO {
     public ClusteringResultDTO() {
     }
 
-    public ClusteringResultDTO(Integer clusterNum, Long id, String street, String houseNo, String flatNo,
+    public ClusteringResultDTO(Integer clusterNum, Integer id, String street, String houseNo, String flatNo,
                                String postalcode, String city, String locationGeom) {
         this.clusterNum = clusterNum;
         this.id = id;
@@ -50,11 +50,11 @@ public class ClusteringResultDTO {
         this.clusterNum = clusterNum;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

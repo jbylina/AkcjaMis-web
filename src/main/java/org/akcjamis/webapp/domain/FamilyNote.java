@@ -3,12 +3,12 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Type;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
@@ -26,7 +26,8 @@ public class FamilyNote extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "family_note_id")
+    private Integer id;
 
     @NotNull
     @Size(max = 65535)
@@ -34,24 +35,26 @@ public class FamilyNote extends AbstractAuditingEntity implements Serializable {
     private String content;
 
     @Column(name = "archived", nullable = false)
+    @Type(type="yes_no")
     private Boolean archived = false;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "family_notes_tag",
-               joinColumns = @JoinColumn(name="family_notes_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="tag_id", referencedColumnName="ID"))
+    @JoinTable(name = "family_note_tags",
+               joinColumns = @JoinColumn(name="family_note_id", referencedColumnName="family_note_id"),
+               inverseJoinColumns = @JoinColumn(name="tag_id", referencedColumnName="tag_id"))
     private Set<Tag> tags = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @JoinColumn(name = "family_id")
     private Family family;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -10,13 +10,13 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the Team entity.
  */
-public interface TeamRepository extends JpaRepository<Team,Long> {
+public interface TeamRepository extends JpaRepository<Team, Integer> {
 
     @Query("select distinct team from Team team left join fetch team.users")
     List<Team> findAllWithEagerRelationships();
 
     @Query("select team from Team team left join fetch team.users where team.id =:id")
-    Team findOneWithEagerRelationships(@Param("id") Long id);
+    Team findOneWithEagerRelationships(@Param("id") Integer id);
 
     @Query("select team from Team team " +
         "left join fetch team.christmasPackages christmasPackages " +

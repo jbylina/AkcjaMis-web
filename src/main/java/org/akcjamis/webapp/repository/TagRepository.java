@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * Spring Data JPA repository for the Tag entity.
  */
-public interface TagRepository extends JpaRepository<Tag,Long> {
+public interface TagRepository extends JpaRepository<Tag, Integer> {
 
     Set<Tag> findByCodeIn(Set<String> tagCodes);
 

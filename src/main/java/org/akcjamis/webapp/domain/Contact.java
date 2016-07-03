@@ -23,7 +23,8 @@ public class Contact extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "contact_id")
+    private Integer id;
 
     @NotNull
     @Size(max = 20)
@@ -39,13 +40,14 @@ public class Contact extends AbstractAuditingEntity implements Serializable {
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "family_id")
     private Family family;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

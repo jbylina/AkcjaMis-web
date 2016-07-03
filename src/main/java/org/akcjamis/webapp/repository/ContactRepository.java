@@ -9,9 +9,9 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the Contact entity.
  */
-public interface ContactRepository extends JpaRepository<Contact,Long> {
+public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
-    List<Contact>findByFamily_id(Long id);
+    List<Contact>findByFamily_id(Integer id);
 
-    Contact findByIdAndFamily_id(Long id, Long FamilyId);
+    Contact findByIdAndFamily_id(Integer id, Integer FamilyId);
 }

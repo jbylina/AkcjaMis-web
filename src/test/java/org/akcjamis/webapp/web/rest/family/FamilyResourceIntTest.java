@@ -4,7 +4,6 @@ import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.service.FamilyService;
-import org.akcjamis.webapp.repository.search.FamilySearchRepository;
 
 import org.akcjamis.webapp.web.rest.FamilyResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
@@ -21,7 +20,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;

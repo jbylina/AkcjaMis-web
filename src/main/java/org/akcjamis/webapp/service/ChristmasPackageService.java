@@ -90,7 +90,7 @@ public class ChristmasPackageService {
      *  @return the entity
      */
     @Transactional(readOnly = true)
-    public ChristmasPackage findOne(Short eventYear, Long id) {
+    public ChristmasPackage findOne(Short eventYear, Integer id) {
         log.debug("Request to get ChristmasPackage : {}", id);
         return christmasPackageRepository.findByEvent_yearAndId(eventYear, id);
     }
@@ -102,7 +102,7 @@ public class ChristmasPackageService {
      *  @return the entity
      */
     @Transactional(readOnly = true)
-    public ChristmasPackage findOne(Long id) {
+    public ChristmasPackage findOne(Integer id) {
         log.debug("Request to get ChristmasPackage : {}", id);
         return christmasPackageRepository.findOne(id);
     }
@@ -114,7 +114,7 @@ public class ChristmasPackageService {
      *  @return the entity
      */
     @Transactional(readOnly = true)
-    public ChristmasPackage findOneById(Long id) {
+    public ChristmasPackage findOneById(Integer id) {
         log.debug("Request to get ChristmasPackage : {}", id);
         return christmasPackageRepository.findById(id);
     }
@@ -124,7 +124,7 @@ public class ChristmasPackageService {
      *
      *  @param id the id of the entity
      */
-    public void delete(Long id) {
+    public void delete(Integer id) {
         log.debug("Request to delete ChristmasPackage : {}", id);
         christmasPackageRepository.delete(id);
     }
@@ -136,7 +136,7 @@ public class ChristmasPackageService {
      * @param packageNote the entity to save
      * @return the persisted entity
      */
-    public ChristmasPackageNote saveNote(Long id, ChristmasPackageNote packageNote) {
+    public ChristmasPackageNote saveNote(Integer id, ChristmasPackageNote packageNote) {
         log.debug("Request to save ChristmasPackageNote : {}", packageNote);
 
         ChristmasPackage christmasPackage = new ChristmasPackage();
@@ -156,7 +156,7 @@ public class ChristmasPackageService {
      * @return the persisted entity
      */
 
-    public List<ChristmasPackageNote> getAllPackageNotes(Long id) {
+    public List<ChristmasPackageNote> getAllPackageNotes(Integer id) {
         log.debug("Request contacts for ChristamasPackageNote : {}", id);
         return christmasPackageNoteRepository.findByChristmasPackage_id(id);
 
@@ -168,7 +168,7 @@ public class ChristmasPackageService {
      * @param id the id of christmas package
      */
 
-    public void deletePackageNote(Long id) {
+    public void deletePackageNote(Integer id) {
         log.debug("Request contacts for ChristamasPackageNote : {}", id);
         christmasPackageNoteRepository.delete(id);
     }
@@ -181,7 +181,7 @@ public class ChristmasPackageService {
      *  @param packageChange the entity to seve
      *  @return the list of entities
      */
-    public ChristmasPackageChange saveChange(Long id, ChristmasPackageChange packageChange) {
+    public ChristmasPackageChange saveChange(Integer id, ChristmasPackageChange packageChange) {
         log.debug("Request to save ChristmasPackageChange : {}", packageChange);
 
         ChristmasPackage christmasPackage = new ChristmasPackage();
@@ -199,7 +199,7 @@ public class ChristmasPackageService {
      *  @param pageable the pagination information
      *  @return the list of entities
      */
-    public Page<ChristmasPackageChange> findAllChanges(Long id, Pageable pageable) {
+    public Page<ChristmasPackageChange> findAllChanges(Integer id, Pageable pageable) {
         log.debug("Request Changes for ChristmasPackage : {}", id);
 
         return christmasPackageChangeRepository.findByChristmasPackage_id(id, pageable);
@@ -212,7 +212,7 @@ public class ChristmasPackageService {
      *  @param id the id of change
      *  @return the list of entities
      */
-    public ChristmasPackageChange findOneChange(Long packageId, Long id) {
+    public ChristmasPackageChange findOneChange(Integer packageId, Integer id) {
         log.debug("Request Changes for ChristmasPackage : {}", id);
 
         return christmasPackageChangeRepository.findByIdAndChristmasPackage_id(packageId, id);
@@ -224,7 +224,7 @@ public class ChristmasPackageService {
      *  @param id the id of change
      *  @return the list of entities
      */
-    public void deleteChange(Long id) {
+    public void deleteChange(Integer id) {
         log.debug("Request delete Change : {}", id);
 
         christmasPackageChangeRepository.delete(id);

@@ -6,5 +6,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 /**
  * Spring Data ElasticSearch repository for the ChristmasPackageChange entity.
  */
-public interface ChristmasPackageChangeSearchRepository extends ElasticsearchRepository<ChristmasPackageChange, Long> {
+public interface ChristmasPackageChangeSearchRepository extends ElasticsearchRepository<ChristmasPackageChange,Integer> {
 }

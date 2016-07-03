@@ -60,7 +60,7 @@ public class ChristmasPackageNoteResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackageNote> createChristmasPackageNote(@PathVariable Long id, @Valid @RequestBody ChristmasPackageNote christmasPackageNote) throws URISyntaxException {
+    public ResponseEntity<ChristmasPackageNote> createChristmasPackageNote(@PathVariable Integer id, @Valid @RequestBody ChristmasPackageNote christmasPackageNote) throws URISyntaxException {
         log.debug("REST request to save ChristmasPackageNote : {}", christmasPackageNote);
         if (christmasPackageNote.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("christmasPackageNote", "idexists", "A new christmasPackageNote cannot already have an ID")).body(null);
@@ -85,7 +85,7 @@ public class ChristmasPackageNoteResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackageNote> updateChristmasPackageNote(@PathVariable Long id,@Valid @RequestBody ChristmasPackageNote christmasPackageNote) throws URISyntaxException {
+    public ResponseEntity<ChristmasPackageNote> updateChristmasPackageNote(@PathVariable Integer id, @Valid @RequestBody ChristmasPackageNote christmasPackageNote) throws URISyntaxException {
         log.debug("REST request to update ChristmasPackageNote : {}", christmasPackageNote);
         if (christmasPackageNote.getId() == null) {
            return createChristmasPackageNote(id, christmasPackageNote);
@@ -106,7 +106,7 @@ public class ChristmasPackageNoteResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<ChristmasPackageNote> getAllChristmasPackageNotes(@PathVariable Long id) {
+    public List<ChristmasPackageNote> getAllChristmasPackageNotes(@PathVariable Integer id) {
         log.debug("REST request to get all ChristmasPackageNotes");
         return christmasPackageService.getAllPackageNotes(id);
     }
@@ -122,7 +122,7 @@ public class ChristmasPackageNoteResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackageNote> getChristmasPackageNote(@PathVariable Long packageId, @PathVariable Long id) {
+    public ResponseEntity<ChristmasPackageNote> getChristmasPackageNote(@PathVariable Integer packageId, @PathVariable Integer id) {
         log.debug("REST request to get ChristmasPackageNote : {}", id);
         ChristmasPackageNote christmasPackageNote = christmasPackageNoteRepository.findByIdAndChristmasPackage_id(id, packageId);
         return Optional.ofNullable(christmasPackageNote)
@@ -143,7 +143,7 @@ public class ChristmasPackageNoteResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteChristmasPackageNote(@PathVariable Long packageId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteChristmasPackageNote(@PathVariable Integer packageId, @PathVariable Integer id) {
         log.debug("REST request to delete ChristmasPackageNote : {}", id);
         ChristmasPackage christmasPackage = christmasPackageService.findOneById(packageId);
 

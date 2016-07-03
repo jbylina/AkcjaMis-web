@@ -1,6 +1,7 @@
 package org.akcjamis.webapp.service;
 
 import com.google.common.collect.*;
+import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import org.akcjamis.webapp.domain.*;
 import org.akcjamis.webapp.repository.*;
@@ -105,7 +106,7 @@ public class FamilyService {
      *  @return the entity
      */
     @Transactional(readOnly = true)
-    public Family findOne(Long id) {
+    public Family findOne(Integer id) {
         log.debug("Request to get Family : {}", id);
         return familyRepository.findOne(id);
     }
@@ -115,7 +116,7 @@ public class FamilyService {
      *
      *  @param id the id of the entity
      */
-    public void delete(Long id) {
+    public void delete(Integer id) {
         log.debug("Request to delete Family : {}", id);
         familyRepository.delete(id);
         familySearchRepository.delete(id);
@@ -127,7 +128,7 @@ public class FamilyService {
      * @param contact the entity to save
      * @return the persisted entity
      */
-    public Contact saveContact(Long id, Contact contact) {
+    public Contact saveContact(Integer id, Contact contact) {
         log.debug("Request to save Contact : {}", contact);
         Family family = new Family();
         family.setId(id);
@@ -143,7 +144,7 @@ public class FamilyService {
      * @param id the id of family
      * @return the persisted entity
      */
-    public List<Contact> getAllContacts(Long id) {
+    public List<Contact> getAllContacts(Integer id) {
         log.debug("Request contacts for Family : {}", id);
         return contactRepository.findByFamily_id(id);
     }
@@ -154,7 +155,7 @@ public class FamilyService {
      * @param id the id of family
      * @return the persisted entity
      */
-    public Child saveChild(Long id, Child child) {
+    public Child saveChild(Integer id, Child child) {
         log.debug("Request to save Child : {}", child);
         Family family = new Family();
         family.setId(id);
@@ -170,7 +171,7 @@ public class FamilyService {
      * @param id the id of family
      * @return the persisted entity
      */
-    public List<Child> getAllChildren(Long id) {
+    public List<Child> getAllChildren(Integer id) {
         log.debug("Request children for Family : {}", id);
         return childRepository.findByFamily_id(id);
     }
@@ -181,7 +182,7 @@ public class FamilyService {
      * @param id the id of family
      * @return the persisted entity
      */
-    public List<ChristmasPackage> getChristmasPackages(Long id) {
+    public List<ChristmasPackage> getChristmasPackages(Integer id) {
         log.debug("Request packages for Family : {}", id);
         return christmasPackageRepository.findByFamily_id(id);
     }
@@ -205,7 +206,7 @@ public class FamilyService {
 
         return result.stream()
             .map(o -> new ClusteringResultDTO(((BigInteger)o[0]).intValue(),
-                ((BigInteger)o[1]).longValue(),
+                (Integer)o[1],
                 (String)o[2],
                 (String)o[3],
                 (String)o[4],
@@ -215,19 +216,19 @@ public class FamilyService {
     }
 
     @Transactional(readOnly = true)
-    public RouteDTO calculateOptimalRoute(Set<Long> families, Double latitude, Double longitude) {
+    public RouteDTO calculateOptimalRoute(Set<Integer> families, Double latitude, Double longitude) {
 
         List<Object[]> list = familyRepository.calculateOptimalRoute(families, latitude, longitude);
 
         //add start point - warehouse facility
-        families.add(0L);
-        long[] fam = families.stream().sorted().mapToLong(Long::longValue).toArray();
+        families.add(0);
+        int[] fam = families.stream().sorted().mapToInt(Integer::intValue).toArray();
         double[][] distMatrix = new double[fam.length][fam.length];
         Table<Integer, Integer, String> routes = HashBasedTable.create();
 
         for (Object[] o : list) {
-            int from = Longs.indexOf(fam, ((BigInteger)o[0]).longValue());
-            int to = Longs.indexOf(fam, ((BigInteger)o[1]).longValue());
+            int from = Ints.indexOf(fam, (Integer) o[0]);
+            int to = Ints.indexOf(fam, (Integer) o[1]);
             distMatrix[from][to] = distMatrix[to][from] = (Double)o[2];
             routes.put(from, to, (String)o[3]);
             routes.put(to, from, (String)o[3]);
@@ -238,7 +239,7 @@ public class FamilyService {
         // starting point is also a last point
         optOrder.add(optOrder.get(0));
 
-        List<Long> orderedFamIds  = optOrder.stream().map(o -> fam[(int)o[1]]).collect(Collectors.toList());
+        List<Integer> orderedFamIds  = optOrder.stream().map(o -> fam[(int)o[1]]).collect(Collectors.toList());
 
         List<String> routePaths = Lists.newLinkedList();
         for (int i = 0; i < optOrder.size() - 1; i++) {
@@ -254,7 +255,7 @@ public class FamilyService {
      * @param familyId the id of family
      * @return the persisted entity
      */
-    public ChristmasPackage addFamilyToEvent(Long familyId) {
+    public ChristmasPackage addFamilyToEvent(Integer familyId) {
         log.debug("Request add Family to event : {}", familyId);
         // TODO reorganize
 

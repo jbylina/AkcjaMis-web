@@ -9,9 +9,9 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the Child entity.
  */
-public interface ChildRepository extends JpaRepository<Child,Long> {
+public interface ChildRepository extends JpaRepository<Child,Integer> {
 
-    List<Child> findByFamily_id(Long id);
+    List<Child> findByFamily_id(Integer id);
 
-    Child findByIdAndFamily_id(Long id, Long FamilyId);
+    Child findByIdAndFamily_id(Integer id, Integer FamilyId);
 }

@@ -6,5 +6,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 /**
  * Spring Data ElasticSearch repository for the SubpackageNote entity.
  */
-public interface SubpackageNoteSearchRepository extends ElasticsearchRepository<SubpackageNote, Long> {
+public interface SubpackageNoteSearchRepository extends ElasticsearchRepository<SubpackageNote, Integer> {
 }

@@ -8,7 +8,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Objects;
 
 import org.akcjamis.webapp.domain.enumeration.Sex;
@@ -26,7 +25,8 @@ public class Child extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "child_id")
+    private Integer id;
 
     @NotNull
     @Column(name = "number", nullable = false)
@@ -49,13 +49,14 @@ public class Child extends AbstractAuditingEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
+    @JoinColumn(name = "family_id")
     private Family family;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -23,7 +23,8 @@ public class SubpackageNote extends AbstractAuditingEntity implements Serializab
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "subpackage_note_id")
+    private Integer id;
 
     @NotNull
     @Size(max = 65535)
@@ -32,13 +33,14 @@ public class SubpackageNote extends AbstractAuditingEntity implements Serializab
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "subpackage_id")
     private Subpackage subpackage;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -6,5 +6,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 /**
  * Spring Data ElasticSearch repository for the Family entity.
  */
-public interface FamilySearchRepository extends ElasticsearchRepository<Family, Long> {
+public interface FamilySearchRepository extends ElasticsearchRepository<Family, Integer> {
 }

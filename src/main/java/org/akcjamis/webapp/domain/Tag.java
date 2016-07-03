@@ -20,7 +20,8 @@ public class Tag extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "tag_id")
+    private Integer id;
 
     @NotNull
     @Size(min = 3, max = 20)
@@ -32,11 +33,11 @@ public class Tag extends AbstractAuditingEntity implements Serializable {
     @Column(name = "color", length = 12, nullable = false)
     private String color;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

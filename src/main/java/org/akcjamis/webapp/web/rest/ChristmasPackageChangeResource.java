@@ -1,9 +1,7 @@
 package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.ChristmasPackageChange;
-import org.akcjamis.webapp.repository.ChristmasPackageChangeRepository;
 import org.akcjamis.webapp.repository.search.ChristmasPackageChangeSearchRepository;
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
@@ -24,8 +22,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
@@ -60,7 +56,7 @@ public class ChristmasPackageChangeResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackageChange> createChristmasPackageChange(@PathVariable Long id, @Valid @RequestBody ChristmasPackageChange christmasPackageChange) throws URISyntaxException {
+    public ResponseEntity<ChristmasPackageChange> createChristmasPackageChange(@PathVariable Integer id, @Valid @RequestBody ChristmasPackageChange christmasPackageChange) throws URISyntaxException {
         log.debug("REST request to save ChristmasPackageChange : {}", christmasPackageChange);
         if (christmasPackageChange.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("christmasPackageChange", "idexists", "A new christmasPackageChange cannot already have an ID")).body(null);
@@ -85,7 +81,7 @@ public class ChristmasPackageChangeResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackageChange> updateChristmasPackageChange(@PathVariable Long id, @Valid @RequestBody ChristmasPackageChange christmasPackageChange) throws URISyntaxException {
+    public ResponseEntity<ChristmasPackageChange> updateChristmasPackageChange(@PathVariable Integer id, @Valid @RequestBody ChristmasPackageChange christmasPackageChange) throws URISyntaxException {
         log.debug("REST request to update ChristmasPackageChange : {}", christmasPackageChange);
         if (christmasPackageChange.getId() == null) {
             return createChristmasPackageChange(id, christmasPackageChange);
@@ -108,7 +104,7 @@ public class ChristmasPackageChangeResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ChristmasPackageChange>> getAllChristmasPackageChanges(@PathVariable Long id, Pageable pageable)
+    public ResponseEntity<List<ChristmasPackageChange>> getAllChristmasPackageChanges(@PathVariable Integer id, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of ChristmasPackageChanges");
         Page<ChristmasPackageChange> page = christmasPackageService.findAllChanges(id, pageable);
@@ -127,7 +123,7 @@ public class ChristmasPackageChangeResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackageChange> getChristmasPackageChange(@PathVariable Long packageId, @PathVariable Long id) {
+    public ResponseEntity<ChristmasPackageChange> getChristmasPackageChange(@PathVariable Integer packageId, @PathVariable Integer id) {
         log.debug("REST request to get ChristmasPackageChange : {}", id);
         ChristmasPackageChange christmasPackageChange = christmasPackageService.findOneChange(packageId, id);
         return Optional.ofNullable(christmasPackageChange)
@@ -148,7 +144,7 @@ public class ChristmasPackageChangeResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteChristmasPackageChange(@PathVariable Long packageId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteChristmasPackageChange(@PathVariable Long packageId, @PathVariable Integer id) {
         log.debug("REST request to delete ChristmasPackageChange : {}", id);
         christmasPackageService.deleteChange(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("christmasPackageChange", id.toString())).build();

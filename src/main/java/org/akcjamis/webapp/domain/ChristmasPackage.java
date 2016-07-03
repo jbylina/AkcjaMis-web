@@ -1,13 +1,13 @@
 package org.akcjamis.webapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -27,7 +27,8 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "christmas_package_id")
+    private Integer id;
 
     @Min(value = 1)
     @Max(value = 6)
@@ -35,6 +36,7 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     private Integer mark;
 
     @Column(name = "delivered", nullable = false)
+    @Type(type="yes_no")
     private Boolean delivered = Boolean.FALSE;
 
     @ManyToOne
@@ -44,6 +46,7 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @OneToMany(fetch=FetchType.EAGER, mappedBy = "christmasPackage")
@@ -61,13 +64,14 @@ public class ChristmasPackage extends AbstractAuditingEntity implements Serializ
     private Set<Subpackage> subpackages = new HashSet<>();
 
     @ManyToOne
+    @JoinColumn(name = "family_id")
     private Family family;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -25,7 +25,8 @@ public class Team extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "team_id")
+    private Integer id;
 
     @NotNull
     @Min(value = 1)
@@ -38,9 +39,9 @@ public class Team extends AbstractAuditingEntity implements Serializable {
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "teams_user",
-               joinColumns = @JoinColumn(name="teams_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="users_id", referencedColumnName="ID"))
+    @JoinTable(name = "team_users",
+               joinColumns = @JoinColumn(name="team_id", referencedColumnName="team_id"),
+               inverseJoinColumns = @JoinColumn(name="user_id", referencedColumnName="ID"))
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
@@ -52,11 +53,11 @@ public class Team extends AbstractAuditingEntity implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ChristmasPackage> christmasPackages = new HashSet<>();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -23,7 +23,8 @@ public class ChristmasPackageNote extends AbstractAuditingEntity implements Seri
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "christmas_package_note_id")
+    private Integer id;
 
     @NotNull
     @Size(max = 65535)
@@ -32,13 +33,14 @@ public class ChristmasPackageNote extends AbstractAuditingEntity implements Seri
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "christmas_package_id")
     private ChristmasPackage christmasPackage;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

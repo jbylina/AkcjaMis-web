@@ -22,12 +22,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing FamilyNote.
@@ -60,7 +55,7 @@ public class FamilyNoteResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<FamilyNoteDTO> createFamilyNote(@PathVariable Long id, @Valid @RequestBody FamilyNoteDTO familyNoteDTO) throws URISyntaxException {
+    public ResponseEntity<FamilyNoteDTO> createFamilyNote(@PathVariable Integer id, @Valid @RequestBody FamilyNoteDTO familyNoteDTO) throws URISyntaxException {
         log.debug("REST request to save FamilyNote : {}", familyNoteDTO);
         if (familyNoteDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("familyNote", "idexists", "A new familyNote cannot already have an ID")).body(null);
@@ -85,7 +80,7 @@ public class FamilyNoteResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<FamilyNoteDTO> updateFamilyNote(@PathVariable Long id, @Valid @RequestBody FamilyNoteDTO familyNoteDTO) throws URISyntaxException {
+    public ResponseEntity<FamilyNoteDTO> updateFamilyNote(@PathVariable Integer id, @Valid @RequestBody FamilyNoteDTO familyNoteDTO) throws URISyntaxException {
         log.debug("REST request to update FamilyNote : {}", familyNoteDTO);
         if (familyNoteDTO.getId() == null) {
             return createFamilyNote(id, familyNoteDTO);
@@ -108,7 +103,7 @@ public class FamilyNoteResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<FamilyNote>> getAllFamilyNotes(@PathVariable Long id, Pageable pageable)
+    public ResponseEntity<List<FamilyNote>> getAllFamilyNotes(@PathVariable Integer id, Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of FamilyNotes");
         Page<FamilyNote> page = familyNoteService.findAll(id, pageable);
@@ -127,7 +122,7 @@ public class FamilyNoteResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<FamilyNote> getFamilyNote(@PathVariable Long familyId, @PathVariable Long id) {
+    public ResponseEntity<FamilyNote> getFamilyNote(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to get FamilyNote : {}", id);
         FamilyNote familyNote = familyNoteService.findOne(familyId, id);
         return Optional.ofNullable(familyNote)
@@ -147,7 +142,7 @@ public class FamilyNoteResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteFamilyNote(@PathVariable Long familyId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteFamilyNote(@PathVariable Long familyId, @PathVariable Integer id) {
         log.debug("REST request to delete FamilyNote : {}", id);
         familyNoteService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("familyNote", id.toString())).build();

@@ -105,7 +105,7 @@ public class TagResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Tag> getTag(@PathVariable Long id) {
+    public ResponseEntity<Tag> getTag(@PathVariable Integer id) {
         log.debug("REST request to get Tag : {}", id);
         Tag tag = tagRepository.findOne(id);
         return Optional.ofNullable(tag)
@@ -125,7 +125,7 @@ public class TagResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTag(@PathVariable Integer id) {
         log.debug("REST request to delete Tag : {}", id);
         tagRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("tag", id.toString())).build();

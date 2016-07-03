@@ -9,10 +9,10 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the ChristmasPackageNote entity.
  */
-public interface ChristmasPackageNoteRepository extends JpaRepository<ChristmasPackageNote,Long> {
+public interface ChristmasPackageNoteRepository extends JpaRepository<ChristmasPackageNote, Integer> {
 
-    List<ChristmasPackageNote> findByChristmasPackage_id(Long id);
+    List<ChristmasPackageNote> findByChristmasPackage_id(Integer id);
 
-    ChristmasPackageNote findByIdAndChristmasPackage_id(Long id, Long packageId);
+    ChristmasPackageNote findByIdAndChristmasPackage_id(Integer id, Integer packageId);
 
 }

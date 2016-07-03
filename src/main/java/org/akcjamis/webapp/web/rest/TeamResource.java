@@ -7,7 +7,6 @@ import org.akcjamis.webapp.repository.search.TeamSearchRepository;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -114,7 +113,7 @@ public class TeamResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Team> getTeam(@PathVariable Long id) {
+    public ResponseEntity<Team> getTeam(@PathVariable Integer id) {
         log.debug("REST request to get Team : {}", id);
         Team team = teamRepository.findOneWithEagerRelationships(id);
         return Optional.ofNullable(team)
@@ -174,7 +173,7 @@ public class TeamResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTeam(@PathVariable Integer id) {
         log.debug("REST request to delete Team : {}", id);
         teamRepository.delete(id);
         teamSearchRepository.delete(id);

@@ -27,7 +27,8 @@ public class Subpackage extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "subpackage_id")
+    private Integer id;
 
     @NotNull
     @Min(value = 1)
@@ -40,17 +41,19 @@ public class Subpackage extends AbstractAuditingEntity implements Serializable {
     private Set<SubpackageNote> subpackageNotes = new HashSet<>();
 
     @ManyToOne
+    @JoinColumn(name = "child_id")
     private Child child;
 
     @ManyToOne
     @JsonIgnore
+    @JoinColumn(name = "christmas_package_id")
     private ChristmasPackage christmasPackage;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

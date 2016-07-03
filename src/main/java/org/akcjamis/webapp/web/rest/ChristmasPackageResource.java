@@ -24,7 +24,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -148,7 +147,7 @@ public class ChristmasPackageResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackageDTO> getChristmasPackage(@PathVariable Short year, @PathVariable Long id) {
+    public ResponseEntity<ChristmasPackageDTO> getChristmasPackage(@PathVariable Short year, @PathVariable Integer id) {
         log.debug("REST request to get ChristmasPackage : {}", id);
         ChristmasPackage christmasPackage = christmasPackageService.findOne(year, id);
         return Optional.ofNullable(mapper.toChristmasPackageDTO(christmasPackage))
@@ -169,7 +168,7 @@ public class ChristmasPackageResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteChristmasPackage(@PathVariable Long year, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteChristmasPackage(@PathVariable Long year, @PathVariable Integer id) {
         log.debug("REST request to delete ChristmasPackage : {}", id);
         christmasPackageService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("christmasPackage", id.toString())).build();
@@ -183,7 +182,7 @@ public class ChristmasPackageResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackage> updateChristmasPackage(@PathVariable Long id, @RequestBody ChristmasPackageMarkDTO packageMark) throws URISyntaxException {
+    public ResponseEntity<ChristmasPackage> updateChristmasPackage(@PathVariable Integer id, @RequestBody ChristmasPackageMarkDTO packageMark) throws URISyntaxException {
         log.debug("REST request to update mark of ChristmasPackage  : {}", id);
 
         ChristmasPackage christmasPackage = christmasPackageService.findOne(id);

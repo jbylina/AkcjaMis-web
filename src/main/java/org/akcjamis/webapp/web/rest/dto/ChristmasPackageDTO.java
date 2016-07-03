@@ -9,10 +9,10 @@ import java.util.Set;
 
 public class ChristmasPackageDTO extends AbstractAuditingDTO {
 
-    private Long id;
+    private Integer id;
 
     @NotNull
-    private Long familyId;
+    private Integer familyId;
 
     @Min(value = 1)
     @Max(value = 6)
@@ -26,19 +26,19 @@ public class ChristmasPackageDTO extends AbstractAuditingDTO {
 
     private Set<Subpackage> subpackages;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getFamilyId() {
+    public Integer getFamilyId() {
         return familyId;
     }
 
-    public void setFamilyId(Long familyId) {
+    public void setFamilyId(Integer familyId) {
         this.familyId = familyId;
     }
 

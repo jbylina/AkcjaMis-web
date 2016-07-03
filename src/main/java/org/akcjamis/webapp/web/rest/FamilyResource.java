@@ -1,7 +1,6 @@
 package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.vividsolutions.jts.geom.Geometry;
 import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.service.FamilyService;
@@ -11,7 +10,6 @@ import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
 import org.akcjamis.webapp.web.rest.dto.RouteDTO;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
-import org.hibernate.validator.constraints.Length;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -125,7 +122,7 @@ public class FamilyResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Family> getFamily(@PathVariable Long id) {
+    public ResponseEntity<Family> getFamily(@PathVariable Integer id) {
         log.debug("REST request to get Family : {}", id);
         Family family = familyService.findOne(id);
         return Optional.ofNullable(family)
@@ -145,7 +142,7 @@ public class FamilyResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<ChristmasPackageDTO>> getFamilyChristmasPackages(@PathVariable Long id) {
+    public ResponseEntity<List<ChristmasPackageDTO>> getFamilyChristmasPackages(@PathVariable Integer id) {
         log.debug("REST request to get packages of Family : {}", id);
         List<ChristmasPackage> christmasPackages = familyService.getChristmasPackages(id);
         return Optional.ofNullable(christmasPkgMapper.toChristmasPackageDTOs(christmasPackages))
@@ -165,7 +162,7 @@ public class FamilyResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteFamily(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteFamily(@PathVariable Integer id) {
         log.debug("REST request to delete Family : {}", id);
         familyService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("family", id.toString())).build();
@@ -217,7 +214,7 @@ public class FamilyResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<RouteDTO> calculateOptimalRoute(@RequestParam Set<Long> families, @RequestParam Double latitude, @RequestParam Double longitude){
+    public ResponseEntity<RouteDTO> calculateOptimalRoute(@RequestParam Set<Integer> families, @RequestParam Double latitude, @RequestParam Double longitude){
         log.debug("REST request to clusterFamiliesWithin : {}", families);
 
         return new ResponseEntity<>(familyService.calculateOptimalRoute(families, latitude, longitude), HttpStatus.OK);
@@ -237,7 +234,7 @@ public class FamilyResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ChristmasPackageDTO> addFamilyToEvent(@PathVariable Long id) {
+    public ResponseEntity<ChristmasPackageDTO> addFamilyToEvent(@PathVariable Integer id) {
         log.debug("REST request to add Family to event : {}", id);
         ChristmasPackage result = familyService.addFamilyToEvent(id);
         return ResponseEntity.ok()

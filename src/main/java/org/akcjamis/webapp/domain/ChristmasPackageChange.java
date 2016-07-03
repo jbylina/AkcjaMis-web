@@ -24,7 +24,8 @@ public class ChristmasPackageChange extends AbstractAuditingEntity implements Se
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "christmas_package_changelog_id")
+    private Integer id;
 
     @Size(min = 3, max = 20)
     @Column(name = "type_code", length = 20)
@@ -42,13 +43,14 @@ public class ChristmasPackageChange extends AbstractAuditingEntity implements Se
     private String content;
 
     @ManyToOne
+    @JoinColumn(name = "christmas_package_id")
     private ChristmasPackage christmasPackage;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -33,7 +33,7 @@ public interface ChristmasPackageMapper {
 
     List<ChristmasPackageDTO> toChristmasPackageDTOs(List<ChristmasPackage> events);
 
-    default Family familyFromfamilyId(Long family){
+    default Family familyFromfamilyId(Integer family){
         Family f = new Family();
         f.setId(family);
         return f;
@@ -45,7 +45,7 @@ public interface ChristmasPackageMapper {
         return e;
     }
 
-    default Long familyIdFromFamily(Family family){
+    default Integer familyIdFromFamily(Family family){
         return family.getId();
     }
 

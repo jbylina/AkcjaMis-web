@@ -2,14 +2,12 @@ package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Contact;
-import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +18,6 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -62,7 +59,7 @@ public class ContactResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Contact> createContact(@PathVariable Long id, @Valid @RequestBody Contact contact) throws URISyntaxException {
+    public ResponseEntity<Contact> createContact(@PathVariable Integer id, @Valid @RequestBody Contact contact) throws URISyntaxException {
         log.debug("REST request to save Contact : {}", contact);
         if (contact.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("contact", "idexists", "A new contact cannot already have an ID")).body(null);
@@ -87,7 +84,7 @@ public class ContactResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Contact> updateContact(@PathVariable Long id, @Valid @RequestBody Contact contact) throws URISyntaxException {
+    public ResponseEntity<Contact> updateContact(@PathVariable Integer id, @Valid @RequestBody Contact contact) throws URISyntaxException {
         log.debug("REST request to update Contact : {}", contact);
         if (contact.getId() == null) {
             return createContact(id, contact);
@@ -108,7 +105,7 @@ public class ContactResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Contact> getAllContacts(@PathVariable Long id) {
+    public List<Contact> getAllContacts(@PathVariable Integer id) {
         log.debug("REST request to get all Contacts");
         return familyService.getAllContacts(id);
     }
@@ -124,7 +121,7 @@ public class ContactResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Contact> getContact(@PathVariable Long familyId, @PathVariable Long id) {
+    public ResponseEntity<Contact> getContact(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to get Contact : {}", id);
         Contact contact = contactRepository.findByIdAndFamily_id(id, familyId);
         return Optional.ofNullable(contact)
@@ -145,7 +142,7 @@ public class ContactResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteContact(@PathVariable Long familyId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteContact(@PathVariable Long familyId, @PathVariable Integer id) {
         log.debug("REST request to delete Contact : {}", id);
         contactRepository.delete(id); // TODO move to FamilyService ?
         contactSearchRepository.delete(id);

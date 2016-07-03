@@ -7,7 +7,6 @@ import org.akcjamis.webapp.repository.search.SubpackageNoteSearchRepository;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +31,13 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class SubpackageNoteResource {
 
     private final Logger log = LoggerFactory.getLogger(SubpackageNoteResource.class);
-        
+
     @Inject
     private SubpackageNoteRepository subpackageNoteRepository;
-    
+
     @Inject
     private SubpackageNoteSearchRepository subpackageNoteSearchRepository;
-    
+
     /**
      * POST  /subpackage-notes : Create a new subpackageNote.
      *
@@ -112,7 +111,7 @@ public class SubpackageNoteResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<SubpackageNote> getSubpackageNote(@PathVariable Long id) {
+    public ResponseEntity<SubpackageNote> getSubpackageNote(@PathVariable Integer id) {
         log.debug("REST request to get SubpackageNote : {}", id);
         SubpackageNote subpackageNote = subpackageNoteRepository.findOne(id);
         return Optional.ofNullable(subpackageNote)
@@ -132,7 +131,7 @@ public class SubpackageNoteResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteSubpackageNote(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSubpackageNote(@PathVariable Integer id) {
         log.debug("REST request to delete SubpackageNote : {}", id);
         subpackageNoteRepository.delete(id);
         subpackageNoteSearchRepository.delete(id);

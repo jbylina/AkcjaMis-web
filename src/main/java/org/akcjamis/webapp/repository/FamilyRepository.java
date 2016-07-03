@@ -12,12 +12,12 @@ import java.util.Set;
 /**
  * Spring Data JPA repository for the Family entity.
  */
-public interface FamilyRepository extends JpaRepository<Family,Long> {
+public interface FamilyRepository extends JpaRepository<Family, Integer> {
 
     Family findByLocationGeom(Geometry geometry);
 
     @Query(value = "SELECT DISTINCT clst.clst_num as cluster_num, " +
-                   "f.id," +
+                   "f.family_id," +
                    "f.street," +
                    "f.house_no," +
                    "f.flat_no," +
@@ -28,7 +28,7 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
                    "              ,(st_DumpPoints(clst.geom)).geom fam_geom" +
                    "            FROM (SELECT unnest(ST_ClusterWithin(location_geom, :distance)) geom" +
                    "                  FROM families f" +
-                   "                  JOIN christmas_packages cp ON cp.family_id = f.id" +
+                   "                  JOIN christmas_packages cp ON cp.family_id = f.family_id" +
                    "                  WHERE location_geom IS NOT NULL AND cp.event_year = :eventYear ) clst) clst" +
                    " LEFT JOIN families f ON f.location_geom = clst.fam_geom", nativeQuery = true)
     List<Object[]> clusterFamiliesWithin(@Param("eventYear") Short eventYear, @Param("distance") Double distance);
@@ -39,14 +39,14 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
 
     @Query(value = "WITH fam_facility_w_nearest_node AS ( " +
                    "  SELECT " +
-                   "      f.id, " +
+                   "      f.family_id id, " +
                    "      (SELECT w.source " +
                    "       FROM osm_ways w " +
                    "       ORDER BY w.the_geom <-> f.location_geom " +
                    "       LIMIT 1) node_num " +
                    "    FROM families f " +
                    "    WHERE f.location_geom IS NOT NULL " +
-                   "          AND f.id IN (:families) " +
+                   "          AND f.family_id IN (:families) " +
                    "UNION ALL " +
                    "  SELECT 0 id, " +
                    "    (SELECT w.source " +
@@ -73,5 +73,5 @@ public interface FamilyRepository extends JpaRepository<Family,Long> {
                    "      comb.start_node \\:\\: INT4, comb.end_node \\:\\: INT4, TRUE, TRUE) r " +
                    "  LEFT JOIN osm_ways w ON w.gid = r.id2 " +
                    " GROUP BY comb.start_n_f_id, comb.end_n_f_id ", nativeQuery = true)
-    List<Object[]> calculateOptimalRoute(@Param("families") Set<Long> families, @Param("latitude") Double latitude, @Param("longitude") Double longitude);
+    List<Object[]> calculateOptimalRoute(@Param("families") Set<Integer> families, @Param("latitude") Double latitude, @Param("longitude") Double longitude);
 }

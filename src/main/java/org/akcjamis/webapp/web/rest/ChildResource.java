@@ -8,7 +8,6 @@ import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -60,7 +59,7 @@ public class ChildResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Child> createChild(@PathVariable Long id, @Valid @RequestBody Child child) throws URISyntaxException {
+    public ResponseEntity<Child> createChild(@PathVariable Integer id, @Valid @RequestBody Child child) throws URISyntaxException {
         log.debug("REST request to save Child : {}", child);
         if (child.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("child", "idexists", "A new child cannot already have an ID")).body(null);
@@ -85,7 +84,7 @@ public class ChildResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Child> updateChild(@PathVariable Long id, @Valid @RequestBody Child child) throws URISyntaxException {
+    public ResponseEntity<Child> updateChild(@PathVariable Integer id, @Valid @RequestBody Child child) throws URISyntaxException {
         log.debug("REST request to update Child : {}", child);
         if (child.getId() == null) {
             return createChild(id, child);
@@ -106,7 +105,7 @@ public class ChildResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Child> getAllChildren(@PathVariable Long id) {
+    public List<Child> getAllChildren(@PathVariable Integer id) {
         log.debug("REST request to get all Children");
         return familyService.getAllChildren(id);
     }
@@ -122,7 +121,7 @@ public class ChildResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Child> getChild(@PathVariable Long familyId, @PathVariable Long id) {
+    public ResponseEntity<Child> getChild(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to get Child : {}", id);
         Child child = childRepository.findByIdAndFamily_id(id, familyId);
         return Optional.ofNullable(child)
@@ -143,7 +142,7 @@ public class ChildResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteChild(@PathVariable Long familyId, @PathVariable Long id) {
+    public ResponseEntity<Void> deleteChild(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to delete Child : {}", id);
         childRepository.delete(id);
         childSearchRepository.delete(id);

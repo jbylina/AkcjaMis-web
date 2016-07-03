@@ -4,7 +4,6 @@ package org.akcjamis.webapp.web.rest.dto;
 import com.google.common.collect.Sets;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -15,7 +14,7 @@ import java.util.Set;
 
 public class FamilyNoteDTO extends AbstractAuditingDTO {
 
-    private Long id;
+    private Integer id;
 
     @NotNull
     @Size(max = 65535)
@@ -25,11 +24,11 @@ public class FamilyNoteDTO extends AbstractAuditingDTO {
 
     private Set<String> tags = Sets.newHashSet();
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

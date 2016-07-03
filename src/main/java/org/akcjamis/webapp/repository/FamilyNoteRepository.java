@@ -12,13 +12,13 @@ import java.util.List;
 /**
  * Spring Data JPA repository for the FamilyNote entity.
  */
-public interface FamilyNoteRepository extends JpaRepository<FamilyNote,Long> {
+public interface FamilyNoteRepository extends JpaRepository<FamilyNote, Integer> {
 
     @Query("select distinct familyNote from FamilyNote familyNote left join fetch familyNote.tags")
     List<FamilyNote> findAllWithEagerRelationships();
 
     @Query("select familyNote from FamilyNote familyNote left join fetch familyNote.tags where familyNote.id =:noteId and familyNote.family.id = :familyId")
-    FamilyNote findOneWithEagerRelationships(@Param("familyId") Long familyId, @Param("noteId") Long noteId);
+    FamilyNote findOneWithEagerRelationships(@Param("familyId") Integer familyId, @Param("noteId") Integer noteId);
 
-    Page<FamilyNote> findByFamily_id(Long id, Pageable var1);
+    Page<FamilyNote> findByFamily_id(Integer id, Pageable var1);
 }

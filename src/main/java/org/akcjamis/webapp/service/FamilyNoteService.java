@@ -5,8 +5,6 @@ import org.akcjamis.webapp.domain.FamilyNote;
 import org.akcjamis.webapp.repository.FamilyNoteRepository;
 import org.akcjamis.webapp.repository.TagRepository;
 import org.akcjamis.webapp.repository.search.FamilyNoteSearchRepository;
-import org.akcjamis.webapp.web.rest.dto.FamilyNoteDTO;
-import org.akcjamis.webapp.web.rest.mapper.FamilyNoteMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -47,7 +45,7 @@ public class FamilyNoteService {
      * @param familyNote the note to save
      * @return the persisted entity
      */
-    public FamilyNote save(Long familyId, FamilyNote familyNote) {
+    public FamilyNote save(Integer familyId, FamilyNote familyNote) {
         log.debug("Request to save FamilyNote : {}", familyNote);
         Family family = new Family();
         family.setId(familyId);
@@ -65,7 +63,7 @@ public class FamilyNoteService {
      *  @return the list of entities
      */
     @Transactional(readOnly = true)
-    public Page<FamilyNote> findAll(Long familyId, Pageable pageable) {
+    public Page<FamilyNote> findAll(Integer familyId, Pageable pageable) {
         log.debug("Request to get all FamilyNotes");
         return familyNoteRepository.findByFamily_id(familyId, pageable);
     }
@@ -78,7 +76,7 @@ public class FamilyNoteService {
      *  @return the entity
      */
     @Transactional(readOnly = true)
-    public FamilyNote findOne(Long familyId, Long noteId) {
+    public FamilyNote findOne(Integer familyId, Integer noteId) {
         log.debug("Request to get FamilyNote : {}", noteId);
         return familyNoteRepository.findOneWithEagerRelationships(familyId, noteId);
     }
@@ -88,7 +86,7 @@ public class FamilyNoteService {
      *
      *  @param id the id of the entity
      */
-    public void delete(Long id) {
+    public void delete(Integer id) {
         log.debug("Request to delete FamilyNote : {}", id);
         familyNoteRepository.delete(id);
         familyNoteSearchRepository.delete(id);

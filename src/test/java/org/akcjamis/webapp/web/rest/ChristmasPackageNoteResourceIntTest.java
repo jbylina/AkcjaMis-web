@@ -29,8 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.awt.*;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 

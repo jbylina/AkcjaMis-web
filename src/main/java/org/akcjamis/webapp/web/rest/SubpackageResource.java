@@ -7,7 +7,6 @@ import org.akcjamis.webapp.repository.search.SubpackageSearchRepository;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,13 +31,13 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class SubpackageResource {
 
     private final Logger log = LoggerFactory.getLogger(SubpackageResource.class);
-        
+
     @Inject
     private SubpackageRepository subpackageRepository;
-    
+
     @Inject
     private SubpackageSearchRepository subpackageSearchRepository;
-    
+
     /**
      * POST  /subpackages : Create a new subpackage.
      *
@@ -112,7 +111,7 @@ public class SubpackageResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Subpackage> getSubpackage(@PathVariable Long id) {
+    public ResponseEntity<Subpackage> getSubpackage(@PathVariable Integer id) {
         log.debug("REST request to get Subpackage : {}", id);
         Subpackage subpackage = subpackageRepository.findOne(id);
         return Optional.ofNullable(subpackage)
@@ -132,7 +131,7 @@ public class SubpackageResource {
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> deleteSubpackage(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSubpackage(@PathVariable Integer id) {
         log.debug("REST request to delete Subpackage : {}", id);
         subpackageRepository.delete(id);
         subpackageSearchRepository.delete(id);

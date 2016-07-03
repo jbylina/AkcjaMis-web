@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 
 public class RouteDTO {
 
-    private List<Long> optimalOrder;
+    private List<Integer> optimalOrder;
 
     private List<Geometry> routePaths;
 
-    public RouteDTO(List<Long> optimalOrder, List<String> routePaths) {
+    public RouteDTO(List<Integer> optimalOrder, List<String> routePaths) {
         this.optimalOrder = optimalOrder;
         WKTReader reader = new WKTReader();
 
@@ -27,11 +27,11 @@ public class RouteDTO {
             .collect(Collectors.toList());
     }
 
-    public List<Long> getOptimalOrder() {
+    public List<Integer> getOptimalOrder() {
         return optimalOrder;
     }
 
-    public void setOptimalOrder(List<Long> optimalOrder) {
+    public void setOptimalOrder(List<Integer> optimalOrder) {
         this.optimalOrder = optimalOrder;
     }
 
