@@ -1,31 +1,31 @@
-id;family_id;content;archived;created_by
-1;1;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ut ipsum at justo pulvinar;FALSE;system
-2;1;per conubia nostra, per inceptos himenaeos. Sed sodales qua;TRUE;system
-3;1;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ut ipsum at justo pulvinar rutrum. Proin;FALSE;system
-4;1;Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed sodales quam nulla, vitae vulputate nisi pelle;FALSE;system
-5;3;mattis aliquet sem, quis sodales orci sodales et. Curabitur venenatis;FALSE;system
-6;3;ngilla vulputate. Cras ut malesuada diam. Suspendisse id ullamcorper nulla.;FALSE;system
-7;3;Nullam quis eros a odio varius rhoncus in at ex. Pellentesque dapibus orci eget lorem efficitur, non aliqu;FALSE;system
-8;3;varius odio, vel sagittis diam. Etiam felis sem, pu;FALSE;system
-9;4;ncus in at ex. Pellentesque dapibus;TRUE;system
-10;4;unc vitae lorem consectetur, elementum massa eget, feugia;FALSE;system
-11;4;ada sed arcu. Pellentesque dignissim lectus dui, tincid;FALSE;system
-12;5;Phasellus metus risus, pellentesque eu ligula sit;FALSE;system
-13;5;igula quis mauris euismod vulputate. Nullam tincidunt libero vitae ullamcorper venenatis.;FALSE;system
-14;5;Phasellus quam lorem, suscipit vel commodo ut, vehicula;FALSE;system
-15;6;viverra. Aliquam fringilla erat convallis orci iaculis, sit amet rhon;FALSE;system
-16;7;pretium varius lacus, non fermentum neque aliquam eu. Sed lorem libero, auctor nec fringilla id, suscipit a ante. Nulla sollicitudin nisi at variu;FALSE;system
-17;7;Maecenas viverra mattis scelerisque. In in blandit ipsum, non luctus tellus. Nam vel vestibulum odio, id varius odio. Praesent porta justo sit;FALSE;system
-18;7;amet faucibus fermentum. Aenean dapibus vehicula sollicitudin. Aliquam pharetra tincidunt blandit. Nam enim arcu, varius ac porttitor;FALSE;system
-19;7;Mauris augue felis, mattis vitae orci sit amet, dapibus feugiat purus. Ut metus nunc, fermentum sit amet dapibus vitae, dapibus id dolor.;FALSE;system
-20;7;Sed mauris mauris, porttitor in enim nec, pharetra tincidunt felis. Duis facilisis iaculis ex, vitae lacinia diam. Integer eu rhoncus ligula. Proin;FALSE;system
-21;8;vel malesuada ante, vel pulvinar est. Quisque dignissim tellus ac quam auctor, euismod malesuada felis ultricies. Aliquam lacinia luctus;FALSE;system
-22;9;Suspendisse gravida arcu malesuada mattis laoreet. Vivamus ut lacus pellentesque turpis cursus suscipit. Donec nec luctus leo. Aenean;FALSE;system
-23;9;porttitor magna eget quam tempus vulputate vitae porta lacus. Vivamus volutpat quam nec purus commodo, vel pharetra lorem finibus.;FALSE;system
-24;10;Morbi dignissim luctus lorem, at euismod dolor consectetur a. Praesent nec odio eget urna maximus aliquet quis eget nisl. Nulla eu justo;FALSE;system
-25;10;sed justo vulputate dictum. Vestibulum placerat ante sed metus mattis, eleifend consequat tellus cursus. Maecenas ex lectus, luctus non;FALSE;system
-26;10;ornare magna. Mauris iaculis venenatis mattis. Suspendisse turpis enim, facilisis eu dapibus eu, malesuada scelerisque leo. Sed finibus;FALSE;system
-27;10;est euismod. Duis commodo pulvinar orci ut tincidunt. Suspendisse potenti. Ut imperdiet varius gravida. Nunc purus eros, elementum et;FALSE;system
-28;10;ac finibus ac, hendrerit eget quam. Vivamus facilisis felis lectus. Maecenas ac leo vel nibh efficitur facilisis. Vivamus pharetra non turpis ac;FALSE;system
-29;11;nec, elementum quis urna. Vivamus blandit diam a pellentesque elementum.;FALSE;system
-30;11;tempus vulputate vitae porta lacus. Vivamus volutpat quam nec purus commodo, vel pharetra lorem finibus. Morbi dignissim luctus lore;FALSE;system
+family_note_id;family_id;content;archived;created_by
+1;1;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ut ipsum at justo pulvinar;N;system
+2;1;per conubia nostra, per inceptos himenaeos. Sed sodales qua;Y;system
+3;1;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ut ipsum at justo pulvinar rutrum. Proin;N;system
+4;1;Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed sodales quam nulla, vitae vulputate nisi pelle;N;system
+5;3;mattis aliquet sem, quis sodales orci sodales et. Curabitur venenatis;N;system
+6;3;ngilla vulputate. Cras ut malesuada diam. Suspendisse id ullamcorper nulla.;N;system
+7;3;Nullam quis eros a odio varius rhoncus in at ex. Pellentesque dapibus orci eget lorem efficitur, non aliqu;N;system
+8;3;varius odio, vel sagittis diam. Etiam felis sem, pu;N;system
+9;4;ncus in at ex. Pellentesque dapibus;Y;system
+10;4;unc vitae lorem consectetur, elementum massa eget, feugia;N;system
+11;4;ada sed arcu. Pellentesque dignissim lectus dui, tincid;N;system
+12;5;Phasellus metus risus, pellentesque eu ligula sit;N;system
+13;5;igula quis mauris euismod vulputate. Nullam tincidunt libero vitae ullamcorper venenatis.;N;system
+14;5;Phasellus quam lorem, suscipit vel commodo ut, vehicula;N;system
+15;6;viverra. Aliquam fringilla erat convallis orci iaculis, sit amet rhon;N;system
+16;7;pretium varius lacus, non fermentum neque aliquam eu. Sed lorem libero, auctor nec fringilla id, suscipit a ante. Nulla sollicitudin nisi at variu;N;system
+17;7;Maecenas viverra mattis scelerisque. In in blandit ipsum, non luctus tellus. Nam vel vestibulum odio, id varius odio. Praesent porta justo sit;N;system
+18;7;amet faucibus fermentum. Aenean dapibus vehicula sollicitudin. Aliquam pharetra tincidunt blandit. Nam enim arcu, varius ac porttitor;N;system
+19;7;Mauris augue felis, mattis vitae orci sit amet, dapibus feugiat purus. Ut metus nunc, fermentum sit amet dapibus vitae, dapibus id dolor.;N;system
+20;7;Sed mauris mauris, porttitor in enim nec, pharetra tincidunt felis. Duis facilisis iaculis ex, vitae lacinia diam. Integer eu rhoncus ligula. Proin;N;system
+21;8;vel malesuada ante, vel pulvinar est. Quisque dignissim tellus ac quam auctor, euismod malesuada felis ultricies. Aliquam lacinia luctus;N;system
+22;9;Suspendisse gravida arcu malesuada mattis laoreet. Vivamus ut lacus pellentesque turpis cursus suscipit. Donec nec luctus leo. Aenean;N;system
+23;9;porttitor magna eget quam tempus vulputate vitae porta lacus. Vivamus volutpat quam nec purus commodo, vel pharetra lorem finibus.;N;system
+24;10;Morbi dignissim luctus lorem, at euismod dolor consectetur a. Praesent nec odio eget urna maximus aliquet quis eget nisl. Nulla eu justo;N;system
+25;10;sed justo vulputate dictum. Vestibulum placerat ante sed metus mattis, eleifend consequat tellus cursus. Maecenas ex lectus, luctus non;N;system
+26;10;ornare magna. Mauris iaculis venenatis mattis. Suspendisse turpis enim, facilisis eu dapibus eu, malesuada scelerisque leo. Sed finibus;N;system
+27;10;est euismod. Duis commodo pulvinar orci ut tincidunt. Suspendisse potenti. Ut imperdiet varius gravida. Nunc purus eros, elementum et;N;system
+28;10;ac finibus ac, hendrerit eget quam. Vivamus facilisis felis lectus. Maecenas ac leo vel nibh efficitur facilisis. Vivamus pharetra non turpis ac;N;system
+29;11;nec, elementum quis urna. Vivamus blandit diam a pellentesque elementum.;N;system
+30;11;tempus vulputate vitae porta lacus. Vivamus volutpat quam nec purus commodo, vel pharetra lorem finibus. Morbi dignissim luctus lore;N;system

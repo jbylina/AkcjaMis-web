@@ -1,4 +1,4 @@
-id;street;house_no;flat_no;postalcode;district;city;region;source;created_by;location_geom
+family_id;street;house_no;flat_no;postalcode;district;city;region;source;created_by;location_geom
 1;Ostródzka;175;1;03-289;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.0470221 52.32742090000001)"
 3;Kajakowa;10;6;02-838;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(21.0209058 52.12973119999999)"
 4;Szczęśliwicka;56;3A;02-353;NULL;Warszawa;NULL;lorem ipsum;system;"SRID=4326;POINT(20.9668189 52.2139559)"

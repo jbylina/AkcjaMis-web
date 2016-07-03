@@ -2,18 +2,14 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="now()" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
-    <property name="now" value="sysdate" dbms="oracle"/>
-
-    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle"/>
-
+    <property name="autoIncrement" value="true" dbms="h2,postgresql"/>
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
-    <property name="floatType" value="float" dbms="mysql, oracle"/>
 
-    <changeSet id="20160524154015" author="jacek" context="dev">
+    <changeSet id="20160524154015" author="JBY" context="dev">
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/data/families.csv"

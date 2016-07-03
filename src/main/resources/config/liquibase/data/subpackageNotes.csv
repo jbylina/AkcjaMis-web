@@ -1,4 +1,4 @@
-id;subpackage_id;content;created_by
+subpackage_note_id;subpackage_id;content;created_by
 1;1;Etiam a tellus vitae nunc cursus fringilla.;system
 2;1;Mauris et tortor sit amet est fermentum varius.;system
 3;2;Integer sodales enim et risus congue maximus.;system

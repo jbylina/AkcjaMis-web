@@ -2,35 +2,28 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="now()" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
-    <property name="now" value="sysdate" dbms="oracle"/>
-
-    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql,oracle"/>
-
+    <property name="autoIncrement" value="true" dbms="h2,postgresql"/>
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
-    <property name="floatType" value="float" dbms="mysql, oracle"/>
 
-    <!--
-        Added the entity FamilyNote.
-    -->
-    <changeSet id="20160415105238" author="jhipster">
+    <changeSet id="20160415105238" author="JBY">
         <createTable tableName="family_notes">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <column name="family_note_id" type="int" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="family_id" type="int">
+                <constraints nullable="false"/>
             </column>
 
             <column name="content" type="varchar(65535)">
                 <constraints nullable="false"/>
             </column>
 
-            <column name="archived" type="bit" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
-
-            <column name="family_id" type="bigint">
+            <column name="archived" type="char(1)" defaultValue="N">
                 <constraints nullable="false"/>
             </column>
 
@@ -43,37 +36,38 @@
             </column>
 
             <column name="last_modified_by" type="varchar(50)"/>
+
             <column name="last_modified_date" type="timestamp"/>
-            <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
 
-        <createTable tableName="family_notes_tag">
-            <column name="tag_id" type="bigint">
+        <createTable tableName="family_note_tags">
+            <column name="family_note_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="family_notes_id" type="bigint">
+
+            <column name="tag_id" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="family_notes_id, tag_id" tableName="family_notes_tag"/>
+        <addPrimaryKey columnNames="family_note_id, tag_id" tableName="family_note_tags"/>
 
-        <addForeignKeyConstraint baseColumnNames="family_notes_id"
-                                 baseTableName="family_notes_tag"
-                                 constraintName="fk_family_notes_tag_tag_id"
-                                 referencedColumnNames="id"
+        <addForeignKeyConstraint baseColumnNames="family_note_id"
+                                 baseTableName="family_note_tags"
+                                 constraintName="family_notes_family_note_tags_fk"
+                                 referencedColumnNames="family_note_id"
                                  referencedTableName="family_notes"/>
 
         <addForeignKeyConstraint baseColumnNames="tag_id"
-                                 baseTableName="family_notes_tag"
-                                 constraintName="fk_family_notes_tag_familynote_id"
-                                 referencedColumnNames="id"
+                                 baseTableName="family_note_tags"
+                                 constraintName="tags_family_note_tags_fk"
+                                 referencedColumnNames="tag_id"
                                  referencedTableName="tags"/>
 
         <addForeignKeyConstraint baseColumnNames="family_id"
                                  baseTableName="family_notes"
-                                 constraintName="fk_familynote_family_id"
-                                 referencedColumnNames="id"
+                                 constraintName="families_family_notes_fk"
+                                 referencedColumnNames="family_id"
                                  referencedTableName="families"/>
 
     </changeSet>

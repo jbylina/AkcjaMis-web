@@ -1,4 +1,4 @@
-id;team_number;note;event_year;created_by
+team_id;team_number;note;event_year;created_by
 1;1;Donec interdum velit viverra fringilla volutpat.;2014;system
 2;2;Duis tincidunt nunc id ullamcorper convallis.;2014;system
 3;3;Nullam bibendum lectus eget lectus dignis;2014;system

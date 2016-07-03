@@ -1,4 +1,4 @@
-id;family_id;type;value;comment;created_by
+contact_id;family_id;type;value;comment;created_by
 1;1;TEL;228348684;Lorem ipsum dolor sit amet, consectetur adipiscing elit.;system
 2;3;TEL;228361813;NULL;system
 3;3;MAIL;sekretariat@naszaszkola.edu.pl;Nunc sed ante eget leo elementum sodales non non dolor.;system

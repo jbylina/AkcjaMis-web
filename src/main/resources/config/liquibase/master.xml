@@ -2,8 +2,7 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
     <include file="classpath:config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160415114117_added_entity_Family.xml" relativeToChangelogFile="false"/>
@@ -11,7 +10,6 @@
     <include file="classpath:config/liquibase/changelog/20160415103839_added_entity_Tag.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160415105238_added_entity_FamilyNote.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160415105553_added_entity_Child.xml" relativeToChangelogFile="false"/>
-
     <include file="classpath:config/liquibase/changelog/20160417195658_added_entity_Event.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160417194720_added_entity_Team.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160417200639_added_entity_ChristmasPackage.xml" relativeToChangelogFile="false"/>
@@ -19,12 +17,8 @@
     <include file="classpath:config/liquibase/changelog/20160417191446_added_entity_SubpackageNote.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160417192113_added_entity_ChristmasPackageChange.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20160417192228_added_entity_ChristmasPackageNote.xml" relativeToChangelogFile="false"/>
-
     <include file="classpath:config/liquibase/changelog/20160517185730_added_entity_Family_geospatial.xml" relativeToChangelogFile="false"/>
-
     <include file="classpath:config/liquibase/changelog/20160417220630_added_entity_EntityAuditEvent.xml" relativeToChangelogFile="false"/>
-
     <include file="classpath:config/liquibase/changelog/20160524154015_load_data.xml" relativeToChangelogFile="false"/>
 
-    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
 </databaseChangeLog>
