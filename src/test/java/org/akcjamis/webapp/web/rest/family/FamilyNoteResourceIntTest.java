@@ -9,7 +9,6 @@ import org.akcjamis.webapp.repository.FamilyNoteRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.repository.TagRepository;
 import org.akcjamis.webapp.service.FamilyNoteService;
-import org.akcjamis.webapp.repository.search.FamilyNoteSearchRepository;
 
 import org.akcjamis.webapp.web.rest.FamilyNoteResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
@@ -87,9 +86,6 @@ public class FamilyNoteResourceIntTest {
 
     @Inject
     private FamilyRepository familyRepository;
-
-    @Inject
-    private FamilyNoteSearchRepository familyNoteSearchRepository;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -285,20 +281,5 @@ public class FamilyNoteResourceIntTest {
         // Validate the database is empty
         List<FamilyNote> familyNotes = familyNoteRepository.findAll();
         assertThat(familyNotes).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchFamilyNote() throws Exception {
-        // Initialize the database
-        familyNote = familyNoteService.save(family.getId(), familyNote);
-
-        // Search the familyNoteDTO
-        restFamilyNoteMockMvc.perform(get("/api/_search/family-notes?query=id:" + familyNote.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(familyNote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)))
-            .andExpect(jsonPath("$.[*].archived").value(hasItem(DEFAULT_ARCHIVED)));
     }
 }

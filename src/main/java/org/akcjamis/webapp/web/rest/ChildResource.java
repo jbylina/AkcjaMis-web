@@ -3,7 +3,6 @@ package org.akcjamis.webapp.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.repository.ChildRepository;
-import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
@@ -19,10 +18,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Child.
@@ -34,9 +29,6 @@ public class ChildResource {
     private final Logger log = LoggerFactory.getLogger(ChildResource.class);
 
     private ChildRepository childRepository;
-
-    @Inject
-    private ChildSearchRepository childSearchRepository;
 
     private FamilyService familyService;
 
@@ -145,26 +137,6 @@ public class ChildResource {
     public ResponseEntity<Void> deleteChild(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to delete Child : {}", id);
         childRepository.delete(id);
-        childSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("child", id.toString())).build();
     }
-
-    /**
-     * SEARCH  /_search/children?query=:query : search for the child corresponding
-     * to the query.
-     *
-     * @param query the query of the child search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/children",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public List<Child> searchChildren(@RequestParam String query) {
-        log.debug("REST request to search Children for query {}", query);
-        return StreamSupport
-            .stream(childSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
-    }
-
 }

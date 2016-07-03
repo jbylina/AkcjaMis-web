@@ -3,7 +3,8 @@ package org.akcjamis.webapp.web.rest.mapper;
 import org.akcjamis.webapp.domain.Authority;
 import org.akcjamis.webapp.domain.User;
 import org.akcjamis.webapp.web.rest.dto.UserDTO;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ public interface UserMapper {
     UserDTO userToUserDTO(User user);
 
     List<UserDTO> usersToUserDTOs(List<User> users);
-    
+
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)

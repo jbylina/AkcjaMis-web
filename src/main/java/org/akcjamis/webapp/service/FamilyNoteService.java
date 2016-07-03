@@ -4,17 +4,14 @@ import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.domain.FamilyNote;
 import org.akcjamis.webapp.repository.FamilyNoteRepository;
 import org.akcjamis.webapp.repository.TagRepository;
-import org.akcjamis.webapp.repository.search.FamilyNoteSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing FamilyNote.
@@ -28,9 +25,6 @@ public class FamilyNoteService {
     private FamilyNoteRepository familyNoteRepository;
 
     private TagRepository tagRepository;
-
-    @Inject
-    private FamilyNoteSearchRepository familyNoteSearchRepository;
 
     @Inject
     public FamilyNoteService(FamilyNoteRepository familyNoteRepository, TagRepository tagRepository) {
@@ -51,7 +45,6 @@ public class FamilyNoteService {
         family.setId(familyId);
         familyNote.setFamily(family);
         FamilyNote result = familyNoteRepository.save(familyNote);
-        familyNoteSearchRepository.save(result);
         return result;
     }
 
@@ -89,18 +82,5 @@ public class FamilyNoteService {
     public void delete(Integer id) {
         log.debug("Request to delete FamilyNote : {}", id);
         familyNoteRepository.delete(id);
-        familyNoteSearchRepository.delete(id);
-    }
-
-    /**
-     * Search for the familyNote corresponding to the query.
-     *
-     *  @param query the query of the search
-     *  @return the list of entities
-     */
-    @Transactional(readOnly = true)
-    public Page<FamilyNote> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of FamilyNotes for query {}", query);
-        return familyNoteSearchRepository.search(queryStringQuery(query), pageable);
     }
 }

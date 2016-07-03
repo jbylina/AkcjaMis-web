@@ -1,7 +1,6 @@
 package org.akcjamis.webapp.security;
 
 import org.akcjamis.webapp.config.Constants;
-
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 

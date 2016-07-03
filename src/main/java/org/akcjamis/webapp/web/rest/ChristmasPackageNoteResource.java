@@ -4,7 +4,6 @@ import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.ChristmasPackageNote;
 import org.akcjamis.webapp.repository.ChristmasPackageNoteRepository;
-import org.akcjamis.webapp.repository.search.ChristmasPackageNoteSearchRepository;
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
@@ -20,10 +19,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing ChristmasPackageNote.
@@ -37,9 +32,6 @@ public class ChristmasPackageNoteResource {
     private ChristmasPackageNoteRepository christmasPackageNoteRepository;
 
     private ChristmasPackageService christmasPackageService;
-
-    @Inject
-    private ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository;
 
     @Inject
     public ChristmasPackageNoteResource(ChristmasPackageNoteRepository christmasPackageNoteRepository,
@@ -154,23 +146,4 @@ public class ChristmasPackageNoteResource {
         christmasPackageService.deletePackageNote(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("christmasPackageNote", id.toString())).build();
     }
-
-    /**
-     * SEARCH  /_search/christmas-package-notes?query=:query : search for the christmasPackageNote corresponding
-     * to the query.
-     *
-     * @param query the query of the christmasPackageNote search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/christmas-package-notes",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public List<ChristmasPackageNote> searchChristmasPackageNotes(@RequestParam String query) {
-        log.debug("REST request to search ChristmasPackageNotes for query {}", query);
-        return StreamSupport
-            .stream(christmasPackageNoteSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
-    }
-
 }

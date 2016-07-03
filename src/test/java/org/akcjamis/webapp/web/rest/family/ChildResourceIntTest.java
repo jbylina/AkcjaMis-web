@@ -5,7 +5,6 @@ import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ChildRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
-import org.akcjamis.webapp.repository.search.ChildSearchRepository;
 
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.ChildResource;
@@ -23,7 +22,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,9 +74,6 @@ public class ChildResourceIntTest {
     private ChildRepository childRepository;
 
     @Inject
-    private ChildSearchRepository childSearchRepository;
-
-    @Inject
     private FamilyService familyService;
 
     @Inject
@@ -101,7 +96,6 @@ public class ChildResourceIntTest {
         MockitoAnnotations.initMocks(this);
         ChildResource childResource = new ChildResource(childRepository,
                                                         familyService);
-        ReflectionTestUtils.setField(childResource, "childSearchRepository", childSearchRepository);
         this.restChildMockMvc = MockMvcBuilders.standaloneSetup(childResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -333,25 +327,5 @@ public class ChildResourceIntTest {
         // Validate the database is empty
         List<Child> children = childRepository.findAll();
         assertThat(children).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchChild() throws Exception {
-        child.setFamily(family);
-        // Initialize the database
-        childRepository.saveAndFlush(child);
-        childSearchRepository.save(child);
-
-        // Search the child
-        restChildMockMvc.perform(get("/api/_search/children?query=id:" + child.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(child.getId().intValue())))
-            .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
-            .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
-            .andExpect(jsonPath("$.[*].lastName").value(hasItem(DEFAULT_LAST_NAME)))
-            .andExpect(jsonPath("$.[*].sex").value(hasItem(DEFAULT_SEX.toString())))
-            .andExpect(jsonPath("$.[*].birthYear").value(hasItem(DEFAULT_BIRTH_YEAR.toString())));
     }
 }

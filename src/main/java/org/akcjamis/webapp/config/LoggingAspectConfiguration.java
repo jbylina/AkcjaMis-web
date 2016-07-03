@@ -1,7 +1,10 @@
 package org.akcjamis.webapp.config;
 
 import org.akcjamis.webapp.aop.logging.LoggingAspect;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 @EnableAspectJAutoProxy

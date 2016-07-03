@@ -5,7 +5,6 @@ import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
-import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.ContactResource;
@@ -22,7 +21,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,9 +65,6 @@ public class ContactResourceIntTest {
     private ContactRepository contactRepository;
 
     @Inject
-    private ContactSearchRepository contactSearchRepository;
-
-    @Inject
     private FamilyService familyService;
 
     @Inject
@@ -91,7 +86,6 @@ public class ContactResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         ContactResource contactResource = new ContactResource(contactRepository, familyService);
-        ReflectionTestUtils.setField(contactResource, "contactSearchRepository", contactSearchRepository);
         this.restContactMockMvc = MockMvcBuilders.standaloneSetup(contactResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -262,23 +256,5 @@ public class ContactResourceIntTest {
         // Validate the database is empty
         List<Contact> contacts = contactRepository.findAll();
         assertThat(contacts).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchContact() throws Exception {
-        contact.setFamily(family);
-        // Initialize the database
-        contactRepository.saveAndFlush(contact);
-        contactSearchRepository.save(contact);
-
-        // Search the contact
-        restContactMockMvc.perform(get("/api/_search/contacts?query=id:" + contact.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(contact.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
-            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
-            .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)));
     }
 }

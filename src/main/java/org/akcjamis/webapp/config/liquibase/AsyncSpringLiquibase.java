@@ -1,7 +1,8 @@
 package org.akcjamis.webapp.config.liquibase;
 
-import javax.inject.Inject;
-
+import liquibase.exception.LiquibaseException;
+import liquibase.integration.spring.SpringLiquibase;
+import org.akcjamis.webapp.config.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,9 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.util.StopWatch;
 
-import org.akcjamis.webapp.config.Constants;
-import liquibase.exception.LiquibaseException;
-import liquibase.integration.spring.SpringLiquibase;
+import javax.inject.Inject;
 
 /**
  * Specific liquibase.integration.spring.SpringLiquibase that will update the database asynchronously.

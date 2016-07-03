@@ -3,12 +3,12 @@ package org.akcjamis.webapp.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import java.time.ZonedDateTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 
@@ -18,7 +18,7 @@ import java.util.Objects;
 public class EntityAuditEvent implements Serializable{
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -51,9 +51,9 @@ public class EntityAuditEvent implements Serializable{
     @NotNull
     @Column(name = "modified_date", nullable = false)
     private ZonedDateTime modifiedDate;
-    
 
-    
+
+
     public Long getId() {
         return id;
     }
@@ -149,6 +149,6 @@ public class EntityAuditEvent implements Serializable{
             '}';
     }
 
-    
+
 
 }

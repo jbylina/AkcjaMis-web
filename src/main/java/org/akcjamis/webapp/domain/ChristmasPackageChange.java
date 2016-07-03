@@ -3,10 +3,10 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -17,7 +17,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "christmas_package_changelogs")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "christmaspackagechange")
 public class ChristmasPackageChange extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

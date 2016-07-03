@@ -5,9 +5,9 @@ import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
-import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
 import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
 import org.akcjamis.webapp.web.rest.dto.RouteDTO;
+import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -166,25 +166,6 @@ public class FamilyResource {
         log.debug("REST request to delete Family : {}", id);
         familyService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("family", id.toString())).build();
-    }
-
-    /**
-     * SEARCH  /_search/families?query=:query : search for the family corresponding
-     * to the query.
-     *
-     * @param query the query of the family search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/families",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<Family>> searchFamilies(@RequestParam String query, Pageable pageable)
-        throws URISyntaxException {
-        log.debug("REST request to search for a page of Families for query {}", query);
-        Page<Family> page = familyService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/families");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
     /**

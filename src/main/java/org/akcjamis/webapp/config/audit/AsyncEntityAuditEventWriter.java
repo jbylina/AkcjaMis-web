@@ -14,7 +14,6 @@ import javax.persistence.Id;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.stream.Collector;
 
 /**
  * Async Entity Audit Event writer

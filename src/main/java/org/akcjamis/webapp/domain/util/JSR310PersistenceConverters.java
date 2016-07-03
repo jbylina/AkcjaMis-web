@@ -1,12 +1,16 @@
 package org.akcjamis.webapp.domain.util;
 
-import org.akcjamis.webapp.domain.util.JSR310DateConverters.*;
-
-import java.time.*;
-import java.util.Date;
+import org.akcjamis.webapp.domain.util.JSR310DateConverters.DateToLocalDateTimeConverter;
+import org.akcjamis.webapp.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
+import org.akcjamis.webapp.domain.util.JSR310DateConverters.LocalDateTimeToDateConverter;
+import org.akcjamis.webapp.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.Date;
 
 public final class JSR310PersistenceConverters {
 

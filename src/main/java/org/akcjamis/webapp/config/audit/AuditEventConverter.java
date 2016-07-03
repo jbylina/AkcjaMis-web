@@ -1,7 +1,6 @@
 package org.akcjamis.webapp.config.audit;
 
 import org.akcjamis.webapp.domain.PersistentAuditEvent;
-
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;

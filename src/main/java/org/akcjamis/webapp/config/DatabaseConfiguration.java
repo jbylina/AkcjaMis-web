@@ -1,11 +1,10 @@
 package org.akcjamis.webapp.config;
 
-import org.akcjamis.webapp.config.liquibase.AsyncSpringLiquibase;
-
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
+import org.akcjamis.webapp.config.liquibase.AsyncSpringLiquibase;
 import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -34,7 +32,6 @@ import java.util.Arrays;
 @EnableJpaRepositories("org.akcjamis.webapp.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
-@EnableElasticsearchRepositories("org.akcjamis.webapp.repository.search")
 public class DatabaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);

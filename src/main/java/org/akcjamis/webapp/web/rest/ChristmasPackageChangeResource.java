@@ -2,7 +2,6 @@ package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.ChristmasPackageChange;
-import org.akcjamis.webapp.repository.search.ChristmasPackageChangeSearchRepository;
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
@@ -23,8 +22,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * REST controller for managing ChristmasPackageChange.
  */
@@ -35,9 +32,6 @@ public class ChristmasPackageChangeResource {
     private final Logger log = LoggerFactory.getLogger(ChristmasPackageChangeResource.class);
 
     private  ChristmasPackageService christmasPackageService;
-
-    @Inject
-    private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
 
     @Inject
     public ChristmasPackageChangeResource(ChristmasPackageService christmasPackageService) {
@@ -149,24 +143,4 @@ public class ChristmasPackageChangeResource {
         christmasPackageService.deleteChange(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("christmasPackageChange", id.toString())).build();
     }
-
-    /**
-     * SEARCH  /_search/christmas-package-changes?query=:query : search for the christmasPackageChange corresponding
-     * to the query.
-     *
-     * @param query the query of the christmasPackageChange search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/christmas-package-changes",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<ChristmasPackageChange>> searchChristmasPackageChanges(@RequestParam String query, Pageable pageable)
-        throws URISyntaxException {
-        log.debug("REST request to search for a page of ChristmasPackageChanges for query {}", query);
-        Page<ChristmasPackageChange> page = christmasPackageChangeSearchRepository.search(queryStringQuery(query), pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/christmas-package-changes");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-
 }

@@ -3,7 +3,6 @@ package org.akcjamis.webapp.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.repository.ContactRepository;
-import org.akcjamis.webapp.repository.search.ContactSearchRepository;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
@@ -19,10 +18,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Contact.
@@ -34,9 +29,6 @@ public class ContactResource {
     private final Logger log = LoggerFactory.getLogger(ContactResource.class);
 
     private ContactRepository contactRepository;
-
-    @Inject
-    private ContactSearchRepository contactSearchRepository;
 
     private FamilyService familyService;
 
@@ -145,26 +137,6 @@ public class ContactResource {
     public ResponseEntity<Void> deleteContact(@PathVariable Long familyId, @PathVariable Integer id) {
         log.debug("REST request to delete Contact : {}", id);
         contactRepository.delete(id); // TODO move to FamilyService ?
-        contactSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("contact", id.toString())).build();
     }
-
-    /**
-     * SEARCH  /_search/contacts?query=:query : search for the contact corresponding
-     * to the query.
-     *
-     * @param query the query of the contact search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/contacts",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public List<Contact> searchContacts(@RequestParam String query) {
-        log.debug("REST request to search Contacts for query {}", query);
-        return StreamSupport
-            .stream(contactSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
-    }
-
 }

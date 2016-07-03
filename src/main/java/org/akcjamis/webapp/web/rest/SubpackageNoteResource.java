@@ -3,7 +3,6 @@ package org.akcjamis.webapp.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.SubpackageNote;
 import org.akcjamis.webapp.repository.SubpackageNoteRepository;
-import org.akcjamis.webapp.repository.search.SubpackageNoteSearchRepository;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +17,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing SubpackageNote.
@@ -34,9 +29,6 @@ public class SubpackageNoteResource {
 
     @Inject
     private SubpackageNoteRepository subpackageNoteRepository;
-
-    @Inject
-    private SubpackageNoteSearchRepository subpackageNoteSearchRepository;
 
     /**
      * POST  /subpackage-notes : Create a new subpackageNote.
@@ -55,7 +47,6 @@ public class SubpackageNoteResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("subpackageNote", "idexists", "A new subpackageNote cannot already have an ID")).body(null);
         }
         SubpackageNote result = subpackageNoteRepository.save(subpackageNote);
-        subpackageNoteSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/subpackage-notes/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("subpackageNote", result.getId().toString()))
             .body(result);
@@ -80,7 +71,6 @@ public class SubpackageNoteResource {
             return createSubpackageNote(subpackageNote);
         }
         SubpackageNote result = subpackageNoteRepository.save(subpackageNote);
-        subpackageNoteSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("subpackageNote", subpackageNote.getId().toString()))
             .body(result);
@@ -134,26 +124,7 @@ public class SubpackageNoteResource {
     public ResponseEntity<Void> deleteSubpackageNote(@PathVariable Integer id) {
         log.debug("REST request to delete SubpackageNote : {}", id);
         subpackageNoteRepository.delete(id);
-        subpackageNoteSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("subpackageNote", id.toString())).build();
-    }
-
-    /**
-     * SEARCH  /_search/subpackage-notes?query=:query : search for the subpackageNote corresponding
-     * to the query.
-     *
-     * @param query the query of the subpackageNote search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/subpackage-notes",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public List<SubpackageNote> searchSubpackageNotes(@RequestParam String query) {
-        log.debug("REST request to search SubpackageNotes for query {}", query);
-        return StreamSupport
-            .stream(subpackageNoteSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
     }
 
 }

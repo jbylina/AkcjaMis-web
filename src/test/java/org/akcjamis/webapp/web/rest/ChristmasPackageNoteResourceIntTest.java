@@ -7,7 +7,6 @@ import org.akcjamis.webapp.repository.ChristmasPackageNoteRepository;
 import org.akcjamis.webapp.repository.ChristmasPackageRepository;
 import org.akcjamis.webapp.repository.EventRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
-import org.akcjamis.webapp.repository.search.ChristmasPackageNoteSearchRepository;
 
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.junit.Before;
@@ -22,7 +21,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,9 +69,6 @@ public class ChristmasPackageNoteResourceIntTest {
     private ChristmasPackageRepository christmasPackageRepository;
 
     @Inject
-    private ChristmasPackageNoteSearchRepository christmasPackageNoteSearchRepository;
-
-    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -101,7 +96,6 @@ public class ChristmasPackageNoteResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         ChristmasPackageNoteResource christmasPackageNoteResource = new ChristmasPackageNoteResource(christmasPackageNoteRepository,christmasPackageService);
-        ReflectionTestUtils.setField(christmasPackageNoteResource, "christmasPackageNoteSearchRepository", christmasPackageNoteSearchRepository);
         this.restChristmasPackageNoteMockMvc = MockMvcBuilders.standaloneSetup(christmasPackageNoteResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -109,7 +103,6 @@ public class ChristmasPackageNoteResourceIntTest {
 
     @Before
     public void initTest() {
-        christmasPackageNoteSearchRepository.deleteAll();
         christmasPackageNote = new ChristmasPackageNote();
         christmasPackageNote.setContent(DEFAULT_CONTENT);
         christmasPackageNoteSecond = new ChristmasPackageNote();
@@ -287,22 +280,5 @@ public class ChristmasPackageNoteResourceIntTest {
         // Validate the database is empty
         List<ChristmasPackageNote> christmasPackageNotes = christmasPackageNoteRepository.findAll();
         assertThat(christmasPackageNotes).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchChristmasPackageNote() throws Exception {
-        // Initialize the database
-        christmasPackageNote.setChristmasPackage(christmasPackage);
-
-        christmasPackageNoteRepository.saveAndFlush(christmasPackageNote);
-        christmasPackageNoteSearchRepository.save(christmasPackageNote);
-
-        // Search the christmasPackageNote
-        restChristmasPackageNoteMockMvc.perform(get("/api/_search/christmas-package-notes?query=id:" + christmasPackageNote.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageNote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
     }
 }

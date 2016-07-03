@@ -2,7 +2,6 @@ package org.akcjamis.webapp.repository;
 
 import org.akcjamis.webapp.config.audit.AuditEventConverter;
 import org.akcjamis.webapp.domain.PersistentAuditEvent;
-
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Repository;

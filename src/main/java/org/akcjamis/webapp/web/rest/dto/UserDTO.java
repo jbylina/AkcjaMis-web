@@ -2,10 +2,11 @@ package org.akcjamis.webapp.web.rest.dto;
 
 import org.akcjamis.webapp.domain.Authority;
 import org.akcjamis.webapp.domain.User;
-
 import org.hibernate.validator.constraints.Email;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Set;
 import java.util.stream.Collectors;
 /**

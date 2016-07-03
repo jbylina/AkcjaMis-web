@@ -3,7 +3,6 @@ package org.akcjamis.webapp.web.rest;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Subpackage;
 import org.akcjamis.webapp.repository.SubpackageRepository;
-import org.akcjamis.webapp.repository.search.SubpackageSearchRepository;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,9 +49,6 @@ public class SubpackageResourceIntTest {
     private SubpackageRepository subpackageRepository;
 
     @Inject
-    private SubpackageSearchRepository subpackageSearchRepository;
-
-    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -66,7 +62,6 @@ public class SubpackageResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         SubpackageResource subpackageResource = new SubpackageResource();
-        ReflectionTestUtils.setField(subpackageResource, "subpackageSearchRepository", subpackageSearchRepository);
         ReflectionTestUtils.setField(subpackageResource, "subpackageRepository", subpackageRepository);
         this.restSubpackageMockMvc = MockMvcBuilders.standaloneSetup(subpackageResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -75,7 +70,6 @@ public class SubpackageResourceIntTest {
 
     @Before
     public void initTest() {
-        subpackageSearchRepository.deleteAll();
         subpackage = new Subpackage();
         subpackage.setSubpackageNumber(DEFAULT_SUBPACKAGE_NUMBER);
     }
@@ -97,10 +91,6 @@ public class SubpackageResourceIntTest {
         assertThat(subpackages).hasSize(databaseSizeBeforeCreate + 1);
         Subpackage testSubpackage = subpackages.get(subpackages.size() - 1);
         assertThat(testSubpackage.getSubpackageNumber()).isEqualTo(DEFAULT_SUBPACKAGE_NUMBER);
-
-        // Validate the Subpackage in ElasticSearch
-        Subpackage subpackageEs = subpackageSearchRepository.findOne(testSubpackage.getId());
-        assertThat(subpackageEs).isEqualToComparingFieldByField(testSubpackage);
     }
 
     @Test
@@ -162,7 +152,6 @@ public class SubpackageResourceIntTest {
     public void updateSubpackage() throws Exception {
         // Initialize the database
         subpackageRepository.saveAndFlush(subpackage);
-        subpackageSearchRepository.save(subpackage);
         int databaseSizeBeforeUpdate = subpackageRepository.findAll().size();
 
         // Update the subpackage
@@ -180,10 +169,6 @@ public class SubpackageResourceIntTest {
         assertThat(subpackages).hasSize(databaseSizeBeforeUpdate);
         Subpackage testSubpackage = subpackages.get(subpackages.size() - 1);
         assertThat(testSubpackage.getSubpackageNumber()).isEqualTo(UPDATED_SUBPACKAGE_NUMBER);
-
-        // Validate the Subpackage in ElasticSearch
-        Subpackage subpackageEs = subpackageSearchRepository.findOne(testSubpackage.getId());
-        assertThat(subpackageEs).isEqualToComparingFieldByField(testSubpackage);
     }
 
     @Test
@@ -191,7 +176,6 @@ public class SubpackageResourceIntTest {
     public void deleteSubpackage() throws Exception {
         // Initialize the database
         subpackageRepository.saveAndFlush(subpackage);
-        subpackageSearchRepository.save(subpackage);
         int databaseSizeBeforeDelete = subpackageRepository.findAll().size();
 
         // Get the subpackage
@@ -199,27 +183,8 @@ public class SubpackageResourceIntTest {
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
-        // Validate ElasticSearch is empty
-        boolean subpackageExistsInEs = subpackageSearchRepository.exists(subpackage.getId());
-        assertThat(subpackageExistsInEs).isFalse();
-
         // Validate the database is empty
         List<Subpackage> subpackages = subpackageRepository.findAll();
         assertThat(subpackages).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchSubpackage() throws Exception {
-        // Initialize the database
-        subpackageRepository.saveAndFlush(subpackage);
-        subpackageSearchRepository.save(subpackage);
-
-        // Search the subpackage
-        restSubpackageMockMvc.perform(get("/api/_search/subpackages?query=id:" + subpackage.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(subpackage.getId().intValue())))
-            .andExpect(jsonPath("$.[*].subpackageNumber").value(hasItem(DEFAULT_SUBPACKAGE_NUMBER)));
     }
 }

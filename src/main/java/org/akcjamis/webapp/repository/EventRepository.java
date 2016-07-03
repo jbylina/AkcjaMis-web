@@ -1,10 +1,7 @@
 package org.akcjamis.webapp.repository;
 
 import org.akcjamis.webapp.domain.Event;
-
-import org.springframework.data.jpa.repository.*;
-
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Spring Data JPA repository for the Event entity.

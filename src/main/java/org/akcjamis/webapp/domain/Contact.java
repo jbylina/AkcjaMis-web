@@ -3,10 +3,10 @@ package org.akcjamis.webapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -16,7 +16,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "contacts")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Document(indexName = "contact")
 public class Contact extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -147,24 +147,4 @@ public class FamilyNoteResource {
         familyNoteService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("familyNote", id.toString())).build();
     }
-
-    /**
-     * SEARCH  /_search/family-notes?query=:query : search for the familyNote corresponding
-     * to the query.
-     *
-     * @param query the query of the familyNote search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/family-notes",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<FamilyNote>> searchFamilyNotes(@RequestParam String query, Pageable pageable)
-        throws URISyntaxException {
-        log.debug("REST request to search for a page of FamilyNotes for query {}", query);
-        Page<FamilyNote> page = familyNoteService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/family-notes");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-
 }

@@ -1,7 +1,6 @@
 package org.akcjamis.webapp.config;
 
 import org.akcjamis.webapp.config.locale.AngularCookieLocaleResolver;
-
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;

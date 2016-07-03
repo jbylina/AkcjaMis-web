@@ -3,7 +3,6 @@ package org.akcjamis.webapp.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Team;
 import org.akcjamis.webapp.repository.TeamRepository;
-import org.akcjamis.webapp.repository.search.TeamSearchRepository;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +19,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Team.
@@ -36,9 +31,6 @@ public class TeamResource {
 
     @Inject
     private TeamRepository teamRepository;
-
-    @Inject
-    private TeamSearchRepository teamSearchRepository;
 
     /**
      * POST  /teams : Create a new team.
@@ -57,7 +49,6 @@ public class TeamResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("team", "idexists", "A new team cannot already have an ID")).body(null);
         }
         Team result = teamRepository.save(team);
-        teamSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/teams/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("team", result.getId().toString()))
             .body(result);
@@ -82,7 +73,6 @@ public class TeamResource {
             return createTeam(team);
         }
         Team result = teamRepository.save(team);
-        teamSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("team", team.getId().toString()))
             .body(result);
@@ -176,26 +166,6 @@ public class TeamResource {
     public ResponseEntity<Void> deleteTeam(@PathVariable Integer id) {
         log.debug("REST request to delete Team : {}", id);
         teamRepository.delete(id);
-        teamSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("team", id.toString())).build();
     }
-
-    /**
-     * SEARCH  /_search/teams?query=:query : search for the team corresponding
-     * to the query.
-     *
-     * @param query the query of the team search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/teams",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public List<Team> searchTeams(@RequestParam String query) {
-        log.debug("REST request to search Teams for query {}", query);
-        return StreamSupport
-            .stream(teamSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
-    }
-
 }

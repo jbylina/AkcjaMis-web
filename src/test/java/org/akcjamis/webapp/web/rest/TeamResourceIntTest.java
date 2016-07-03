@@ -5,7 +5,6 @@ import org.akcjamis.webapp.domain.Event;
 import org.akcjamis.webapp.domain.Team;
 import org.akcjamis.webapp.repository.EventRepository;
 import org.akcjamis.webapp.repository.TeamRepository;
-import org.akcjamis.webapp.repository.search.TeamSearchRepository;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -56,9 +55,6 @@ public class TeamResourceIntTest {
     private TeamRepository teamRepository;
 
     @Inject
-    private TeamSearchRepository teamSearchRepository;
-
-    @Inject
     private EventRepository eventRepository;
 
     @Inject
@@ -77,7 +73,6 @@ public class TeamResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         TeamResource teamResource = new TeamResource();
-        ReflectionTestUtils.setField(teamResource, "teamSearchRepository", teamSearchRepository);
         ReflectionTestUtils.setField(teamResource, "teamRepository", teamRepository);
         this.restTeamMockMvc = MockMvcBuilders.standaloneSetup(teamResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -91,7 +86,6 @@ public class TeamResourceIntTest {
         event.setYear(DEFAULT_YEAR);
         event = eventRepository.save(event);
 
-        teamSearchRepository.deleteAll();
         team = new Team();
         team.setTeamNumber(DEFAULT_TEAM_NUMBER);
         team.setNote(DEFAULT_NOTE);
@@ -116,10 +110,6 @@ public class TeamResourceIntTest {
         Team testTeam = teams.get(teams.size() - 1);
         assertThat(testTeam.getTeamNumber()).isEqualTo(DEFAULT_TEAM_NUMBER);
         assertThat(testTeam.getNote()).isEqualTo(DEFAULT_NOTE);
-
-        // Validate the Team in ElasticSearch
-        Team teamEs = teamSearchRepository.findOne(testTeam.getId());
-        assertThat(teamEs).isEqualToComparingFieldByField(testTeam);
     }
 
     @Test
@@ -198,7 +188,6 @@ public class TeamResourceIntTest {
     public void updateTeam() throws Exception {
         // Initialize the database
         teamRepository.saveAndFlush(team);
-        teamSearchRepository.save(team);
         int databaseSizeBeforeUpdate = teamRepository.findAll().size();
 
         // Update the team
@@ -218,10 +207,6 @@ public class TeamResourceIntTest {
         Team testTeam = teams.get(teams.size() - 1);
         assertThat(testTeam.getTeamNumber()).isEqualTo(UPDATED_TEAM_NUMBER);
         assertThat(testTeam.getNote()).isEqualTo(UPDATED_NOTE);
-
-        // Validate the Team in ElasticSearch
-        Team teamEs = teamSearchRepository.findOne(testTeam.getId());
-        assertThat(teamEs).isEqualToComparingFieldByField(testTeam);
     }
 
     @Test
@@ -229,7 +214,6 @@ public class TeamResourceIntTest {
     public void deleteTeam() throws Exception {
         // Initialize the database
         teamRepository.saveAndFlush(team);
-        teamSearchRepository.save(team);
         int databaseSizeBeforeDelete = teamRepository.findAll().size();
 
         // Get the team
@@ -237,28 +221,8 @@ public class TeamResourceIntTest {
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
-        // Validate ElasticSearch is empty
-        boolean teamExistsInEs = teamSearchRepository.exists(team.getId());
-        assertThat(teamExistsInEs).isFalse();
-
         // Validate the database is empty
         List<Team> teams = teamRepository.findAll();
         assertThat(teams).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchTeam() throws Exception {
-        // Initialize the database
-        teamRepository.saveAndFlush(team);
-        teamSearchRepository.save(team);
-
-        // Search the team
-        restTeamMockMvc.perform(get("/api/_search/teams?query=id:" + team.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(team.getId().intValue())))
-            .andExpect(jsonPath("$.[*].teamNumber").value(hasItem(DEFAULT_TEAM_NUMBER)))
-            .andExpect(jsonPath("$.[*].note").value(hasItem(DEFAULT_NOTE.toString())));
     }
 }

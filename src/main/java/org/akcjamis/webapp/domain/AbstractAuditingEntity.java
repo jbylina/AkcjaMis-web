@@ -1,7 +1,6 @@
 package org.akcjamis.webapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.annotations.ApiModelProperty;
 import org.akcjamis.webapp.config.audit.EntityAuditEventListener;
 import org.hibernate.envers.Audited;
 import org.springframework.data.annotation.CreatedBy;

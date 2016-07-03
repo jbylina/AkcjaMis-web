@@ -1,7 +1,6 @@
 package org.akcjamis.webapp.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import org.akcjamis.webapp.domain.Authority;
 import org.akcjamis.webapp.domain.User;
 import org.akcjamis.webapp.repository.UserRepository;
 import org.akcjamis.webapp.security.SecurityUtils;
@@ -10,7 +9,6 @@ import org.akcjamis.webapp.service.UserService;
 import org.akcjamis.webapp.web.rest.dto.KeyAndPasswordDTO;
 import org.akcjamis.webapp.web.rest.dto.UserDTO;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
-
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.*;
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.

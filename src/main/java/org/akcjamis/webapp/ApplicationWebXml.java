@@ -1,7 +1,6 @@
 package org.akcjamis.webapp;
 
 import org.akcjamis.webapp.config.Constants;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;

@@ -1,7 +1,6 @@
 package org.akcjamis.webapp.repository;
 
 import org.akcjamis.webapp.domain.Authority;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

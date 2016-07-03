@@ -1,7 +1,6 @@
 package org.akcjamis.webapp.aop.logging;
 
 import org.akcjamis.webapp.config.Constants;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;

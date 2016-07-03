@@ -1,12 +1,12 @@
 package org.akcjamis.webapp.web.rest.dto;
 
-import java.io.Serializable;
-import java.time.ZonedDateTime;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
-import static com.fasterxml.jackson.annotation.JsonProperty.*;
+import java.io.Serializable;
+import java.time.ZonedDateTime;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 /**
  * Base abstract class for DTO which will hold definitions for created, last modified by and created,

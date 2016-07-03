@@ -3,7 +3,6 @@ package org.akcjamis.webapp.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Subpackage;
 import org.akcjamis.webapp.repository.SubpackageRepository;
-import org.akcjamis.webapp.repository.search.SubpackageSearchRepository;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +17,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Subpackage.
@@ -34,9 +29,6 @@ public class SubpackageResource {
 
     @Inject
     private SubpackageRepository subpackageRepository;
-
-    @Inject
-    private SubpackageSearchRepository subpackageSearchRepository;
 
     /**
      * POST  /subpackages : Create a new subpackage.
@@ -55,7 +47,6 @@ public class SubpackageResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("subpackage", "idexists", "A new subpackage cannot already have an ID")).body(null);
         }
         Subpackage result = subpackageRepository.save(subpackage);
-        subpackageSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/subpackages/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("subpackage", result.getId().toString()))
             .body(result);
@@ -80,7 +71,6 @@ public class SubpackageResource {
             return createSubpackage(subpackage);
         }
         Subpackage result = subpackageRepository.save(subpackage);
-        subpackageSearchRepository.save(result);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("subpackage", subpackage.getId().toString()))
             .body(result);
@@ -134,26 +124,6 @@ public class SubpackageResource {
     public ResponseEntity<Void> deleteSubpackage(@PathVariable Integer id) {
         log.debug("REST request to delete Subpackage : {}", id);
         subpackageRepository.delete(id);
-        subpackageSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("subpackage", id.toString())).build();
     }
-
-    /**
-     * SEARCH  /_search/subpackages?query=:query : search for the subpackage corresponding
-     * to the query.
-     *
-     * @param query the query of the subpackage search
-     * @return the result of the search
-     */
-    @RequestMapping(value = "/_search/subpackages",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public List<Subpackage> searchSubpackages(@RequestParam String query) {
-        log.debug("REST request to search Subpackages for query {}", query);
-        return StreamSupport
-            .stream(subpackageSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
-    }
-
 }

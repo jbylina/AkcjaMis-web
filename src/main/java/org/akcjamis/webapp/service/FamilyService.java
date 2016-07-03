@@ -1,13 +1,11 @@
 package org.akcjamis.webapp.service;
 
-import com.google.common.collect.*;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Table;
 import com.google.common.primitives.Ints;
-import com.google.common.primitives.Longs;
 import org.akcjamis.webapp.domain.*;
 import org.akcjamis.webapp.repository.*;
-import org.akcjamis.webapp.repository.search.ChildSearchRepository;
-import org.akcjamis.webapp.repository.search.ContactSearchRepository;
-import org.akcjamis.webapp.repository.search.FamilySearchRepository;
 import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
 import org.akcjamis.webapp.web.rest.dto.RouteDTO;
 import org.apache.commons.lang3.ArrayUtils;
@@ -24,8 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
 /**
  * Service Implementation for managing Family.
  */
@@ -37,15 +33,9 @@ public class FamilyService {
 
     private FamilyRepository familyRepository;
 
-    private FamilySearchRepository familySearchRepository;
-
     private ContactRepository contactRepository;
 
-    private ContactSearchRepository contactSearchRepository;
-
     private ChildRepository childRepository;
-
-    private ChildSearchRepository childSearchRepository;
 
     private ChristmasPackageRepository christmasPackageRepository;
 
@@ -55,20 +45,14 @@ public class FamilyService {
 
     @Inject
     public FamilyService(FamilyRepository familyRepository,
-                         FamilySearchRepository familySearchRepository,
                          ContactRepository contactRepository,
-                         ContactSearchRepository contactSearchRepository,
                          ChildRepository childRepository,
-                         ChildSearchRepository childSearchRepository,
                          ChristmasPackageRepository christmasPackageRepository,
                          EventRepository eventRepository,
                          SubpackageRepository subpackageRepository) {
         this.familyRepository = familyRepository;
-        this.familySearchRepository = familySearchRepository;
         this.contactRepository = contactRepository;
-        this.contactSearchRepository = contactSearchRepository;
         this.childRepository = childRepository;
-        this.childSearchRepository = childSearchRepository;
         this.christmasPackageRepository = christmasPackageRepository;
         this.eventRepository = eventRepository;
         this.subpackageRepository = subpackageRepository;
@@ -83,7 +67,6 @@ public class FamilyService {
     public Family save(Family family) {
         log.debug("Request to save Family : {}", family);
         Family result = familyRepository.save(family);
-        familySearchRepository.save(result);
         return result;
     }
 
@@ -119,7 +102,6 @@ public class FamilyService {
     public void delete(Integer id) {
         log.debug("Request to delete Family : {}", id);
         familyRepository.delete(id);
-        familySearchRepository.delete(id);
     }
 
     /**
@@ -134,7 +116,6 @@ public class FamilyService {
         family.setId(id);
         contact.setFamily(family);
         Contact result = contactRepository.save(contact);
-        contactSearchRepository.save(result);
         return result;
     }
 
@@ -161,7 +142,6 @@ public class FamilyService {
         family.setId(id);
         child.setFamily(family);
         Child result = childRepository.save(child);
-        childSearchRepository.save(result);
         return result;
     }
 
@@ -185,18 +165,6 @@ public class FamilyService {
     public List<ChristmasPackage> getChristmasPackages(Integer id) {
         log.debug("Request packages for Family : {}", id);
         return christmasPackageRepository.findByFamily_id(id);
-    }
-
-    /**
-     * Search for the family corresponding to the query.
-     *
-     *  @param query the query of the search
-     *  @return the list of entities
-     */
-    @Transactional(readOnly = true)
-    public Page<Family> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of Families for query {}", query);
-        return familySearchRepository.search(queryStringQuery(query), pageable);
     }
 
     @Transactional(readOnly = true)

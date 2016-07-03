@@ -3,7 +3,6 @@ package org.akcjamis.webapp.web.rest;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.*;
 import org.akcjamis.webapp.repository.*;
-import org.akcjamis.webapp.repository.search.ChristmasPackageChangeSearchRepository;
 
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.junit.Before;
@@ -18,7 +17,6 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,9 +82,6 @@ public class ChristmasPackageChangeResourceIntTest {
     private EventRepository eventRepository;
 
     @Inject
-    private ChristmasPackageChangeSearchRepository christmasPackageChangeSearchRepository;
-
-    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -106,7 +101,6 @@ public class ChristmasPackageChangeResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         ChristmasPackageChangeResource christmasPackageChangeResource = new ChristmasPackageChangeResource(christmasPackageService);
-        ReflectionTestUtils.setField(christmasPackageChangeResource, "christmasPackageChangeSearchRepository", christmasPackageChangeSearchRepository);
         this.restChristmasPackageChangeMockMvc = MockMvcBuilders.standaloneSetup(christmasPackageChangeResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -292,23 +286,5 @@ public class ChristmasPackageChangeResourceIntTest {
         // Validate the database is empty
         List<ChristmasPackageChange> christmasPackageChanges = christmasPackageChangeRepository.findAll();
         assertThat(christmasPackageChanges).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchChristmasPackageChange() throws Exception {
-        christmasPackageChange.setChristmasPackage(christmasPackage);
-        // Initialize the database
-        christmasPackageChangeRepository.saveAndFlush(christmasPackageChange);
-        christmasPackageChangeSearchRepository.save(christmasPackageChange);
-
-        // Search the christmasPackageChange
-        restChristmasPackageChangeMockMvc.perform(get("/api/_search/christmas-package-changes?query=id:" + christmasPackageChange.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageChange.getId().intValue())))
-            .andExpect(jsonPath("$.[*].type_code").value(hasItem(DEFAULT_TYPE_CODE)))
-            .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
     }
 }

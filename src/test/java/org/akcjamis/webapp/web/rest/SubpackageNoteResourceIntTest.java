@@ -3,7 +3,6 @@ package org.akcjamis.webapp.web.rest;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.SubpackageNote;
 import org.akcjamis.webapp.repository.SubpackageNoteRepository;
-import org.akcjamis.webapp.repository.search.SubpackageNoteSearchRepository;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,9 +48,6 @@ public class SubpackageNoteResourceIntTest {
     private SubpackageNoteRepository subpackageNoteRepository;
 
     @Inject
-    private SubpackageNoteSearchRepository subpackageNoteSearchRepository;
-
-    @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Inject
@@ -65,7 +61,6 @@ public class SubpackageNoteResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         SubpackageNoteResource subpackageNoteResource = new SubpackageNoteResource();
-        ReflectionTestUtils.setField(subpackageNoteResource, "subpackageNoteSearchRepository", subpackageNoteSearchRepository);
         ReflectionTestUtils.setField(subpackageNoteResource, "subpackageNoteRepository", subpackageNoteRepository);
         this.restSubpackageNoteMockMvc = MockMvcBuilders.standaloneSetup(subpackageNoteResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
@@ -74,7 +69,6 @@ public class SubpackageNoteResourceIntTest {
 
     @Before
     public void initTest() {
-        subpackageNoteSearchRepository.deleteAll();
         subpackageNote = new SubpackageNote();
         subpackageNote.setContent(DEFAULT_CONTENT);
     }
@@ -96,10 +90,6 @@ public class SubpackageNoteResourceIntTest {
         assertThat(subpackageNotes).hasSize(databaseSizeBeforeCreate + 1);
         SubpackageNote testSubpackageNote = subpackageNotes.get(subpackageNotes.size() - 1);
         assertThat(testSubpackageNote.getContent()).isEqualTo(DEFAULT_CONTENT);
-
-        // Validate the SubpackageNote in ElasticSearch
-        SubpackageNote subpackageNoteEs = subpackageNoteSearchRepository.findOne(testSubpackageNote.getId());
-        assertThat(subpackageNoteEs).isEqualToComparingFieldByField(testSubpackageNote);
     }
 
     @Test
@@ -161,7 +151,6 @@ public class SubpackageNoteResourceIntTest {
     public void updateSubpackageNote() throws Exception {
         // Initialize the database
         subpackageNoteRepository.saveAndFlush(subpackageNote);
-        subpackageNoteSearchRepository.save(subpackageNote);
         int databaseSizeBeforeUpdate = subpackageNoteRepository.findAll().size();
 
         // Update the subpackageNote
@@ -179,10 +168,6 @@ public class SubpackageNoteResourceIntTest {
         assertThat(subpackageNotes).hasSize(databaseSizeBeforeUpdate);
         SubpackageNote testSubpackageNote = subpackageNotes.get(subpackageNotes.size() - 1);
         assertThat(testSubpackageNote.getContent()).isEqualTo(UPDATED_CONTENT);
-
-        // Validate the SubpackageNote in ElasticSearch
-        SubpackageNote subpackageNoteEs = subpackageNoteSearchRepository.findOne(testSubpackageNote.getId());
-        assertThat(subpackageNoteEs).isEqualToComparingFieldByField(testSubpackageNote);
     }
 
     @Test
@@ -190,7 +175,6 @@ public class SubpackageNoteResourceIntTest {
     public void deleteSubpackageNote() throws Exception {
         // Initialize the database
         subpackageNoteRepository.saveAndFlush(subpackageNote);
-        subpackageNoteSearchRepository.save(subpackageNote);
         int databaseSizeBeforeDelete = subpackageNoteRepository.findAll().size();
 
         // Get the subpackageNote
@@ -198,27 +182,8 @@ public class SubpackageNoteResourceIntTest {
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
-        // Validate ElasticSearch is empty
-        boolean subpackageNoteExistsInEs = subpackageNoteSearchRepository.exists(subpackageNote.getId());
-        assertThat(subpackageNoteExistsInEs).isFalse();
-
         // Validate the database is empty
         List<SubpackageNote> subpackageNotes = subpackageNoteRepository.findAll();
         assertThat(subpackageNotes).hasSize(databaseSizeBeforeDelete - 1);
-    }
-
-    @Test
-    @Transactional
-    public void searchSubpackageNote() throws Exception {
-        // Initialize the database
-        subpackageNoteRepository.saveAndFlush(subpackageNote);
-        subpackageNoteSearchRepository.save(subpackageNote);
-
-        // Search the subpackageNote
-        restSubpackageNoteMockMvc.perform(get("/api/_search/subpackage-notes?query=id:" + subpackageNote.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(subpackageNote.getId().intValue())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())));
     }
 }

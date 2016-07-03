@@ -1,6 +1,7 @@
 package org.akcjamis.webapp.web.rest.dto;
 
-import org.akcjamis.webapp.domain.*;
+import org.akcjamis.webapp.domain.ChristmasPackageNote;
+import org.akcjamis.webapp.domain.Subpackage;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
