@@ -56,19 +56,25 @@
                                  baseTableName="family_note_tags"
                                  constraintName="family_notes_family_note_tags_fk"
                                  referencedColumnNames="family_note_id"
-                                 referencedTableName="family_notes"/>
+                                 referencedTableName="family_notes"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
 
         <addForeignKeyConstraint baseColumnNames="tag_id"
                                  baseTableName="family_note_tags"
                                  constraintName="tags_family_note_tags_fk"
                                  referencedColumnNames="tag_id"
-                                 referencedTableName="tags"/>
+                                 referencedTableName="tags"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"/>
 
         <addForeignKeyConstraint baseColumnNames="family_id"
                                  baseTableName="family_notes"
                                  constraintName="families_family_notes_fk"
                                  referencedColumnNames="family_id"
-                                 referencedTableName="families"/>
+                                 referencedTableName="families"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
 
     </changeSet>
 </databaseChangeLog>

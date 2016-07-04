@@ -40,6 +40,8 @@
                                  baseTableName="subpackage_notes"
                                  constraintName="subpackages_subpackage_notes_fk"
                                  referencedColumnNames="subpackage_id"
-                                 referencedTableName="subpackages"/>
+                                 referencedTableName="subpackages"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
     </changeSet>
 </databaseChangeLog>

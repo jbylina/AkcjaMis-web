@@ -44,13 +44,17 @@
                                  baseTableName="subpackages"
                                  constraintName="children_subpackages_fk"
                                  referencedColumnNames="child_id"
-                                 referencedTableName="children"/>
+                                 referencedTableName="children"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
 
         <addForeignKeyConstraint baseColumnNames="christmas_package_id"
                                  baseTableName="subpackages"
                                  constraintName="christmas_packages_subpackages_fk"
                                  referencedColumnNames="christmas_package_id"
-                                 referencedTableName="christmas_packages"/>
+                                 referencedTableName="christmas_packages"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
 
     </changeSet>
 </databaseChangeLog>

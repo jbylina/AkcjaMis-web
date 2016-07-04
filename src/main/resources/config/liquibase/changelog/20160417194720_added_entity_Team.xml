@@ -56,20 +56,26 @@
                                  baseTableName="team_users"
                                  constraintName="teams_team_users_fk"
                                  referencedColumnNames="team_id"
-                                 referencedTableName="teams"/>
+                                 referencedTableName="teams"
+                                 onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
 
         <!-- TODO change id in jhi_user table -->
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="team_users"
                                  constraintName="jhi_user_team_users_fk"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
+                                 referencedTableName="jhi_user"
+                                 onDelete="RESTRICT"
+                                 onUpdate="CASCADE"/>
 
         <addForeignKeyConstraint baseColumnNames="event_year"
                                  baseTableName="teams"
                                  constraintName="events_teams_fk"
                                  referencedColumnNames="event_year"
-                                 referencedTableName="events"/>
+                                 referencedTableName="events"
+                                 onDelete="RESTRICT"
+                                 onUpdate="RESTRICT"/>
 
     </changeSet>
 </databaseChangeLog>

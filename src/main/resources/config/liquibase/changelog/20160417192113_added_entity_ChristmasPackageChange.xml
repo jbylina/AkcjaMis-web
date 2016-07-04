@@ -48,7 +48,9 @@
                                  baseTableName="christmas_package_changelogs"
                                  constraintName="christmas_packages_christmas_package_changelogs_fk"
                                  referencedColumnNames="christmas_package_id"
-                                 referencedTableName="christmas_packages"/>
+                                 referencedTableName="christmas_packages"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"/>
 
     </changeSet>
 </databaseChangeLog>
