@@ -44,13 +44,13 @@
 
     <properties>
         <hikaricp.version>2.4.3</hikaricp.version>
-        <assertj-core.version>3.3.0</assertj-core.version>
+        <assertj-core.version>3.5.1</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
-        <commons-io.version>2.4</commons-io.version>
+        <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <hibernate.version>5.1.0.Final</hibernate.version>
-        <hibernate-spatial.version>4.3</hibernate-spatial.version>
-        <jackson-jts.version>2.2</jackson-jts.version>
+        <jackson.version>2.8.0</jackson.version>
+        <jackson-jts.version>2.3</jackson-jts.version>
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -64,13 +64,13 @@
         <sortpom-maven-plugin.version>2.5.0</sortpom-maven-plugin.version>
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
         <metrics-spring.version>3.1.3</metrics-spring.version>
-        <logstash-logback-encoder.version>4.6</logstash-logback-encoder.version>
+        <logstash-logback-encoder.version>4.7</logstash-logback-encoder.version>
         <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <h2-database.version>1.4.192</h2-database.version>
         <run.addResources>false</run.addResources>
         <spring-security.version>4.0.4.RELEASE</spring-security.version>
-        <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
-        <springfox.version>2.4.0</springfox.version>
+        <spring-security-oauth2.version>2.0.10.RELEASE</spring-security-oauth2.version>
+        <springfox.version>2.5.0</springfox.version>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <sonar-maven-plugin.version>2.7.1</sonar-maven-plugin.version>
@@ -139,7 +139,7 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
@@ -617,7 +617,6 @@
                     </resources>
                 </configuration>
             </plugin>
-            <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
         <pluginManagement>
             <plugins>
