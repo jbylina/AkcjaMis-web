@@ -27,7 +27,7 @@ public class Family extends AbstractAuditingEntity implements Serializable {
     public static final int SRID = 4326;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "family_id")
     private Integer id;
 
@@ -62,7 +62,6 @@ public class Family extends AbstractAuditingEntity implements Serializable {
     private String source;
 
     @Column(name = "location_geom")
-    @Type(type = "org.hibernate.spatial.GeometryType")
     private Point locationGeom;
 
     @OneToMany(mappedBy = "family")

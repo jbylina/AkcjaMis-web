@@ -11,19 +11,40 @@
     <property name="autoIncrement" value="true" dbms="h2,postgresql"/>
     <property name="floatType" value="float4" dbms="postgresql, h2"/>
 
-    <changeSet id="20160517185730" author="JBY">
+    <changeSet id="20160517185730-add-spatial-support" author="JBY">
+        <sql dbms="h2">
+            CREATE ALIAS IF NOT EXISTS InitGeoDB for "geodb.GeoDB.InitGeoDB";
+            CALL InitGeoDB();
+        </sql>
+        <sql dbms="postgresql">
+            CREATE EXTENSION IF NOT EXISTS postgis;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20160517185730-add-spatial-columns" author="JBY" dbms="h2">
+        <preConditions>
+            <spatial:spatialSupported />
+        </preConditions>
+        <sql dbms="h2">
+            ALTER TABLE "FAMILIES" ADD "LOCATION_GEOM" GEOMETRY COMMENT 'Point';
+            ALTER TABLE "FAMILIES" ADD CONSTRAINT "ENFORCE_GEOTYPE_FAMILIES_LOCATION" CHECK "LOCATION_GEOM" IS NULL OR GeometryType("LOCATION_GEOM") = 'POINT';
+            INSERT INTO geometry_columns VALUES ('PUBLIC', 'FAMILIES', 'LOCATION_GEOM', 2, 4326, 'POINT');
+        </sql>
+    </changeSet>
+
+    <changeSet id="20160517185730-add-spatial-columns" author="JBY" dbms="postgresql">
         <preConditions>
             <spatial:spatialSupported />
         </preConditions>
 
-        <addColumn tableName="families">
-            <column name="location_geom" type="GEOMETRY(Point, 4326)">
+        <addColumn tableName="FAMILIES" >
+                    <column name="LOCATION_GEOM" type="GEOMETRY(Point, 4326)">
                 <constraints nullable="true" />
             </column>
         </addColumn>
 
-        <spatial:createSpatialIndex tableName="families" indexName="families_location_geom_IDX" geometryType="Point" srid="4326">
-            <column name="location_geom" />
+        <spatial:createSpatialIndex tableName="FAMILIES" indexName="families_location_geom_IDX" geometryType="POINT" srid="4326">
+            <column name="LOCATION_GEOM"/>
         </spatial:createSpatialIndex>
     </changeSet>
 

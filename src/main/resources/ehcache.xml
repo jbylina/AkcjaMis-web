@@ -36,4 +36,109 @@
     <cache name="org.akcjamis.webapp.domain.User.persistentTokens"
            timeToLiveSeconds="3600">
     </cache>
-    </ehcache>
+
+    <cache name="org.akcjamis.webapp.domain.FamilyNote"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.SubpackageNote"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.ChristmasPackageNote"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.ChristmasPackage"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Contact"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Subpackage"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Family"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.EntityAuditEvent"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Tag"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Event"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Child"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.ChristmasPackageChange"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Team"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.ChristmasPackage.christmasPackageChanges"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Subpackage.subpackageNotes"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.ChristmasPackage.subpackages"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Family.familyNotes"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.ChristmasPackage.christmasPackageNotes"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Event.teams"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.FamilyNote.tags"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Team.christmasPackages"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Family.contacts"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Team.users"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Family.christmasPackages"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Event.christmasPackages"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="org.akcjamis.webapp.domain.Family.childs"
+           timeToLiveSeconds="3600">
+    </cache>
+
+</ehcache>

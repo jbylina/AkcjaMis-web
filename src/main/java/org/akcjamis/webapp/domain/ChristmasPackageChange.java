@@ -22,7 +22,7 @@ public class ChristmasPackageChange extends AbstractAuditingEntity implements Se
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "christmas_package_changelog_id")
     private Integer id;
 

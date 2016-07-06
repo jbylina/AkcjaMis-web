@@ -1,10 +1,10 @@
 package org.akcjamis.webapp.domain.util;
 
-import org.hibernate.dialect.H2Dialect;
+import org.hibernate.spatial.dialect.h2geodb.GeoDBDialect;
 
 import java.sql.Types;
 
-public class FixedH2Dialect extends H2Dialect {
+public class FixedH2Dialect extends GeoDBDialect {
 
     public FixedH2Dialect() {
         super();

@@ -45,7 +45,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="user_id" type="int">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
