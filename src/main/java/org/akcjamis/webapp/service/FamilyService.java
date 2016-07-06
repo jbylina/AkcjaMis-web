@@ -167,56 +167,6 @@ public class FamilyService {
         return christmasPackageRepository.findByFamily_id(id);
     }
 
-    @Transactional(readOnly = true)
-    public List<ClusteringResultDTO> clusterFamiliesWithin(Short eventYear, Double distance) {
-        log.debug("Request to get clusterFamiliesWithin : {}", distance);
-        List<Object[]> result = familyRepository.clusterFamiliesWithin(eventYear, distance);
-
-        return result.stream()
-            .map(o -> new ClusteringResultDTO(((BigInteger)o[0]).intValue(),
-                (Integer)o[1],
-                (String)o[2],
-                (String)o[3],
-                (String)o[4],
-                (String)o[5],
-                (String)o[6],
-                (String)o[7])).collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public RouteDTO calculateOptimalRoute(Set<Integer> families, Double latitude, Double longitude) {
-
-        List<Object[]> list = familyRepository.calculateOptimalRoute(families, latitude, longitude);
-
-        //add start point - warehouse facility
-        families.add(0);
-        int[] fam = families.stream().sorted().mapToInt(Integer::intValue).toArray();
-        double[][] distMatrix = new double[fam.length][fam.length];
-        Table<Integer, Integer, String> routes = HashBasedTable.create();
-
-        for (Object[] o : list) {
-            int from = Ints.indexOf(fam, (Integer) o[0]);
-            int to = Ints.indexOf(fam, (Integer) o[1]);
-            distMatrix[from][to] = distMatrix[to][from] = (Double)o[2];
-            routes.put(from, to, (String)o[3]);
-            routes.put(to, from, (String)o[3]);
-        }
-
-        List<Object[]> optOrder = familyRepository.calculateOptimalOrder(ArrayUtils.toString(distMatrix));
-
-        // starting point is also a last point
-        optOrder.add(optOrder.get(0));
-
-        List<Integer> orderedFamIds  = optOrder.stream().map(o -> fam[(int)o[1]]).collect(Collectors.toList());
-
-        List<String> routePaths = Lists.newLinkedList();
-        for (int i = 0; i < optOrder.size() - 1; i++) {
-            routePaths.add(routes.get(optOrder.get(i)[1], optOrder.get(i + 1)[1]));
-        }
-
-        return new RouteDTO(orderedFamIds, routePaths);
-    }
-
     /**
      * Add family to event
      *

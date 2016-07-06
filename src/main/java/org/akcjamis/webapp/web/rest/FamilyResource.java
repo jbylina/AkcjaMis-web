@@ -169,40 +169,6 @@ public class FamilyResource {
     }
 
     /**
-     * GET  /events/:year/families/cluster?distance=:distance : cluster families with provided parameters
-     *
-     * @param distance distance within
-     * @return the result of the clustering
-     */
-    @RequestMapping(
-        value = "/events/{year}/families/cluster",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<ClusteringResultDTO>> clusterFamiliesWithin(@PathVariable Short year, @RequestParam(defaultValue = "0.06") Double distance){
-        log.debug("REST request to clusterFamiliesWithin : {}", distance);
-        return new ResponseEntity<>(familyService.clusterFamiliesWithin(year, distance), HttpStatus.OK);
-    }
-
-    /**
-     * GET  /families/calculateOptimalRoute?families=:families  : calculate optimal route thru all families
-     *
-     * @param families array of families ID's
-     * @return the result of the clustering
-     */
-    @RequestMapping(
-        value = "/families/calculateOptimalRoute",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<RouteDTO> calculateOptimalRoute(@RequestParam Set<Integer> families, @RequestParam Double latitude, @RequestParam Double longitude){
-        log.debug("REST request to clusterFamiliesWithin : {}", families);
-
-        return new ResponseEntity<>(familyService.calculateOptimalRoute(families, latitude, longitude), HttpStatus.OK);
-    }
-
-
-    /**
      * PUT  /families/:id/add-to-event  : Updates an existing family.
      *
      * @param id "id" of family to update
