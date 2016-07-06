@@ -17,8 +17,6 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Event extends AbstractAuditingEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Id
     @Column(name = "event_year", nullable = false, unique = true)
     private Short year;

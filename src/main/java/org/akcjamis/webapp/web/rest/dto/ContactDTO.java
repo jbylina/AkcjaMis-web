@@ -1,39 +1,21 @@
-package org.akcjamis.webapp.domain;
+package org.akcjamis.webapp.web.rest.dto;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
-/**
- * A Contact.
- */
-@Entity
-@Table(name = "contacts")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Contact extends AbstractAuditingEntity implements Serializable {
+public class ContactDTO extends AbstractAuditingDTO {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "contact_id")
     private Integer id;
 
-    @Column(name = "type", length = 20, nullable = false)
+    @NotNull
+    @Size(max = 20)
     private String type;
 
-    @Column(name = "value", nullable = false)
+    @NotNull
     private String value;
 
-    @Column(name = "comment")
     private String comment;
-
-    @ManyToOne
-    @JoinColumn(name = "family_id")
-    private Family family;
 
     public Integer getId() {
         return id;
@@ -67,14 +49,6 @@ public class Contact extends AbstractAuditingEntity implements Serializable {
         this.comment = comment;
     }
 
-    public Family getFamily() {
-        return family;
-    }
-
-    public void setFamily(Family family) {
-        this.family = family;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -83,7 +57,7 @@ public class Contact extends AbstractAuditingEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Contact contact = (Contact) o;
+        ContactDTO contact = (ContactDTO) o;
         if(contact.id == null || id == null) {
             return false;
         }
@@ -97,11 +71,11 @@ public class Contact extends AbstractAuditingEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "Contact{" +
+        return "ContactDTO{" +
             "id=" + id +
-            ", type='" + type + "'" +
-            ", value='" + value + "'" +
-            ", comment='" + comment + "'" +
+            ", type='" + type + '\'' +
+            ", value='" + value + '\'' +
+            ", comment='" + comment + '\'' +
             '}';
     }
 }

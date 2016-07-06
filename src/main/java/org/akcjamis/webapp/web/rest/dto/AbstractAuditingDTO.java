@@ -14,8 +14,6 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access;
  */
 public abstract class AbstractAuditingDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @ApiModelProperty(readOnly = true, hidden = true)
     @JsonProperty(access = Access.READ_ONLY)
     private String createdBy;

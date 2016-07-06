@@ -9,6 +9,7 @@ import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.ContactResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
+import org.akcjamis.webapp.web.rest.mapper.ContactMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -76,6 +77,9 @@ public class ContactResourceIntTest {
     @Inject
     private FamilyRepository familyRepository;
 
+    @Inject
+    private ContactMapper mapper;
+
     private MockMvc restContactMockMvc;
 
     private Contact contact;
@@ -85,7 +89,7 @@ public class ContactResourceIntTest {
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        ContactResource contactResource = new ContactResource(contactRepository, familyService);
+        ContactResource contactResource = new ContactResource(contactRepository, familyService, mapper);
         this.restContactMockMvc = MockMvcBuilders.standaloneSetup(contactResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();
@@ -179,7 +183,7 @@ public class ContactResourceIntTest {
         restContactMockMvc.perform(get("/api/families/{id}/contacts?sort=id,desc", family.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[*].id").value(hasItem(contact.getId().intValue())))
+                .andExpect(jsonPath("$.[*].id").value(hasItem(contact.getId())))
                 .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
                 .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
                 .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)));
@@ -196,7 +200,7 @@ public class ContactResourceIntTest {
         restContactMockMvc.perform(get("/api/families/{id}/contacts/{id}", family.getId(), contact.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id").value(contact.getId().intValue()))
+            .andExpect(jsonPath("$.id").value(contact.getId()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT));
@@ -206,7 +210,7 @@ public class ContactResourceIntTest {
     @Transactional
     public void getNonExistingContact() throws Exception {
         // Get the contact
-        restContactMockMvc.perform(get("/api/families/{id}/contacts/{id}", family.getId(), Long.MAX_VALUE))
+        restContactMockMvc.perform(get("/api/families/{id}/contacts/{id}", family.getId(), Integer.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 

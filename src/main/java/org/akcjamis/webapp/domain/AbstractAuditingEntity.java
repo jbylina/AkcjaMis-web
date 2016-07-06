@@ -26,24 +26,18 @@ import java.time.ZonedDateTime;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class AbstractAuditingEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    // TODO remove
     @CreatedBy
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)
     private String createdBy;
 
-    // TODO remove
     @CreatedDate
     @Column(name = "created_date", nullable = false)
     private ZonedDateTime createdDate = ZonedDateTime.now();
 
-    // TODO remove
     @LastModifiedBy
     @Column(name = "last_modified_by", length = 50)
     private String lastModifiedBy;
 
-    // TODO remove
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private ZonedDateTime lastModifiedDate = ZonedDateTime.now();

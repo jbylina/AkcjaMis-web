@@ -10,7 +10,6 @@ import java.util.List;
 
 @Mapper
 public interface EventMapper {
-    EventMapper INSTANCE = Mappers.getMapper(EventMapper.class);
 
     EventDTO eventToEventDTO(Event event);
 

@@ -4,6 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.service.FamilyService;
+import org.akcjamis.webapp.web.rest.dto.ContactDTO;
+import org.akcjamis.webapp.web.rest.mapper.ContactMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +34,15 @@ public class ContactResource {
 
     private FamilyService familyService;
 
+    private ContactMapper mapper;
+
     @Inject
     public ContactResource(ContactRepository contactRepository,
-                           FamilyService familyService) {
+                           FamilyService familyService,
+                           ContactMapper contactMapper) {
         this.contactRepository = contactRepository;
         this.familyService = familyService;
+        this.mapper = contactMapper;
     }
 
     /**
@@ -51,15 +57,15 @@ public class ContactResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Contact> createContact(@PathVariable Integer id, @Valid @RequestBody Contact contact) throws URISyntaxException {
+    public ResponseEntity<ContactDTO> createContact(@PathVariable Integer id, @Valid @RequestBody ContactDTO contact) throws URISyntaxException {
         log.debug("REST request to save Contact : {}", contact);
         if (contact.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("contact", "idexists", "A new contact cannot already have an ID")).body(null);
         }
-        Contact result = familyService.saveContact(id, contact);
+        Contact result = familyService.saveContact(id, mapper.toContact(contact));
         return ResponseEntity.created(new URI("/api/families/" + id + "/contacts/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("contact", result.getId().toString()))
-            .body(result);
+            .body(mapper.toContactDTO(result));
     }
 
     /**
@@ -76,15 +82,15 @@ public class ContactResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Contact> updateContact(@PathVariable Integer id, @Valid @RequestBody Contact contact) throws URISyntaxException {
+    public ResponseEntity<ContactDTO> updateContact(@PathVariable Integer id, @Valid @RequestBody ContactDTO contact) throws URISyntaxException {
         log.debug("REST request to update Contact : {}", contact);
         if (contact.getId() == null) {
             return createContact(id, contact);
         }
-        Contact result = familyService.saveContact(id, contact);
+        Contact result = familyService.saveContact(id, mapper.toContact(contact));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("contact", contact.getId().toString()))
-            .body(result);
+            .body(mapper.toContactDTO(result));
     }
 
     /**
@@ -97,9 +103,16 @@ public class ContactResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Contact> getAllContacts(@PathVariable Integer id) {
+    public ResponseEntity<List<ContactDTO>> getAllContacts(@PathVariable Integer id) {
         log.debug("REST request to get all Contacts");
-        return familyService.getAllContacts(id);
+
+        List<Contact> contacts = familyService.getAllContacts(id);
+
+        return Optional.ofNullable(mapper.toContactDTOs(contacts))
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**
@@ -113,10 +126,10 @@ public class ContactResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Contact> getContact(@PathVariable Integer familyId, @PathVariable Integer id) {
+    public ResponseEntity<ContactDTO> getContact(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to get Contact : {}", id);
         Contact contact = contactRepository.findByIdAndFamily_id(id, familyId);
-        return Optional.ofNullable(contact)
+        return Optional.ofNullable(mapper.toContactDTO(contact))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))
