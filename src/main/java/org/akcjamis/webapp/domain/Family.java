@@ -193,7 +193,9 @@ public class Family extends AbstractAuditingEntity implements Serializable {
     }
 
     public void setLocationGeom(Point locationGeom) {
-        locationGeom.setSRID(SRID);
+        if (locationGeom != null) {
+            locationGeom.setSRID(SRID);
+        }
         this.locationGeom = locationGeom;
     }
 

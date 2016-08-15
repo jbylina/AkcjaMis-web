@@ -226,7 +226,7 @@ public class ChristmasPackageNoteResourceIntTest {
     @Transactional
     public void getNonExistingChristmasPackageNote() throws Exception {
         // Get the christmasPackageNote
-        restChristmasPackageNoteMockMvc.perform(get("/api/christmas-packages/{packageId}/notes/{id}", Long.MAX_VALUE, Long.MAX_VALUE))
+        restChristmasPackageNoteMockMvc.perform(get("/api/christmas-packages/{packageId}/notes/{id}", Integer.MAX_VALUE, Integer.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
@@ -268,10 +268,10 @@ public class ChristmasPackageNoteResourceIntTest {
 
         int databaseSizeBeforeDelete = christmasPackageNoteRepository.findAll().size();
 
-        restChristmasPackageNoteMockMvc.perform(delete("/api/christmas-packages/{packageId}/notes/{id}", Long.MAX_VALUE, christmasPackageNote.getId())
+
+        restChristmasPackageNoteMockMvc.perform(delete("/api/christmas-packages/{packageId}/notes/{id}", Integer.MAX_VALUE, christmasPackageNote.getId())
             .accept(TestUtil.APPLICATION_JSON_UTF8))
             .andExpect(status().isNotFound());
-
         // Get the christmasPackageNote
         restChristmasPackageNoteMockMvc.perform(delete("/api/christmas-packages/{packageId}/notes/{id}", christmasPackage.getId(), christmasPackageNote.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))

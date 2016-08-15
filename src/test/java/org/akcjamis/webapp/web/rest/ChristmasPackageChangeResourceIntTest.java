@@ -6,6 +6,7 @@ import org.akcjamis.webapp.repository.*;
 
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.hasItem;
@@ -236,7 +237,7 @@ public class ChristmasPackageChangeResourceIntTest {
     @Transactional
     public void getNonExistingChristmasPackageChange() throws Exception {
         // Get the christmasPackageChange
-        restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package/{packageId}/changes/{id}", christmasPackage.getId(), Long.MAX_VALUE))
+        restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package/{packageId}/changes/{id}", christmasPackage.getId(), Integer.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 

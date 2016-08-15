@@ -238,7 +238,7 @@ public class FamilyNoteResourceIntTest {
     @Transactional
     public void getNonExistingFamilyNote() throws Exception {
         // Get the familyNoteDTO
-        restFamilyNoteMockMvc.perform(get("/api/families/{id}/family-notes/{id}", family.getId(), Long.MAX_VALUE))
+        restFamilyNoteMockMvc.perform(get("/api/families/{id}/family-notes/{id}", family.getId(), Integer.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 

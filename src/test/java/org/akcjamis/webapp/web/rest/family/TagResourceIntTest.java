@@ -185,7 +185,7 @@ public class TagResourceIntTest {
     @Transactional
     public void getNonExistingTag() throws Exception {
         // Get the tag
-        restTagMockMvc.perform(get("/api/tags/{id}", Long.MAX_VALUE))
+        restTagMockMvc.perform(get("/api/tags/{id}", Integer.MAX_VALUE))
                 .andExpect(status().isNotFound());
     }
 
