@@ -37,12 +37,14 @@
       precision: 0,
       minRange: null,
       maxRange: null,
+      pushRange: false,
       minLimit: null,
       maxLimit: null,
       id: null,
       translate: null,
       getLegend: null,
       stepsArray: null,
+      bindIndexForStepsArray: false,
       draggableRange: false,
       draggableRangeOnly: false,
       showSelectionBar: false,
@@ -59,6 +61,7 @@
       ticksValuesTooltip: null,
       vertical: false,
       getSelectionBarColor: null,
+      getTickColor: null,
       getPointerColor: null,
       keyboardSupport: true,
       scale: 1,
@@ -70,7 +73,9 @@
       onChange: null,
       onEnd: null,
       rightToLeft: false,
-      boundPointerLabels: true
+      boundPointerLabels: true,
+      mergeRangeLabelsIfSame: false,
+      customTemplateScope: null
     };
     var globalOptions = {};
 
@@ -296,6 +301,12 @@
        */
       this.internalChange = false;
 
+      /**
+       * Internal flag to keep track of the visibility of combo label
+       * @type {boolean}
+       */
+      this.cmbLabelShown = false;
+
       // Slider DOM elements wrapped in jqLite
       this.fullBar = null; // The whole slider bar
       this.selBar = null; // Highlight between two handles
@@ -425,15 +436,23 @@
       },
 
       syncLowValue: function() {
-        if (this.options.stepsArray)
-          this.lowValue = this.findStepIndex(this.scope.rzSliderModel);
+        if (this.options.stepsArray) {
+          if (!this.options.bindIndexForStepsArray)
+            this.lowValue = this.findStepIndex(this.scope.rzSliderModel);
+          else
+            this.lowValue = this.scope.rzSliderModel
+        }
         else
           this.lowValue = this.scope.rzSliderModel;
       },
 
       syncHighValue: function() {
-        if (this.options.stepsArray)
-          this.highValue = this.findStepIndex(this.scope.rzSliderHigh);
+        if (this.options.stepsArray) {
+          if (!this.options.bindIndexForStepsArray)
+            this.highValue = this.findStepIndex(this.scope.rzSliderHigh);
+          else
+            this.highValue = this.scope.rzSliderHigh
+        }
         else
           this.highValue = this.scope.rzSliderHigh;
       },
@@ -446,15 +465,23 @@
       },
 
       applyLowValue: function() {
-        if (this.options.stepsArray)
-          this.scope.rzSliderModel = this.getStepValue(this.lowValue);
+        if (this.options.stepsArray) {
+          if (!this.options.bindIndexForStepsArray)
+            this.scope.rzSliderModel = this.getStepValue(this.lowValue);
+          else
+            this.scope.rzSliderModel = this.lowValue
+        }
         else
           this.scope.rzSliderModel = this.lowValue;
       },
 
       applyHighValue: function() {
-        if (this.options.stepsArray)
-          this.scope.rzSliderHigh = this.getStepValue(this.highValue);
+        if (this.options.stepsArray) {
+          if (!this.options.bindIndexForStepsArray)
+            this.scope.rzSliderHigh = this.getStepValue(this.highValue);
+          else
+            this.scope.rzSliderHigh = this.highValue
+        }
         else
           this.scope.rzSliderHigh = this.highValue;
       },
@@ -530,15 +557,16 @@
               return String(value);
             };
 
-          if (this.options.getLegend) {
-            this.getLegend = this.options.getLegend;
-          }
+          this.getLegend = this.options.getLegend;
         }
 
         if (this.options.vertical) {
           this.positionProperty = 'bottom';
           this.dimensionProperty = 'height';
         }
+
+        if (this.options.customTemplateScope)
+          this.scope.custom = this.options.customTemplateScope;
       },
 
       parseStepsArray: function() {
@@ -551,6 +579,8 @@
         }
         else {
           this.customTrFn = function(modelValue) {
+            if (this.options.bindIndexForStepsArray)
+              return this.getStepValue(modelValue)
             return modelValue;
           };
         }
@@ -749,10 +779,11 @@
         useCustomTr = useCustomTr === undefined ? true : useCustomTr;
 
         var valStr = '',
-          getDimension = false;
+          getDimension = false,
+          noLabelInjection = label.hasClass('no-label-injection');
 
         if (useCustomTr) {
-          if (this.options.stepsArray)
+          if (this.options.stepsArray && !this.options.bindIndexForStepsArray)
             value = this.getStepValue(value);
           valStr = String(this.customTrFn(value, this.options.id, which));
         }
@@ -765,7 +796,12 @@
           label.rzsv = valStr;
         }
 
-        label.html(valStr);
+        if (!noLabelInjection) {
+          label.html(valStr);
+        }
+        ;
+
+        this.scope[which + 'Label'] = valStr;
 
         // Update width only when length of the label have changed
         if (getDimension) {
@@ -903,6 +939,11 @@
             tick.style = {
               'background-color': this.getSelectionBarColor()
             };
+          }
+          if (!tick.selected && this.options.getTickColor) {
+            tick.style = {
+              'background-color': this.getTickColor(value)
+            }
           }
           if (this.options.ticksTooltip) {
             tick.tooltip = this.options.ticksTooltip(value);
@@ -1062,6 +1103,10 @@
        * @returns {undefined}
        */
       shFloorCeil: function() {
+        // Show based only on hideLimitLabels if pointer labels are hidden
+        if (this.options.hidePointerLabels) {
+          return;
+        }
         var flHidden = false,
           clHidden = false,
           isRTL = this.options.rightToLeft,
@@ -1071,12 +1116,16 @@
           minLabDim = this.minLab.rzsd,
           maxLabPos = this.maxLab.rzsp,
           maxLabDim = this.maxLab.rzsd,
+          cmbLabPos = this.cmbLab.rzsp,
+          cmbLabDim = this.cmbLab.rzsd,
           ceilLabPos = this.ceilLab.rzsp,
           halfHandle = this.handleHalfDim,
           isMinLabAtFloor = isRTL ? minLabPos + minLabDim >= flrLabPos - flrLabDim - 5 : minLabPos <= flrLabPos + flrLabDim + 5,
           isMinLabAtCeil = isRTL ? minLabPos - minLabDim <= ceilLabPos + halfHandle + 10 : minLabPos + minLabDim >= ceilLabPos - halfHandle - 10,
           isMaxLabAtFloor = isRTL ? maxLabPos >= flrLabPos - flrLabDim - halfHandle : maxLabPos <= flrLabPos + flrLabDim + halfHandle,
-          isMaxLabAtCeil = isRTL ? maxLabPos - maxLabDim <= ceilLabPos + 10 : maxLabPos + maxLabDim >= ceilLabPos - 10;
+          isMaxLabAtCeil = isRTL ? maxLabPos - maxLabDim <= ceilLabPos + 10 : maxLabPos + maxLabDim >= ceilLabPos - 10,
+          isCmbLabAtFloor = isRTL ? cmbLabPos >= flrLabPos - flrLabDim - halfHandle : cmbLabPos <= flrLabPos + flrLabDim + halfHandle,
+          isCmbLabAtCeil = isRTL ? cmbLabPos - cmbLabDim <= ceilLabPos + 10 : cmbLabPos + cmbLabDim >= ceilLabPos - 10
 
 
         if (isMinLabAtFloor) {
@@ -1096,14 +1145,17 @@
         }
 
         if (this.range) {
-          if (isMaxLabAtCeil) {
+          var hideCeil = this.cmbLabelShown ? isCmbLabAtCeil : isMaxLabAtCeil;
+          var hideFloor = this.cmbLabelShown ? isCmbLabAtFloor : isMinLabAtFloor;
+
+          if (hideCeil) {
             this.hideEl(this.ceilLab);
           } else if (!clHidden) {
             this.showEl(this.ceilLab);
           }
 
           // Hide or show floor label
-          if (isMaxLabAtFloor) {
+          if (hideFloor) {
             this.hideEl(this.flrLab);
           } else if (!flHidden) {
             this.showEl(this.flrLab);
@@ -1180,6 +1232,14 @@
       },
 
       /**
+       * Wrapper around the getTickColor of the user to pass to
+       * correct parameters
+       */
+      getTickColor: function(value) {
+        return this.options.getTickColor(value);
+      },
+
+      /**
        * Update combined label position and value
        *
        * @returns {undefined}
@@ -1196,7 +1256,7 @@
           var lowTr = this.getDisplayValue(this.lowValue, 'model'),
             highTr = this.getDisplayValue(this.highValue, 'high'),
             labelVal = '';
-          if (lowTr === highTr) {
+          if (this.options.mergeRangeLabelsIfSame && lowTr === highTr) {
             labelVal = lowTr;
           } else {
             labelVal = this.options.rightToLeft ? highTr + ' - ' + lowTr : lowTr + ' - ' + highTr;
@@ -1212,10 +1272,12 @@
           ) : this.selBar.rzsp + this.selBar.rzsd / 2 - this.cmbLab.rzsd / 2;
 
           this.setPosition(this.cmbLab, pos);
+          this.cmbLabelShown = true;
           this.hideEl(this.minLab);
           this.hideEl(this.maxLab);
           this.showEl(this.cmbLab);
         } else {
+          this.cmbLabelShown = false;
           this.showEl(this.maxLab);
           this.showEl(this.minLab);
           this.hideEl(this.cmbLab);
@@ -1229,7 +1291,7 @@
        * @returns {*}
        */
       getDisplayValue: function(value, which) {
-        if (this.options.stepsArray) {
+        if (this.options.stepsArray && !this.options.bindIndexForStepsArray) {
           value = this.getStepValue(value);
         }
         return this.customTrFn(value, this.options.id, which);
@@ -1258,7 +1320,7 @@
        */
       hideEl: function(element) {
         return element.css({
-          opacity: 0
+          visibility: 'hidden'
         });
       },
 
@@ -1274,7 +1336,7 @@
         }
 
         return element.css({
-          opacity: 1
+          visibility: 'visible'
         });
       },
 
@@ -1371,7 +1433,7 @@
         /* http://stackoverflow.com/a/12336075/282882 */
         //noinspection JSLint
         var clientXY = this.options.vertical ? 'clientY' : 'clientX';
-        if (clientXY in event) {
+        if (event[clientXY] !== undefined) {
           return event[clientXY];
         }
 
@@ -1857,6 +1919,16 @@
        * @param {number} newMaxValue   the new maximum value
        */
       positionTrackingBar: function(newMinValue, newMaxValue) {
+
+        if (this.options.minLimit != null && newMinValue < this.options.minLimit) {
+          newMinValue = this.options.minLimit;
+          newMaxValue = newMinValue + this.dragging.difference;
+        }
+        if (this.options.maxLimit != null && newMaxValue > this.options.maxLimit){
+          newMaxValue = this.options.maxLimit;
+          newMinValue = newMaxValue - this.dragging.difference;
+        }
+
         this.lowValue = newMinValue;
         this.highValue = newMaxValue;
         this.applyLowValue();
@@ -1877,13 +1949,20 @@
 
         newValue = this.applyMinMaxLimit(newValue);
         if (this.range) {
-          newValue = this.applyMinMaxRange(newValue);
-          /* This is to check if we need to switch the min and max handles */
-          if (this.tracking === 'lowValue' && newValue > this.highValue) {
-            if (this.options.noSwitching && this.highValue !== this.minValue) {
-              newValue = this.applyMinMaxRange(this.highValue);
+          if (this.options.pushRange) {
+            newValue = this.applyPushRange(newValue);
+            valueChanged = true;
+          }
+          else {
+            if (this.options.noSwitching) {
+              if (this.tracking === 'lowValue' && newValue > this.highValue)
+                newValue = this.applyMinMaxRange(this.highValue);
+              else if (this.tracking === 'highValue' && newValue < this.lowValue)
+                newValue = this.applyMinMaxRange(this.lowValue);
             }
-            else {
+            newValue = this.applyMinMaxRange(newValue);
+            /* This is to check if we need to switch the min and max handles */
+            if (this.tracking === 'lowValue' && newValue > this.highValue) {
               this.lowValue = this.highValue;
               this.applyLowValue();
               this.updateHandles(this.tracking, this.maxH.rzsp);
@@ -1893,13 +1972,9 @@
               this.maxH.addClass('rz-active');
               if (this.options.keyboardSupport)
                 this.focusElement(this.maxH);
+              valueChanged = true;
             }
-            valueChanged = true;
-          } else if (this.tracking === 'highValue' && newValue < this.lowValue) {
-            if (this.options.noSwitching && this.lowValue !== this.maxValue) {
-              newValue = this.applyMinMaxRange(this.lowValue);
-            }
-            else {
+            else if (this.tracking === 'highValue' && newValue < this.lowValue) {
               this.highValue = this.lowValue;
               this.applyHighValue();
               this.updateHandles(this.tracking, this.minH.rzsp);
@@ -1909,8 +1984,8 @@
               this.minH.addClass('rz-active');
               if (this.options.keyboardSupport)
                 this.focusElement(this.minH);
+              valueChanged = true;
             }
-            valueChanged = true;
           }
         }
 
@@ -1955,6 +2030,27 @@
             else
               return this.lowValue + this.options.maxRange;
           }
+        }
+        return newValue;
+      },
+
+      applyPushRange: function(newValue) {
+        var difference = this.tracking === 'lowValue' ? this.highValue - newValue : newValue - this.lowValue,
+          range = this.options.minRange !== null ? this.options.minRange : this.options.step;
+        if (difference < range) {
+          if (this.tracking === 'lowValue') {
+            this.highValue = Math.min(newValue + range, this.maxValue);
+            newValue = this.highValue - range;
+            this.applyHighValue();
+            this.updateHandles('highValue', this.valueToOffset(this.highValue));
+          }
+          else {
+            this.lowValue = Math.max(newValue - range, this.minValue);
+            newValue = this.lowValue + range;
+            this.applyLowValue();
+            this.updateHandles('lowValue', this.valueToOffset(this.lowValue));
+          }
+          this.updateAriaAttributes();
         }
         return newValue;
       },
@@ -2089,5 +2185,5 @@
 
   /*templateReplacement*/
 
-  return module
+  return module.name
 }));

@@ -63,6 +63,15 @@
   </article>
 
   <article>
+    <h2>Range slider with minimum range of 10 and pushRange option</h2>
+    <rzslider
+      rz-slider-model="minPushRangeSlider.minValue"
+      rz-slider-high="minPushRangeSlider.maxValue"
+      rz-slider-options="minPushRangeSlider.options"
+    ></rzslider>
+  </article>
+
+  <article>
     <h2>Slider with visible selection bar</h2>
     <rzslider
       rz-slider-model="slider_visible_bar.value"
@@ -99,6 +108,14 @@
     <rzslider
       rz-slider-model="color_slider_pointer.value"
       rz-slider-options="color_slider_pointer.options"
+    ></rzslider>
+  </article>
+
+  <article>
+    <h2>Slider with dynamic tick color</h2>
+    <rzslider
+      rz-slider-model="slider_tick_color.value"
+      rz-slider-options="slider_tick_color.options"
     ></rzslider>
   </article>
 
@@ -145,6 +162,16 @@
       rz-slider-model="slider_translate_html.minValue"
       rz-slider-high="slider_translate_html.maxValue"
       rz-slider-options="slider_translate_html.options"
+    ></rzslider>
+  </article>
+
+  <article>
+    <h2>Slider with angular directive inside custom template</h2>
+    <rzslider
+            rz-slider-model="slider_custom_directive_inside_template.minValue"
+            rz-slider-high="slider_custom_directive_inside_template.maxValue"
+            rz-slider-options="slider_custom_directive_inside_template.options"
+            rz-slider-tpl-url="directiveInCustomTemplate.html"
     ></rzslider>
   </article>
 

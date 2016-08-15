@@ -1,3 +1,58 @@
+# 5.4.3 (2016-08-07)
+## Fix
+- Fix minLimit/maxLimit bugged for draggableRange (#384).
+
+# 5.4.2 (2016-08-02)
+## Fix
+- Fix minimum value goes below floor when using maxRange (#377).
+
+# 5.4.1 (2016-07-17)
+## Fix
+- Fix showing limit labels when pointer labels are always hidden (#373).
+
+# 5.4.0 (2016-07-13)
+## Features
+- Add function to customize color of ticks (#372).
+
+# 5.3.0 (2016-07-11)
+## Features
+- Expose labels on scope in template (#358).
+
+# 5.2.0 (2016-07-07)
+## Features
+- Add a `customTemplateScope` option (#354).
+
+# 5.1.1 (2016-07-06)
+## Fix
+- Fix the way to check when event properties are undefined (#365).
+
+# 5.1.0 (2016-07-02)
+## Features
+- Add a `pushRange` option (#341).
+
+# 5.0.1 (2016-07-01)
+## Fix
+- Switch from using opacity to visibility to show/hide elements (#362).
+
+# 5.0.0 (2016-06-30)
+## Fix
+- AMD/CommonJS exported module: export module name instead of module (#360).
+
+## Breaking change
+Code that relies on the module object to be exported (accessing the name via .name for example) will break, since the name is now directly returned.
+
+# 4.1.0 (2016-06-30)
+## Improvement
+- Add a `bindIndexForStepsArray` option that enable to use `stepsArray` with the same behavior as before 4.0 (#345).
+
+## Fix
+- Hide floor/ceil label when overlapped on combo label (#357).
+- Fix switching from steps array to regular steps (#361).
+
+# 4.0.2 (2016-06-07)
+## Improvement
+- Add a `mergeRangeLabelsIfSame` option (#245).
+
 # 4.0.1 (2016-06-04)
 ## Improvement
 - Add a pointerType arg for the callbacks (onStart, onChange and onEnd) to identify which handle is used (#339).

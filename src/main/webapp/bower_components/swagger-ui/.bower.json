@@ -12,7 +12,11 @@
     "Swagger",
     "API"
   ],
-  "license": "Copyright 2016 SmartBear Software",
+  "license": [
+    "Apache-2.0",
+    "Copyright 2016 SmartBear Software",
+    "./LICENSE"
+  ],
   "homepage": "http://swagger.io",
   "private": true,
   "ignore": [
@@ -22,14 +26,14 @@
     "test",
     "tests"
   ],
-  "version": "2.1.4",
-  "_release": "2.1.4",
+  "version": "2.2.0",
+  "_release": "2.2.0",
   "_resolution": {
     "type": "version",
-    "tag": "v2.1.4",
-    "commit": "5e5e33ace1214e453e2484b9e08220a3236c46a5"
+    "tag": "v2.2.0",
+    "commit": "36c5fd89d410f820d2f282e778725968459bb622"
   },
   "_source": "https://github.com/wordnik/swagger-ui.git",
-  "_target": "2.1.4",
+  "_target": "2.2.0",
   "_originalSource": "swagger-ui"
 }

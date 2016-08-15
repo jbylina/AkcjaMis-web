@@ -1,6 +1,7 @@
 {
   "name": "angular-google-maps",
-  "version": "2.3.3",
+  "version": "2.3.4",
+  "license": "MIT",
   "main": "./dist/angular-google-maps.js",
   "dependencies": {
     "angular": "1.2 - 1.5",
@@ -41,13 +42,13 @@
     "uuid": "http://github.com/LiosK/UUID.js/archive/v3.2.tar.gz"
   },
   "homepage": "https://github.com/angular-ui/angular-google-maps",
-  "_release": "2.3.3",
+  "_release": "2.3.4",
   "_resolution": {
     "type": "version",
-    "tag": "2.3.3",
-    "commit": "e9e767e8cc4ddeac9b90bbe14736a831d38e9356"
+    "tag": "2.3.4",
+    "commit": "62b501e7a161834b2ad4634de33454b529ced14f"
   },
   "_source": "https://github.com/angular-ui/angular-google-maps.git",
-  "_target": "2.3.3",
+  "_target": "2.3.4",
   "_originalSource": "angular-google-maps"
 }

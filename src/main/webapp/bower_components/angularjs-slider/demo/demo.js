@@ -54,6 +54,18 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
     }
   };
 
+  //Range slider with minRange and pushRange config
+  $scope.minPushRangeSlider = {
+    minValue: 40,
+    maxValue: 60,
+    options: {
+      floor: 0,
+      ceil: 100,
+      minRange: 10,
+      pushRange: true
+    }
+  };
+
   //Slider with selection bar
   $scope.slider_visible_bar = {
     value: 10,
@@ -109,6 +121,27 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
         if (value <= 6)
           return 'orange';
         if (value <= 9)
+          return 'yellow';
+        return '#2AE02A';
+      }
+    }
+  };
+
+  //Slider with custom tick formatting
+  $scope.slider_tick_color = {
+    value: 0,
+    options: {
+      ceil: 1200,
+      floor: 0,
+      step: 50,
+      showSelectionBar: true,
+      showTicks: true,
+      getTickColor: function(value){
+        if (value < 300)
+          return 'red';
+        if (value < 600)
+          return 'orange';
+        if (value < 900)
           return 'yellow';
         return '#2AE02A';
       }
@@ -193,6 +226,15 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
             return '$' + value
         }
       }
+    }
+  };
+  //Slider config with angular directive inside custom template
+  $scope.slider_custom_directive_inside_template = {
+    minValue: 20,
+    maxValue: 80,
+    options: {
+      floor: 0,
+      ceil: 100
     }
   };
 
@@ -502,4 +544,18 @@ app.controller('MainCtrl', function($scope, $rootScope, $timeout, $modal) {
       $scope.slider_all_options.maxValue = 8;
     }
   }
+});
+
+app.directive('clickableLabel', function() {
+  return {
+    restrict: 'E',
+    scope: {label: '='},
+    replace: true,
+    template: "<button ng-click='onclick(label)' style='cursor: pointer;'>click me - {{label}}</button>",
+    link: function(scope, elem, attrs){
+      scope.onclick = function(label){
+        alert("I'm " + label);
+      };
+    }
+  };
 });
