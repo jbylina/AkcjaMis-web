@@ -4,7 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.akcjamis.webapp.domain.FamilyNote;
 import org.akcjamis.webapp.service.FamilyNoteService;
 import org.akcjamis.webapp.web.rest.dto.FamilyNoteDTO;
-import org.akcjamis.webapp.web.rest.mapper.FamilyNoteMapper;
+import org.akcjamis.webapp.web.rest.mapper.FamilyMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -35,12 +35,12 @@ public class FamilyNoteResource {
 
     private FamilyNoteService familyNoteService;
 
-    private FamilyNoteMapper mapper;
+    private FamilyMapper mapper;
 
     @Inject
-    public FamilyNoteResource(FamilyNoteService familyNoteService, FamilyNoteMapper familyNoteMapper) {
+    public FamilyNoteResource(FamilyNoteService familyNoteService, FamilyMapper familyMapper) {
         this.familyNoteService = familyNoteService;
-        this.mapper = familyNoteMapper;
+        this.mapper = familyMapper;
     }
 
     /**

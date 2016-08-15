@@ -6,7 +6,7 @@ import org.akcjamis.webapp.domain.ChristmasPackageNote;
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
 import org.akcjamis.webapp.web.rest.dto.ChristmasPackageMarkDTO;
-import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
+import org.akcjamis.webapp.web.rest.mapper.EventMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -37,13 +37,13 @@ public class ChristmasPackageResource {
 
     private ChristmasPackageService christmasPackageService;
 
-    private ChristmasPackageMapper mapper;
+    private EventMapper mapper;
 
     @Inject
     public ChristmasPackageResource(ChristmasPackageService christmasPackageService,
-                                    ChristmasPackageMapper christmasPackageMapper) {
+                                    EventMapper eventMapper) {
         this.christmasPackageService = christmasPackageService;
-        this.mapper = christmasPackageMapper;
+        this.mapper = eventMapper;
     }
 
     /**

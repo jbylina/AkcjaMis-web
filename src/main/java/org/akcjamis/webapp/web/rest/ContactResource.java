@@ -5,7 +5,7 @@ import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.dto.ContactDTO;
-import org.akcjamis.webapp.web.rest.mapper.ContactMapper;
+import org.akcjamis.webapp.web.rest.mapper.FamilyMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +34,15 @@ public class ContactResource {
 
     private FamilyService familyService;
 
-    private ContactMapper mapper;
+    private FamilyMapper mapper;
 
     @Inject
     public ContactResource(ContactRepository contactRepository,
                            FamilyService familyService,
-                           ContactMapper contactMapper) {
+                           FamilyMapper familyMapper) {
         this.contactRepository = contactRepository;
         this.familyService = familyService;
-        this.mapper = contactMapper;
+        this.mapper = familyMapper;
     }
 
     /**

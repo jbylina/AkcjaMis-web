@@ -57,7 +57,7 @@ public class EventResource {
 
         return ResponseEntity.created(new URI("/api/events/" + result.getYear()))
             .headers(HeaderUtil.createEntityCreationAlert("event", result.getYear().toString()))
-            .body(mapper.eventToEventDTO(result));
+            .body(mapper.toEventDTO(result));
     }
 
     /**
@@ -87,7 +87,7 @@ public class EventResource {
     public ResponseEntity<EventDTO> getEvent(@PathVariable Short year) {
         log.debug("REST request to get Event : {}", year);
         Event event = eventService.getEvent(year);
-        return Optional.ofNullable(mapper.eventToEventDTO(event))
+        return Optional.ofNullable(mapper.toEventDTO(event))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))

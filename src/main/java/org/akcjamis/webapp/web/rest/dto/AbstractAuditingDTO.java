@@ -8,11 +8,7 @@ import java.time.ZonedDateTime;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access;
 
-/**
- * Base abstract class for DTO which will hold definitions for created, last modified by and created,
- * last modified by date.
- */
-public abstract class AbstractAuditingDTO implements Serializable {
+public abstract class AbstractAuditingDTO {
 
     @ApiModelProperty(readOnly = true, hidden = true)
     @JsonProperty(access = Access.READ_ONLY)
@@ -20,13 +16,15 @@ public abstract class AbstractAuditingDTO implements Serializable {
 
     @ApiModelProperty(readOnly = true, hidden = true)
     @JsonProperty(access = Access.READ_ONLY)
-    private ZonedDateTime createdDate = ZonedDateTime.now();
+    private ZonedDateTime createdDate;
 
     @ApiModelProperty(readOnly = true, hidden = true)
+    @JsonProperty(access = Access.READ_ONLY)
     private String lastModifiedBy;
 
     @ApiModelProperty(readOnly = true, hidden = true)
-    private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
+    @JsonProperty(access = Access.READ_ONLY)
+    private ZonedDateTime lastModifiedDate;
 
     public String getCreatedBy() {
         return createdBy;

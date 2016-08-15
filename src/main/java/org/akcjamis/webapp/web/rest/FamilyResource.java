@@ -5,9 +5,9 @@ import org.akcjamis.webapp.domain.ChristmasPackage;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
-import org.akcjamis.webapp.web.rest.dto.ClusteringResultDTO;
-import org.akcjamis.webapp.web.rest.dto.RouteDTO;
-import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
+import org.akcjamis.webapp.web.rest.dto.FamilyDTO;
+import org.akcjamis.webapp.web.rest.mapper.EventMapper;
+import org.akcjamis.webapp.web.rest.mapper.FamilyMapper;
 import org.akcjamis.webapp.web.rest.util.HeaderUtil;
 import org.akcjamis.webapp.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -26,7 +26,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * REST controller for managing Family.
@@ -39,12 +38,17 @@ public class FamilyResource {
 
     private FamilyService familyService;
 
-    private ChristmasPackageMapper christmasPkgMapper;
+    private EventMapper eventMapper;
+
+    private FamilyMapper mapper;
 
     @Inject
-    public FamilyResource(FamilyService familyService, ChristmasPackageMapper christmasPackageMapper) {
+    public FamilyResource(FamilyService familyService,
+                          FamilyMapper familyMapper,
+                          EventMapper eventMapper) {
         this.familyService = familyService;
-        christmasPkgMapper = christmasPackageMapper;
+        this.mapper = familyMapper;
+        this.eventMapper = eventMapper;
     }
 
     /**
@@ -58,39 +62,45 @@ public class FamilyResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Family> createFamily(@Valid @RequestBody Family family) throws URISyntaxException {
+    public ResponseEntity<FamilyDTO> createFamily(@Valid @RequestBody FamilyDTO family) throws URISyntaxException {
         log.debug("REST request to save Family : {}", family);
         if (family.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("family", "idexists", "A new family cannot already have an ID")).body(null);
         }
-        Family result = familyService.save(family);
+        Family result = familyService.save(mapper.toFamily(family));
         return ResponseEntity.created(new URI("/api/families/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("family", result.getId().toString()))
-            .body(result);
+            .body(mapper.toFamilyDTO(result));
     }
 
     /**
-     * PUT  /families : Updates an existing family.
+     * PUT  /families/:id : Updates an existing family.
      *
+     * @param id the id of the family
      * @param family the family to update
      * @return the ResponseEntity with status 200 (OK) and with body the updated family,
      * or with status 400 (Bad Request) if the family is not valid,
      * or with status 500 (Internal Server Error) if the family couldnt be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @RequestMapping(value = "/families",
+    @RequestMapping(value = {"/families/{id}", "/families"},
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Family> updateFamily(@Valid @RequestBody Family family) throws URISyntaxException {
+    public ResponseEntity<FamilyDTO> updateFamily(@PathVariable Optional<Integer> id, @Valid @RequestBody FamilyDTO family) throws URISyntaxException {
         log.debug("REST request to update Family : {}", family);
-        if (family.getId() == null) {
+
+        if(id.isPresent()){
+            family.setId(id.get());
+        }
+        else if(family.getId() == null){
             return createFamily(family);
         }
-        Family result = familyService.save(family);
+        
+        Family result = familyService.update(mapper.toFamily(family));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("family", family.getId().toString()))
-            .body(result);
+            .body(mapper.toFamilyDTO(result));
     }
 
     /**
@@ -122,10 +132,10 @@ public class FamilyResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Family> getFamily(@PathVariable Integer id) {
+    public ResponseEntity<FamilyDTO> getFamily(@PathVariable Integer id) {
         log.debug("REST request to get Family : {}", id);
         Family family = familyService.findOne(id);
-        return Optional.ofNullable(family)
+        return Optional.ofNullable(mapper.toFamilyDTO(family))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))
@@ -145,7 +155,7 @@ public class FamilyResource {
     public ResponseEntity<List<ChristmasPackageDTO>> getFamilyChristmasPackages(@PathVariable Integer id) {
         log.debug("REST request to get packages of Family : {}", id);
         List<ChristmasPackage> christmasPackages = familyService.getChristmasPackages(id);
-        return Optional.ofNullable(christmasPkgMapper.toChristmasPackageDTOs(christmasPackages))
+        return Optional.ofNullable(eventMapper.toChristmasPackageDTOs(christmasPackages))
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))
@@ -186,7 +196,7 @@ public class FamilyResource {
         ChristmasPackage result = familyService.addFamilyToEvent(id);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("christmasPackage", result.getId().toString()))
-            .body(christmasPkgMapper.toChristmasPackageDTO(result));
+            .body(eventMapper.toChristmasPackageDTO(result));
     }
 
 }

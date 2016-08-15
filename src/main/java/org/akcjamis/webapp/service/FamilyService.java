@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +45,9 @@ public class FamilyService {
 
     private SubpackageRepository subpackageRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Inject
     public FamilyService(FamilyRepository familyRepository,
                          ContactRepository contactRepository,
@@ -66,7 +71,20 @@ public class FamilyService {
      */
     public Family save(Family family) {
         log.debug("Request to save Family : {}", family);
-        Family result = familyRepository.save(family);
+        Family result = familyRepository.saveAndFlush(family);
+        return familyRepository.findOne(result.getId());
+    }
+
+    /**
+     * Update a family.
+     *
+     * @param family the entity to save
+     * @return the persisted entity
+     */
+    public Family update(Family family) {
+        log.debug("Request to update Family : {}", family);
+        Family result = entityManager.merge(family);
+        entityManager.refresh(result);
         return result;
     }
 

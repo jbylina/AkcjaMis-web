@@ -9,7 +9,7 @@ import org.akcjamis.webapp.repository.EventRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.akcjamis.webapp.web.rest.dto.ChristmasPackageDTO;
-import org.akcjamis.webapp.web.rest.mapper.ChristmasPackageMapper;
+import org.akcjamis.webapp.web.rest.mapper.EventMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -72,7 +72,7 @@ public class ChristmasPackageResourceIntTest {
     private ChristmasPackageService christmasPackageService;
 
     @Inject
-    private ChristmasPackageMapper mapper;
+    private EventMapper mapper;
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;

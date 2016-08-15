@@ -9,7 +9,7 @@ import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.ContactResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
-import org.akcjamis.webapp.web.rest.mapper.ContactMapper;
+import org.akcjamis.webapp.web.rest.mapper.FamilyMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -78,7 +78,7 @@ public class ContactResourceIntTest {
     private FamilyRepository familyRepository;
 
     @Inject
-    private ContactMapper mapper;
+    private FamilyMapper mapper;
 
     private MockMvc restContactMockMvc;
 

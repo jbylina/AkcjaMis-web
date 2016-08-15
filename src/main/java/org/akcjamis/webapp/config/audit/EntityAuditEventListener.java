@@ -1,14 +1,14 @@
 package org.akcjamis.webapp.config.audit;
 
+import org.akcjamis.webapp.domain.AbstractAuditingEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
-import javax.persistence.PostUpdate;
+import javax.persistence.*;
+import java.time.ZonedDateTime;
 
 public class EntityAuditEventListener extends AuditingEntityListener {
 
@@ -17,7 +17,7 @@ public class EntityAuditEventListener extends AuditingEntityListener {
     private static BeanFactory beanFactory;
 
     @PostPersist
-    public void onPostCreate(Object target) {
+    public void onPostCreate(AbstractAuditingEntity target) {
         try {
             AsyncEntityAuditEventWriter asyncEntityAuditEventWriter = beanFactory.getBean(AsyncEntityAuditEventWriter.class);
             asyncEntityAuditEventWriter.writeAuditEvent(target, EntityAuditAction.CREATE);
@@ -28,8 +28,13 @@ public class EntityAuditEventListener extends AuditingEntityListener {
         }
     }
 
+    @PrePersist
+    public void onPreCreate(AbstractAuditingEntity target) {
+        target.setCreatedDate(ZonedDateTime.now());
+    }
+
     @PostUpdate
-    public void onPostUpdate(Object target) {
+    public void onPostUpdate(AbstractAuditingEntity target) {
         try {
             AsyncEntityAuditEventWriter asyncEntityAuditEventWriter = beanFactory.getBean(AsyncEntityAuditEventWriter.class);
             asyncEntityAuditEventWriter.writeAuditEvent(target, EntityAuditAction.UPDATE);
@@ -41,7 +46,7 @@ public class EntityAuditEventListener extends AuditingEntityListener {
     }
 
     @PostRemove
-    public void onPostRemove(Object target) {
+    public void onPostRemove(AbstractAuditingEntity target) {
         try {
             AsyncEntityAuditEventWriter asyncEntityAuditEventWriter = beanFactory.getBean(AsyncEntityAuditEventWriter.class);
             asyncEntityAuditEventWriter.writeAuditEvent(target, EntityAuditAction.DELETE);

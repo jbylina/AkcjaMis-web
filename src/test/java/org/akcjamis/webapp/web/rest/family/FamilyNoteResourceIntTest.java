@@ -13,7 +13,7 @@ import org.akcjamis.webapp.service.FamilyNoteService;
 import org.akcjamis.webapp.web.rest.FamilyNoteResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
 import org.akcjamis.webapp.web.rest.dto.FamilyNoteDTO;
-import org.akcjamis.webapp.web.rest.mapper.FamilyNoteMapper;
+import org.akcjamis.webapp.web.rest.mapper.FamilyMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -79,7 +79,7 @@ public class FamilyNoteResourceIntTest {
     private FamilyNoteService familyNoteService;
 
     @Inject
-    FamilyNoteMapper mapper;
+    FamilyMapper mapper;
 
     @Inject
     private TagRepository tagRepository;
