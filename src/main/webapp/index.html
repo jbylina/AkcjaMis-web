@@ -13,8 +13,8 @@
         <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="bower_components/angular-object-diff/dist/angular-object-diff.css" />
-        <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css">
-        <link rel="stylesheet" href="bower_components/angularjs-slider/dist/rzslider.css"/>
+        <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
+        <link rel="stylesheet" href="bower_components/angularjs-slider/dist/rzslider.css" />
         <!-- endbower -->
         <!-- endbuild -->
         <!-- build:css content/css/main.css -->
@@ -69,10 +69,10 @@
         <script src="bower_components/angular-object-diff/dist/angular-object-diff.js"></script>
         <script src="bower_components/angular-animate/angular-animate.js"></script>
         <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
-        <script src='bower_components/lodash/lodash.js'></script>
-        <script src='bower_components/angular-simple-logger/dist/angular-simple-logger.js'></script>
-        <script src='bower_components/angular-google-maps/dist/angular-google-maps.js'></script>
-        <script src='bower_components/angularjs-slider/dist/rzslider.js'></script>
+        <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+        <script src="bower_components/lodash/lodash.js"></script>
+        <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+        <script src="bower_components/angularjs-slider/dist/rzslider.js"></script>
         <script src="bower_components/randomcolor/randomColor.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
@@ -139,11 +139,11 @@
         <script src="app/entities/family/family.service.js"></script>
         <script src="app/entities/family/family.search.service.js"></script>
         <script src="app/entities/family/family.controller.js"></script>
+        <script src="app/entities/family/family-edit.controller.js"></script>
         <script src="app/entities/family/family-dialog.controller.js"></script>
         <script src="app/entities/family/family-detail.controller.js"></script>
         <script src="app/entities/family/family-delete-dialog.controller.js"></script>
         <script src="app/entities/family/family-create.controller.js"></script>
-        <script src="app/entities/family/family-edit.controller.js"></script>
         <script src="app/entities/family/edit-address.controller.js"></script>
         <script src="app/entities/event/event.state.js"></script>
         <script src="app/entities/event/event.service.js"></script>
@@ -159,6 +159,9 @@
         <script src="app/entities/contact/contact-dialog.controller.js"></script>
         <script src="app/entities/contact/contact-detail.controller.js"></script>
         <script src="app/entities/contact/contact-delete-dialog.controller.js"></script>
+        <script src="app/entities/christmas-packages-map/christmas-packages-map.state.js"></script>
+        <script src="app/entities/christmas-packages-map/christmas-packages-map.service.js"></script>
+        <script src="app/entities/christmas-packages-map/christmas-packages-map.controller.js"></script>
         <script src="app/entities/christmas-package-note/christmas-package-note.state.js"></script>
         <script src="app/entities/christmas-package-note/christmas-package-note.service.js"></script>
         <script src="app/entities/christmas-package-note/christmas-package-note.search.service.js"></script>
@@ -173,9 +176,6 @@
         <script src="app/entities/christmas-package-change/christmas-package-change-dialog.controller.js"></script>
         <script src="app/entities/christmas-package-change/christmas-package-change-detail.controller.js"></script>
         <script src="app/entities/christmas-package-change/christmas-package-change-delete-dialog.controller.js"></script>
-        <script src="app/entities/christmas-packages-map/christmas-packages-map.controller.js"></script>
-        <script src="app/entities/christmas-packages-map/christmas-packages-map.state.js"></script>
-        <script src="app/entities/christmas-packages-map/christmas-packages-map.service.js"></script>
         <script src="app/entities/christmas-package/christmas-package.state.js"></script>
         <script src="app/entities/christmas-package/christmas-package.service.js"></script>
         <script src="app/entities/christmas-package/christmas-package.search.service.js"></script>
@@ -221,6 +221,15 @@
         <script src="app/blocks/config/http.config.js"></script>
         <script src="app/blocks/config/compile.config.js"></script>
         <script src="app/blocks/config/alert.config.js"></script>
+        <script src="app/account/settings/settings.state.js"></script>
+        <script src="app/account/settings/settings.controller.js"></script>
+        <script src="app/account/register/register.state.js"></script>
+        <script src="app/account/register/register.controller.js"></script>
+        <script src="app/account/password/password.state.js"></script>
+        <script src="app/account/password/password.controller.js"></script>
+        <script src="app/account/password/password-strength-bar.directive.js"></script>
+        <script src="app/account/activate/activate.state.js"></script>
+        <script src="app/account/activate/activate.controller.js"></script>
         <script src="app/admin/user-management/user-management.state.js"></script>
         <script src="app/admin/user-management/user-management.controller.js"></script>
         <script src="app/admin/user-management/user-management-dialog.controller.js"></script>
@@ -251,20 +260,11 @@
         <script src="app/admin/audits/audits.state.js"></script>
         <script src="app/admin/audits/audits.service.js"></script>
         <script src="app/admin/audits/audits.controller.js"></script>
-        <script src="app/account/settings/settings.state.js"></script>
-        <script src="app/account/settings/settings.controller.js"></script>
-        <script src="app/account/register/register.state.js"></script>
-        <script src="app/account/register/register.controller.js"></script>
-        <script src="app/account/password/password.state.js"></script>
-        <script src="app/account/password/password.controller.js"></script>
-        <script src="app/account/password/password-strength-bar.directive.js"></script>
-        <script src="app/account/activate/activate.state.js"></script>
-        <script src="app/account/activate/activate.controller.js"></script>
         <script src="app/home/home.state.js"></script>
         <script src="app/home/home.controller.js"></script>
         <script src="app/entities/entity.state.js"></script>
-        <script src="app/admin/admin.state.js"></script>
         <script src="app/account/account.state.js"></script>
+        <script src="app/admin/admin.state.js"></script>
         <script src="app/app.state.js"></script>
         <script src="app/app.constants.js"></script>
         <!-- endinject -->
