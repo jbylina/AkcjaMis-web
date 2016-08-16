@@ -107,7 +107,12 @@ gulp.task('wiredep:app', function () {
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
-                'bower_components/bootstrap/dist/js/' // exclude bootstrap js files as we use ui-bootstrap
+                'bower_components/bootstrap/dist/js/', // exclude bootstrap js files as we use ui-bootstrap
+                'bower_components/markerclustererplus',
+                'bower_components/google-maps-utility-library-v3-markerwithlabel',
+                'bower_components/google-maps-utility-library-v3-infobox',
+                'bower_components/google-maps-utility-library-v3-keydragzoom',
+                'bower_components/js-rich-marker'
             ]
         }))
         .pipe(gulp.dest(config.app));
