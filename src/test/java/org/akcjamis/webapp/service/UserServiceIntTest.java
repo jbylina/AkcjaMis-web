@@ -3,32 +3,28 @@ package org.akcjamis.webapp.service;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.User;
 import org.akcjamis.webapp.repository.UserRepository;
-import java.time.ZonedDateTime;
 import org.akcjamis.webapp.service.util.RandomUtil;
-import java.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
-import java.util.Optional;
+import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
 /**
  * Test class for the UserResource REST controller.
  *
  * @see UserService
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 @Transactional
 public class UserServiceIntTest {
 

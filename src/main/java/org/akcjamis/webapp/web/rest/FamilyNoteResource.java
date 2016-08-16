@@ -53,7 +53,7 @@ public class FamilyNoteResource {
      */
     @RequestMapping(value = "/families/{id}/family-notes",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<FamilyNoteDTO> createFamilyNote(@PathVariable Integer id, @Valid @RequestBody FamilyNoteDTO familyNoteDTO) throws URISyntaxException {
         log.debug("REST request to save FamilyNote : {}", familyNoteDTO);
@@ -78,7 +78,7 @@ public class FamilyNoteResource {
      */
     @RequestMapping(value = "/families/{id}/family-notes",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<FamilyNoteDTO> updateFamilyNote(@PathVariable Integer id, @Valid @RequestBody FamilyNoteDTO familyNoteDTO) throws URISyntaxException {
         log.debug("REST request to update FamilyNote : {}", familyNoteDTO);
@@ -101,7 +101,7 @@ public class FamilyNoteResource {
      */
     @RequestMapping(value = "/families/{id}/family-notes",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<List<FamilyNote>> getAllFamilyNotes(@PathVariable Integer id, Pageable pageable)
         throws URISyntaxException {
@@ -120,7 +120,7 @@ public class FamilyNoteResource {
      */
     @RequestMapping(value = "/families/{familyId}/family-notes/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<FamilyNote> getFamilyNote(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to get FamilyNote : {}", id);
@@ -140,7 +140,7 @@ public class FamilyNoteResource {
      */
     @RequestMapping(value = "/families/{familyId}/family-notes/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteFamilyNote(@PathVariable Long familyId, @PathVariable Integer id) {
         log.debug("REST request to delete FamilyNote : {}", id);

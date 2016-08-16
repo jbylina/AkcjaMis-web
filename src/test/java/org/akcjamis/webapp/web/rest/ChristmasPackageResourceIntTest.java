@@ -15,13 +15,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,19 +30,17 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 /**
  * Test class for the ChristmasPackageResource REST controller.
  *
  * @see ChristmasPackageResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 @Ignore("Not ready")
 public class ChristmasPackageResourceIntTest {
 
@@ -182,7 +178,7 @@ public class ChristmasPackageResourceIntTest {
         // Get all the christmasPackages
         restChristmasPackageMockMvc.perform(get("/api/events/{year}/christmas-packages?sort=id,desc", DEFAULT_YEAR))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackage.getId().intValue())))
                 .andExpect(jsonPath("$.[*].mark").value(hasItem(DEFAULT_MARK)))
                 .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED)));
@@ -198,7 +194,7 @@ public class ChristmasPackageResourceIntTest {
         // Get the christmasPackage
         restChristmasPackageMockMvc.perform(get("/api/events/{year}/christmas-packages/{id}", DEFAULT_YEAR, christmasPackage.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(christmasPackage.getId().intValue()))
             .andExpect(jsonPath("$.mark").value(DEFAULT_MARK))
             .andExpect(jsonPath("$.delivered").value(DEFAULT_DELIVERED));
@@ -271,7 +267,7 @@ public class ChristmasPackageResourceIntTest {
         // Get the christmasPackage
         restChristmasPackageMockMvc.perform(get("/api/events/{year}/christmas-packages-list", DEFAULT_YEAR))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackage.getId().intValue())))
             .andExpect(jsonPath("$.[*].mark").value(hasItem(DEFAULT_MARK)))
             .andExpect(jsonPath("$.[*].delivered").value(hasItem(DEFAULT_DELIVERED)));

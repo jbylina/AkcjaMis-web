@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.3.6.RELEASE</version>
+        <version>1.4.0.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -44,11 +44,11 @@
 
     <properties>
         <hikaricp.version>2.4.3</hikaricp.version>
-        <assertj-core.version>3.5.1</assertj-core.version>
+        <assertj-core.version>3.5.2</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <hibernate.version>5.1.0.Final</hibernate.version>
+        <hibernate.version>5.1.1.Final</hibernate.version>
         <jackson.version>2.8.0</jackson.version>
         <jackson-jts.version>2.3</jackson-jts.version>
         <java.version>1.8</java.version>
@@ -68,8 +68,6 @@
         <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <h2-database.version>1.4.192</h2-database.version>
         <run.addResources>false</run.addResources>
-        <spring-security.version>4.0.4.RELEASE</spring-security.version>
-        <spring-security-oauth2.version>2.0.10.RELEASE</spring-security-oauth2.version>
         <springfox.version>2.5.0</springfox.version>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
@@ -385,7 +383,6 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version>${spring-security-oauth2.version}</version>
         </dependency>
         <!-- Spring Cloud -->
         <dependency>
@@ -427,7 +424,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
-            <version>${spring-security.version}</version>
         </dependency>
         <!-- reporting -->
         <dependency>

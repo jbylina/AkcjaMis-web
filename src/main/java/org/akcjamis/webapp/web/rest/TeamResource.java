@@ -41,7 +41,7 @@ public class TeamResource {
      */
     @RequestMapping(value = "/teams",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Team> createTeam(@Valid @RequestBody Team team) throws URISyntaxException {
         log.debug("REST request to save Team : {}", team);
@@ -65,7 +65,7 @@ public class TeamResource {
      */
     @RequestMapping(value = "/teams",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Team> updateTeam(@Valid @RequestBody Team team) throws URISyntaxException {
         log.debug("REST request to update Team : {}", team);
@@ -85,7 +85,7 @@ public class TeamResource {
      */
     @RequestMapping(value = "/events/{year}/teams",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public List<Team> getTeams(@PathVariable Short year) {
         log.debug("REST request to get Teams from year : {}", year);
@@ -101,7 +101,7 @@ public class TeamResource {
      */
     @RequestMapping(value = "/teams/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Team> getTeam(@PathVariable Integer id) {
         log.debug("REST request to get Team : {}", id);
@@ -122,7 +122,7 @@ public class TeamResource {
      */
     @RequestMapping(value = "/events/{year}/teams/{teamNumber}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Team> getTeamDetail(@PathVariable Short year, @PathVariable Integer teamNumber) {
         log.debug("REST request to get Team {} by Event year : {}", teamNumber, year);
@@ -141,7 +141,7 @@ public class TeamResource {
      */
     @RequestMapping(value = "/user/team",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Team> getUserTeamDetails(@AuthenticationPrincipal UserDetails user) {
         log.debug("REST request to get Team");
@@ -161,7 +161,7 @@ public class TeamResource {
      */
     @RequestMapping(value = "/teams/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteTeam(@PathVariable Integer id) {
         log.debug("REST request to delete Team : {}", id);

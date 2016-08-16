@@ -1,26 +1,24 @@
 package org.akcjamis.webapp.web.rest;
 
 import org.akcjamis.webapp.AkcjamisApp;
-import org.akcjamis.webapp.domain.*;
+import org.akcjamis.webapp.domain.ChristmasPackage;
+import org.akcjamis.webapp.domain.ChristmasPackageNote;
 import org.akcjamis.webapp.domain.Event;
+import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ChristmasPackageNoteRepository;
 import org.akcjamis.webapp.repository.ChristmasPackageRepository;
 import org.akcjamis.webapp.repository.EventRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
-
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,19 +29,18 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 /**
  * Test class for the ChristmasPackageNoteResource REST controller.
  *
  * @see ChristmasPackageNoteResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class ChristmasPackageNoteResourceIntTest {
 
     private static final Integer DEFAULT_NUMBER = 1;
@@ -193,7 +190,7 @@ public class ChristmasPackageNoteResourceIntTest {
         // Get all the christmasPackageNotes
         restChristmasPackageNoteMockMvc.perform(get("/api/christmas-packages/{id}/notes?sort=id,desc", christmasPackage.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageNote.getId().intValue())))
                 .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)));
     }
@@ -210,14 +207,14 @@ public class ChristmasPackageNoteResourceIntTest {
         // Get the first christmasPackageNote
         restChristmasPackageNoteMockMvc.perform(get("/api/christmas-packages/{packageId}/notes/{id}", christmasPackage.getId(), christmasPackageNote.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(christmasPackageNote.getId().intValue()))
             .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT));
 
         // Get the second christmasPackageNote
         restChristmasPackageNoteMockMvc.perform(get("/api/christmas-packages/{packageId}/notes/{id}", christmasPackageSecond.getId(), christmasPackageNoteSecond.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(christmasPackageNoteSecond.getId().intValue()))
             .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT_SECOND));
     }

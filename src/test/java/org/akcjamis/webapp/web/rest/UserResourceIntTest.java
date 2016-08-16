@@ -1,25 +1,21 @@
 package org.akcjamis.webapp.web.rest;
 
 import org.akcjamis.webapp.AkcjamisApp;
-import org.akcjamis.webapp.domain.User;
 import org.akcjamis.webapp.repository.UserRepository;
 import org.akcjamis.webapp.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,10 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see UserResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class UserResourceIntTest {
 
     @Inject
@@ -53,16 +47,16 @@ public class UserResourceIntTest {
     @Test
     public void testGetExistingUser() throws Exception {
         restUserMockMvc.perform(get("/api/users/admin")
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$.lastName").value("Administrator"));
     }
 
     @Test
     public void testGetUnknownUser() throws Exception {
         restUserMockMvc.perform(get("/api/users/unknown")
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound());
     }
 

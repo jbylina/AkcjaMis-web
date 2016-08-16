@@ -90,7 +90,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<?> createUser(@RequestBody ManagedUserDTO managedUserDTO, HttpServletRequest request) throws URISyntaxException {
@@ -128,7 +128,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     @Transactional
     @Secured(AuthoritiesConstants.ADMIN)
@@ -174,7 +174,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     @Transactional(readOnly = true)
     public ResponseEntity<List<ManagedUserDTO>> getAllUsers(Pageable pageable)
@@ -195,7 +195,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users/{login:[_'.@a-z0-9-]+}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
@@ -212,7 +212,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users/{login:[_'.@a-z0-9-]+}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {

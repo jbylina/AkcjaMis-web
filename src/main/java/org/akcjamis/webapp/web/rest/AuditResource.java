@@ -21,7 +21,7 @@ import java.util.List;
  * REST controller for getting the audit events.
  */
 @RestController
-@RequestMapping(value = "/api/audits", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/audits", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class AuditResource {
 
     private AuditEventService auditEventService;

@@ -49,7 +49,7 @@ public class ChildResource {
      */
     @RequestMapping(value = "/families/{id}/children",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Child> createChild(@PathVariable Integer id, @Valid @RequestBody Child child) throws URISyntaxException {
         log.debug("REST request to save Child : {}", child);
@@ -74,7 +74,7 @@ public class ChildResource {
      */
     @RequestMapping(value = "/families/{id}/children",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Child> updateChild(@PathVariable Integer id, @Valid @RequestBody Child child) throws URISyntaxException {
         log.debug("REST request to update Child : {}", child);
@@ -95,7 +95,7 @@ public class ChildResource {
      */
     @RequestMapping(value = "/families/{id}/children",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public List<Child> getAllChildren(@PathVariable Integer id) {
         log.debug("REST request to get all Children");
@@ -111,7 +111,7 @@ public class ChildResource {
      */
     @RequestMapping(value = "/families/{familyId}/children/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Child> getChild(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to get Child : {}", id);
@@ -132,7 +132,7 @@ public class ChildResource {
      */
     @RequestMapping(value = "/families/{familyId}/children/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteChild(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to delete Child : {}", id);

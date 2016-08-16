@@ -23,11 +23,12 @@ spring:
         show_sql: true
         hibernate:
             ddl-auto: none
-            naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+            naming.strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
         properties:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
+            hibernate.id.new_generator_mappings: true
             hibernate.hbm2ddl.auto: validate
     data:
         elasticsearch:

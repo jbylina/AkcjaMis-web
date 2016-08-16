@@ -43,7 +43,7 @@ public class EntityAuditResource {
      */
     @RequestMapping(value = "/audits/entity/all",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public List<String> getAuditedEntities() {
@@ -57,7 +57,7 @@ public class EntityAuditResource {
      */
     @RequestMapping(value = "/audits/entity/changes",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<List<EntityAuditEvent>> getChanges(@RequestParam(value = "entityType") String entityType,
@@ -78,7 +78,7 @@ public class EntityAuditResource {
      */
     @RequestMapping(value = "/audits/entity/changes/version/previous",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<EntityAuditEvent> getPrevVersion(@RequestParam(value = "qualifiedName") String qualifiedName,

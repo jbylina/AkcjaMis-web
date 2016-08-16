@@ -50,7 +50,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/register",
                     method = RequestMethod.POST,
-                    produces={MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+                    produces={MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.TEXT_PLAIN_VALUE})
     @Timed
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {
 
@@ -86,7 +86,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/activate",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {
         return userService.activateRegistration(key)
@@ -102,7 +102,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/authenticate",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
@@ -116,7 +116,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/account",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<UserDTO> getAccount() {
         return Optional.ofNullable(userService.getUserWithAuthorities())
@@ -132,7 +132,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/account",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {
         Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());

@@ -39,7 +39,7 @@ public class SubpackageNoteResource {
      */
     @RequestMapping(value = "/subpackage-notes",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<SubpackageNote> createSubpackageNote(@Valid @RequestBody SubpackageNote subpackageNote) throws URISyntaxException {
         log.debug("REST request to save SubpackageNote : {}", subpackageNote);
@@ -63,7 +63,7 @@ public class SubpackageNoteResource {
      */
     @RequestMapping(value = "/subpackage-notes",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<SubpackageNote> updateSubpackageNote(@Valid @RequestBody SubpackageNote subpackageNote) throws URISyntaxException {
         log.debug("REST request to update SubpackageNote : {}", subpackageNote);
@@ -83,7 +83,7 @@ public class SubpackageNoteResource {
      */
     @RequestMapping(value = "/subpackage-notes",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public List<SubpackageNote> getAllSubpackageNotes() {
         log.debug("REST request to get all SubpackageNotes");
@@ -99,7 +99,7 @@ public class SubpackageNoteResource {
      */
     @RequestMapping(value = "/subpackage-notes/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<SubpackageNote> getSubpackageNote(@PathVariable Integer id) {
         log.debug("REST request to get SubpackageNote : {}", id);
@@ -119,7 +119,7 @@ public class SubpackageNoteResource {
      */
     @RequestMapping(value = "/subpackage-notes/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteSubpackageNote(@PathVariable Integer id) {
         log.debug("REST request to delete SubpackageNote : {}", id);

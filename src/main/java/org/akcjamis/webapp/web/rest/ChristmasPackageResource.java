@@ -56,7 +56,7 @@ public class ChristmasPackageResource {
      */
     @RequestMapping(value = "/events/{year}/christmas-packages",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageDTO> createChristmasPackage(@PathVariable Short year, @Valid @RequestBody ChristmasPackageDTO christmasPackageDTO) throws URISyntaxException {
         log.debug("REST request to save ChristmasPackage : {}", christmasPackageDTO);
@@ -81,7 +81,7 @@ public class ChristmasPackageResource {
      */
     @RequestMapping(value = "/events/{year}/christmas-packages",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageDTO> updateChristmasPackage(@PathVariable Short year, @Valid @RequestBody ChristmasPackageDTO christmasPackageDTO) throws URISyntaxException {
         log.debug("REST request to update ChristmasPackage : {}", christmasPackageDTO);
@@ -104,7 +104,7 @@ public class ChristmasPackageResource {
      */
     @RequestMapping(value = "/events/{year}/christmas-packages",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<List<ChristmasPackageDTO>> getAllChristmasPackages(@PathVariable Short year, Pageable pageable)
         throws URISyntaxException {
@@ -124,7 +124,7 @@ public class ChristmasPackageResource {
      */
     @RequestMapping(value = "/events/{year}/christmas-packages-list",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<List<ChristmasPackageDTO>> getChristmasPackageList(@PathVariable Short year, Pageable pageable)
         throws URISyntaxException {
@@ -145,7 +145,7 @@ public class ChristmasPackageResource {
      */
     @RequestMapping(value = "/events/{year}/christmas-packages/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageDTO> getChristmasPackage(@PathVariable Short year, @PathVariable Integer id) {
         log.debug("REST request to get ChristmasPackage : {}", id);
@@ -166,7 +166,7 @@ public class ChristmasPackageResource {
      */
     @RequestMapping(value = "/events/{year}/christmas-packages/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteChristmasPackage(@PathVariable Long year, @PathVariable Integer id) {
         log.debug("REST request to delete ChristmasPackage : {}", id);
@@ -180,7 +180,7 @@ public class ChristmasPackageResource {
      */
     @RequestMapping(value = "/events/christmas-packages/{id}",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackage> updateChristmasPackage(@PathVariable Integer id, @RequestBody ChristmasPackageMarkDTO packageMark) throws URISyntaxException {
         log.debug("REST request to update mark of ChristmasPackage  : {}", id);

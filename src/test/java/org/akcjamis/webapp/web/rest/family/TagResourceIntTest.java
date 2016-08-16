@@ -3,21 +3,17 @@ package org.akcjamis.webapp.web.rest.family;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Tag;
 import org.akcjamis.webapp.repository.TagRepository;
-
 import org.akcjamis.webapp.web.rest.TagResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,19 +23,18 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 /**
  * Test class for the TagResource REST controller.
  *
  * @see TagResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class TagResourceIntTest {
 
     private static final String DEFAULT_CODE = "AAA";
@@ -160,7 +155,7 @@ public class TagResourceIntTest {
         // Get all the tags
         restTagMockMvc.perform(get("/api/tags?sort=id,desc"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(tag.getId().intValue())))
                 .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
                 .andExpect(jsonPath("$.[*].color").value(hasItem(DEFAULT_COLOR)));
@@ -175,7 +170,7 @@ public class TagResourceIntTest {
         // Get the tag
         restTagMockMvc.perform(get("/api/tags/{id}", tag.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(tag.getId().intValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.color").value(DEFAULT_COLOR));

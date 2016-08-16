@@ -3,9 +3,9 @@ package org.akcjamis.webapp.web.rest.family;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Child;
 import org.akcjamis.webapp.domain.Family;
+import org.akcjamis.webapp.domain.enumeration.Sex;
 import org.akcjamis.webapp.repository.ChildRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
-
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.ChildResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
@@ -13,16 +13,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
-
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,20 +28,18 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import org.akcjamis.webapp.domain.enumeration.Sex;
 
 /**
  * Test class for the ChildResource REST controller.
  *
  * @see ChildResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class ChildResourceIntTest {
 
 
@@ -247,7 +241,7 @@ public class ChildResourceIntTest {
         // Get all the children
         restChildMockMvc.perform(get("/api/families/{id}/children?sort=id,desc", family.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(child.getId().intValue())))
                 .andExpect(jsonPath("$.[*].number").value(hasItem(DEFAULT_NUMBER)))
                 .andExpect(jsonPath("$.[*].firstName").value(hasItem(DEFAULT_FIRST_NAME)))
@@ -267,7 +261,7 @@ public class ChildResourceIntTest {
         // Get the child
         restChildMockMvc.perform(get("/api/families/{id}/children/{id}", family.getId(), child.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(child.getId().intValue()))
             .andExpect(jsonPath("$.number").value(DEFAULT_NUMBER))
             .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRST_NAME))

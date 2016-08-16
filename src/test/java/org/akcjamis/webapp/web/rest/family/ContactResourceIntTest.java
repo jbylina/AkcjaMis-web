@@ -5,7 +5,6 @@ import org.akcjamis.webapp.domain.Contact;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.ContactRepository;
 import org.akcjamis.webapp.repository.FamilyRepository;
-
 import org.akcjamis.webapp.service.FamilyService;
 import org.akcjamis.webapp.web.rest.ContactResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
@@ -13,15 +12,12 @@ import org.akcjamis.webapp.web.rest.mapper.FamilyMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +27,8 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -40,10 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @see ContactResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class ContactResourceIntTest {
 
     private static final String DEFAULT_TYPE = "AAAAAAAAAAAAAAAAAAAA";
@@ -182,7 +178,7 @@ public class ContactResourceIntTest {
         // Get all the contacts
         restContactMockMvc.perform(get("/api/families/{id}/contacts?sort=id,desc", family.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(contact.getId())))
                 .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
                 .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
@@ -199,7 +195,7 @@ public class ContactResourceIntTest {
         // Get the contact
         restContactMockMvc.perform(get("/api/families/{id}/contacts/{id}", family.getId(), contact.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(contact.getId()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))

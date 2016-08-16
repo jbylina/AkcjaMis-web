@@ -4,7 +4,6 @@ import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Family;
 import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.service.FamilyService;
-
 import org.akcjamis.webapp.web.rest.FamilyResource;
 import org.akcjamis.webapp.web.rest.TestUtil;
 import org.akcjamis.webapp.web.rest.mapper.EventMapper;
@@ -13,15 +12,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,19 +27,18 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 /**
  * Test class for the FamilyResource REST controller.
  *
  * @see FamilyResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class FamilyResourceIntTest {
 
     private static final String DEFAULT_STREET = "AAAAA";
@@ -194,7 +189,7 @@ public class FamilyResourceIntTest {
         // Get all the families
         restFamilyMockMvc.perform(get("/api/families?sort=id,desc"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(family.getId().intValue())))
                 .andExpect(jsonPath("$.[*].street").value(hasItem(DEFAULT_STREET)))
                 .andExpect(jsonPath("$.[*].houseNo").value(hasItem(DEFAULT_HOUSE_NO)))
@@ -215,7 +210,7 @@ public class FamilyResourceIntTest {
         // Get the family
         restFamilyMockMvc.perform(get("/api/families/{id}", family.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(family.getId().intValue()))
             .andExpect(jsonPath("$.street").value(DEFAULT_STREET))
             .andExpect(jsonPath("$.houseNo").value(DEFAULT_HOUSE_NO))
@@ -305,7 +300,7 @@ public class FamilyResourceIntTest {
         // Search the family
         restFamilyMockMvc.perform(get("/api/_search/families?query=id:" + family.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.[*].id").value(hasItem(family.getId().intValue())))
             .andExpect(jsonPath("$.[*].street").value(hasItem(DEFAULT_STREET)))
             .andExpect(jsonPath("$.[*].houseNo").value(hasItem(DEFAULT_HOUSE_NO)))

@@ -55,7 +55,7 @@ public class ContactResource {
      */
     @RequestMapping(value = "/families/{id}/contacts",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ContactDTO> createContact(@PathVariable Integer id, @Valid @RequestBody ContactDTO contact) throws URISyntaxException {
         log.debug("REST request to save Contact : {}", contact);
@@ -80,7 +80,7 @@ public class ContactResource {
      */
     @RequestMapping(value = "/families/{id}/contacts",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ContactDTO> updateContact(@PathVariable Integer id, @Valid @RequestBody ContactDTO contact) throws URISyntaxException {
         log.debug("REST request to update Contact : {}", contact);
@@ -101,7 +101,7 @@ public class ContactResource {
      */
     @RequestMapping(value = "/families/{id}/contacts",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<List<ContactDTO>> getAllContacts(@PathVariable Integer id) {
         log.debug("REST request to get all Contacts");
@@ -124,7 +124,7 @@ public class ContactResource {
      */
     @RequestMapping(value = "/families/{familyId}/contacts/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ContactDTO> getContact(@PathVariable Integer familyId, @PathVariable Integer id) {
         log.debug("REST request to get Contact : {}", id);
@@ -145,7 +145,7 @@ public class ContactResource {
      */
     @RequestMapping(value = "/families/{familyId}/contacts/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteContact(@PathVariable Long familyId, @PathVariable Integer id) {
         log.debug("REST request to delete Contact : {}", id);

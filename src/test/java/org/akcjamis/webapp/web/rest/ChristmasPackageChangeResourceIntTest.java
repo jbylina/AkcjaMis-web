@@ -1,23 +1,24 @@
 package org.akcjamis.webapp.web.rest;
 
 import org.akcjamis.webapp.AkcjamisApp;
-import org.akcjamis.webapp.domain.*;
-import org.akcjamis.webapp.repository.*;
-
+import org.akcjamis.webapp.domain.ChristmasPackage;
+import org.akcjamis.webapp.domain.ChristmasPackageChange;
+import org.akcjamis.webapp.domain.Event;
+import org.akcjamis.webapp.domain.Family;
+import org.akcjamis.webapp.repository.ChristmasPackageChangeRepository;
+import org.akcjamis.webapp.repository.ChristmasPackageRepository;
+import org.akcjamis.webapp.repository.EventRepository;
+import org.akcjamis.webapp.repository.FamilyRepository;
 import org.akcjamis.webapp.service.ChristmasPackageService;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,19 +30,18 @@ import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 /**
  * Test class for the ChristmasPackageChangeResource REST controller.
  *
  * @see ChristmasPackageChangeResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class ChristmasPackageChangeResourceIntTest {
 
     private static final String DEFAULT_TYPE_CODE = "AAA";
@@ -209,7 +209,7 @@ public class ChristmasPackageChangeResourceIntTest {
         // Get all the christmasPackageChanges
         restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package/{id}/changes?sort=id,desc", christmasPackage.getId()))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(christmasPackageChange.getId().intValue())))
                 .andExpect(jsonPath("$.[*].type_code").value(hasItem(DEFAULT_TYPE_CODE)))
                 .andExpect(jsonPath("$.[*].time").value(hasItem(DEFAULT_TIME.toString())))
@@ -226,7 +226,7 @@ public class ChristmasPackageChangeResourceIntTest {
         // Get the christmasPackageChange
         restChristmasPackageChangeMockMvc.perform(get("/api/christmas-package/{packageId}/changes/{id}", christmasPackage.getId(), christmasPackageChange.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(christmasPackageChange.getId().intValue()))
             .andExpect(jsonPath("$.type_code").value(DEFAULT_TYPE_CODE))
             .andExpect(jsonPath("$.time").value(DEFAULT_TIME.toString()))

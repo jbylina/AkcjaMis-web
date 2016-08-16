@@ -44,7 +44,7 @@ public class TagResource {
      */
     @RequestMapping(value = "/tags",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Tag> createTag(@Valid @RequestBody Tag tag) throws URISyntaxException {
         log.debug("REST request to save Tag : {}", tag);
@@ -68,7 +68,7 @@ public class TagResource {
      */
     @RequestMapping(value = "/tags",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Tag> updateTag(@Valid @RequestBody Tag tag) throws URISyntaxException {
         log.debug("REST request to update Tag : {}", tag);
@@ -88,7 +88,7 @@ public class TagResource {
      */
     @RequestMapping(value = "/tags",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public List<Tag> getAllTags() {
         log.debug("REST request to get all Tags");
@@ -103,7 +103,7 @@ public class TagResource {
      */
     @RequestMapping(value = "/tags/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Tag> getTag(@PathVariable Integer id) {
         log.debug("REST request to get Tag : {}", id);
@@ -123,7 +123,7 @@ public class TagResource {
      */
     @RequestMapping(value = "/tags/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteTag(@PathVariable Integer id) {
         log.debug("REST request to delete Tag : {}", id);

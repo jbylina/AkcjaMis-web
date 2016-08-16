@@ -60,7 +60,7 @@ public class FamilyResource {
      */
     @RequestMapping(value = "/families",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<FamilyDTO> createFamily(@Valid @RequestBody FamilyDTO family) throws URISyntaxException {
         log.debug("REST request to save Family : {}", family);
@@ -85,7 +85,7 @@ public class FamilyResource {
      */
     @RequestMapping(value = {"/families/{id}", "/families"},
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<FamilyDTO> updateFamily(@PathVariable Optional<Integer> id, @Valid @RequestBody FamilyDTO family) throws URISyntaxException {
         log.debug("REST request to update Family : {}", family);
@@ -96,7 +96,7 @@ public class FamilyResource {
         else if(family.getId() == null){
             return createFamily(family);
         }
-        
+
         Family result = familyService.update(mapper.toFamily(family));
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("family", family.getId().toString()))
@@ -112,7 +112,7 @@ public class FamilyResource {
      */
     @RequestMapping(value = "/families",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<List<Family>> getAllFamilies(Pageable pageable)
         throws URISyntaxException {
@@ -130,7 +130,7 @@ public class FamilyResource {
      */
     @RequestMapping(value = "/families/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<FamilyDTO> getFamily(@PathVariable Integer id) {
         log.debug("REST request to get Family : {}", id);
@@ -150,7 +150,7 @@ public class FamilyResource {
      */
     @RequestMapping(value = "/families/{id}/christmas-packages",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<List<ChristmasPackageDTO>> getFamilyChristmasPackages(@PathVariable Integer id) {
         log.debug("REST request to get packages of Family : {}", id);
@@ -170,7 +170,7 @@ public class FamilyResource {
      */
     @RequestMapping(value = "/families/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteFamily(@PathVariable Integer id) {
         log.debug("REST request to delete Family : {}", id);
@@ -189,7 +189,7 @@ public class FamilyResource {
      */
     @RequestMapping(value = "/families/{id}/add-to-event",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageDTO> addFamilyToEvent(@PathVariable Integer id) {
         log.debug("REST request to add Family to event : {}", id);

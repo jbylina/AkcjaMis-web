@@ -21,7 +21,7 @@ public class LogsResource {
 
     @RequestMapping(value = "/logs",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public List<LoggerDTO> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();

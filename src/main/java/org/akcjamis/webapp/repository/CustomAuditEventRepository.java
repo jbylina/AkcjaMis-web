@@ -60,4 +60,16 @@ public class CustomAuditEventRepository implements AuditEventRepository {
             persistenceAuditEventRepository.save(persistentAuditEvent);
         }
     }
+
+    @Override
+    public List<AuditEvent> find(String principal, Date after, String type) {
+        // TODO: 16.08.16 Implement
+        return null;
+    }
+
+    @Override
+    public List<AuditEvent> find(Date after) {
+        // TODO: 16.08.16 Implement
+        return null;
+    }
 }

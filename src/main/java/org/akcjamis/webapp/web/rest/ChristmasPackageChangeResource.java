@@ -48,7 +48,7 @@ public class ChristmasPackageChangeResource {
      */
     @RequestMapping(value = "/christmas-package/{id}/changes",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageChange> createChristmasPackageChange(@PathVariable Integer id, @Valid @RequestBody ChristmasPackageChange christmasPackageChange) throws URISyntaxException {
         log.debug("REST request to save ChristmasPackageChange : {}", christmasPackageChange);
@@ -73,7 +73,7 @@ public class ChristmasPackageChangeResource {
      */
     @RequestMapping(value = "/christmas-package/{id}/changes",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageChange> updateChristmasPackageChange(@PathVariable Integer id, @Valid @RequestBody ChristmasPackageChange christmasPackageChange) throws URISyntaxException {
         log.debug("REST request to update ChristmasPackageChange : {}", christmasPackageChange);
@@ -96,7 +96,7 @@ public class ChristmasPackageChangeResource {
      */
     @RequestMapping(value = "/christmas-package/{id}/changes",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<List<ChristmasPackageChange>> getAllChristmasPackageChanges(@PathVariable Integer id, Pageable pageable)
         throws URISyntaxException {
@@ -115,7 +115,7 @@ public class ChristmasPackageChangeResource {
      */
     @RequestMapping(value = "/christmas-package/{packageId}/changes/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageChange> getChristmasPackageChange(@PathVariable Integer packageId, @PathVariable Integer id) {
         log.debug("REST request to get ChristmasPackageChange : {}", id);
@@ -136,7 +136,7 @@ public class ChristmasPackageChangeResource {
      */
     @RequestMapping(value = "/christmas-package/{packageId}/changes/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteChristmasPackageChange(@PathVariable Long packageId, @PathVariable Integer id) {
         log.debug("REST request to delete ChristmasPackageChange : {}", id);

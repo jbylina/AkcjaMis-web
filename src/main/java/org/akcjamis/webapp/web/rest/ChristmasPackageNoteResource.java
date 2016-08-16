@@ -50,7 +50,7 @@ public class ChristmasPackageNoteResource {
      */
     @RequestMapping(value = "/christmas-packages/{id}/notes",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageNote> createChristmasPackageNote(@PathVariable Integer id, @Valid @RequestBody ChristmasPackageNote christmasPackageNote) throws URISyntaxException {
         log.debug("REST request to save ChristmasPackageNote : {}", christmasPackageNote);
@@ -75,7 +75,7 @@ public class ChristmasPackageNoteResource {
      */
     @RequestMapping(value = "/christmas-packages/{id}/notes",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageNote> updateChristmasPackageNote(@PathVariable Integer id, @Valid @RequestBody ChristmasPackageNote christmasPackageNote) throws URISyntaxException {
         log.debug("REST request to update ChristmasPackageNote : {}", christmasPackageNote);
@@ -96,7 +96,7 @@ public class ChristmasPackageNoteResource {
      */
     @RequestMapping(value = "/christmas-packages/{id}/notes",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public List<ChristmasPackageNote> getAllChristmasPackageNotes(@PathVariable Integer id) {
         log.debug("REST request to get all ChristmasPackageNotes");
@@ -112,7 +112,7 @@ public class ChristmasPackageNoteResource {
      */
     @RequestMapping(value = "/christmas-packages/{packageId}/notes/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<ChristmasPackageNote> getChristmasPackageNote(@PathVariable Integer packageId, @PathVariable Integer id) {
         log.debug("REST request to get ChristmasPackageNote : {}", id);
@@ -133,7 +133,7 @@ public class ChristmasPackageNoteResource {
      */
     @RequestMapping(value = "/christmas-packages/{packageId}/notes/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteChristmasPackageNote(@PathVariable Integer packageId, @PathVariable Integer id) {
         log.debug("REST request to delete ChristmasPackageNote : {}", id);

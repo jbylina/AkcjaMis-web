@@ -48,7 +48,7 @@ public class EventResource {
      */
     @RequestMapping(value = "/events",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO event) throws URISyntaxException {
         log.debug("REST request to save Event : {}", event);
@@ -67,7 +67,7 @@ public class EventResource {
      */
     @RequestMapping(value = "/events",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public List<EventDTO> getAllEvents() {
         log.debug("REST request to get all Events");
@@ -82,7 +82,7 @@ public class EventResource {
      */
     @RequestMapping(value = "/events/{year}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<EventDTO> getEvent(@PathVariable Short year) {
         log.debug("REST request to get Event : {}", year);
@@ -102,7 +102,7 @@ public class EventResource {
      */
     @RequestMapping(value = "/events/{year}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteEvent(@PathVariable Short year) {
         log.debug("REST request to delete Event : {}", year);

@@ -39,7 +39,7 @@ public class SubpackageResource {
      */
     @RequestMapping(value = "/subpackages",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Subpackage> createSubpackage(@Valid @RequestBody Subpackage subpackage) throws URISyntaxException {
         log.debug("REST request to save Subpackage : {}", subpackage);
@@ -63,7 +63,7 @@ public class SubpackageResource {
      */
     @RequestMapping(value = "/subpackages",
         method = RequestMethod.PUT,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Subpackage> updateSubpackage(@Valid @RequestBody Subpackage subpackage) throws URISyntaxException {
         log.debug("REST request to update Subpackage : {}", subpackage);
@@ -83,7 +83,7 @@ public class SubpackageResource {
      */
     @RequestMapping(value = "/subpackages",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public List<Subpackage> getAllSubpackages() {
         log.debug("REST request to get all Subpackages");
@@ -99,7 +99,7 @@ public class SubpackageResource {
      */
     @RequestMapping(value = "/subpackages/{id}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Subpackage> getSubpackage(@PathVariable Integer id) {
         log.debug("REST request to get Subpackage : {}", id);
@@ -119,7 +119,7 @@ public class SubpackageResource {
      */
     @RequestMapping(value = "/subpackages/{id}",
         method = RequestMethod.DELETE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @Timed
     public ResponseEntity<Void> deleteSubpackage(@PathVariable Integer id) {
         log.debug("REST request to delete Subpackage : {}", id);

@@ -3,20 +3,16 @@ package org.akcjamis.webapp.web.rest;
 import org.akcjamis.webapp.AkcjamisApp;
 import org.akcjamis.webapp.domain.Subpackage;
 import org.akcjamis.webapp.repository.SubpackageRepository;
-
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,19 +23,18 @@ import javax.inject.Inject;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 /**
  * Test class for the SubpackageResource REST controller.
  *
  * @see SubpackageResource
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = AkcjamisApp.class)
-@WebAppConfiguration
-@IntegrationTest
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = AkcjamisApp.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 @Ignore("Not ready")
 public class SubpackageResourceIntTest {
 
@@ -122,7 +117,7 @@ public class SubpackageResourceIntTest {
         // Get all the subpackages
         restSubpackageMockMvc.perform(get("/api/subpackages?sort=id,desc"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$.[*].id").value(hasItem(subpackage.getId().intValue())))
                 .andExpect(jsonPath("$.[*].subpackageNumber").value(hasItem(DEFAULT_SUBPACKAGE_NUMBER)));
     }
@@ -136,7 +131,7 @@ public class SubpackageResourceIntTest {
         // Get the subpackage
         restSubpackageMockMvc.perform(get("/api/subpackages/{id}", subpackage.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(jsonPath("$.id").value(subpackage.getId().intValue()))
             .andExpect(jsonPath("$.subpackageNumber").value(DEFAULT_SUBPACKAGE_NUMBER));
     }
